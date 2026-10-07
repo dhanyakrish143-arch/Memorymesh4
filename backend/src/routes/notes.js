@@ -6,17 +6,35 @@ const router = express.Router();
 
 /*
   GET /api/notes
-  Returns notes available to the logged-in user.
-  Includes global seed notes and the user's own notes.
+  Returns notes for the logged-in student's class and board,
+  plus the user's own notes.
 */
 router.get("/", auth, async (req, res) => {
   try {
     const { subject, chapter } = req.query;
 
+    const user = await (await import("../models/User.js")).default
+      .findById(req.userId)
+      .select("class board")
+      .lean();
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
     const filter = {
       $or: [
-        { userId: null },
-        { userId: req.userId },
+        {
+          userId: null,
+          class: user.class,
+          board: user.board,
+        },
+        {
+          userId: req.userId,
+        },
       ],
     };
 
@@ -34,6 +52,8 @@ router.get("/", auth, async (req, res) => {
 
     res.json({
       success: true,
+      class: user.class,
+      board: user.board,
       notes,
     });
   } catch (error) {
@@ -46,16 +66,36 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+
 /*
   GET /api/notes/subjects
-  Returns subjects available in the notes.
+  Returns subjects for the logged-in student's class and board.
 */
 router.get("/subjects", auth, async (req, res) => {
   try {
+    const User = (await import("../models/User.js")).default;
+
+    const user = await User.findById(req.userId)
+      .select("class board")
+      .lean();
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
     const notes = await Note.find({
       $or: [
-        { userId: null },
-        { userId: req.userId },
+        {
+          userId: null,
+          class: user.class,
+          board: user.board,
+        },
+        {
+          userId: req.userId,
+        },
       ],
     })
       .select("subject")
@@ -71,6 +111,8 @@ router.get("/subjects", auth, async (req, res) => {
 
     res.json({
       success: true,
+      class: user.class,
+      board: user.board,
       subjects,
     });
   } catch (error) {
@@ -83,17 +125,37 @@ router.get("/subjects", auth, async (req, res) => {
   }
 });
 
+
 /*
   GET /api/notes/:id
   Get one note.
 */
 router.get("/:id", auth, async (req, res) => {
   try {
+    const User = (await import("../models/User.js")).default;
+
+    const user = await User.findById(req.userId)
+      .select("class board")
+      .lean();
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
     const note = await Note.findOne({
       _id: req.params.id,
       $or: [
-        { userId: null },
-        { userId: req.userId },
+        {
+          userId: null,
+          class: user.class,
+          board: user.board,
+        },
+        {
+          userId: req.userId,
+        },
       ],
     }).lean();
 
@@ -117,6 +179,7 @@ router.get("/:id", auth, async (req, res) => {
     });
   }
 });
+
 
 /*
   POST /api/notes
@@ -164,6 +227,7 @@ router.post("/", auth, async (req, res) => {
     });
   }
 });
+
 
 /*
   POST /api/notes/:id/bookmark
@@ -219,4 +283,3 @@ router.post("/:id/bookmark", auth, async (req, res) => {
 });
 
 export default router;
-

@@ -1,4 +1,4 @@
-﻿import mongoose from "mongoose";
+import mongoose from "mongoose";
 
 const textbookSchema = new mongoose.Schema(
   {
@@ -7,6 +7,13 @@ const textbookSchema = new mongoose.Schema(
       required: true,
       min: 5,
       max: 12,
+      index: true,
+    },
+
+    board: {
+      type: String,
+      enum: ["CBSE", "ICSE", "State"],
+      default: "CBSE",
       index: true,
     },
 
@@ -88,3 +95,4 @@ textbookSchema.index({
 });
 
 export default mongoose.model("Textbook", textbookSchema);
+

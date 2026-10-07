@@ -8,6 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userClass, setUserClass] = useState(10);
+  const [board, setBoard] = useState("CBSE");
   const [error, setError] = useState("");
   const { login, register } = useAuth();
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function Login() {
     setError("");
     try {
       if (isRegister) {
-        await register({ name, email, password, class: userClass });
+        await register({ name, email, password, class: userClass, board });
       } else {
         await login(email, password);
       }
@@ -36,6 +37,11 @@ export default function Login() {
           <>
             <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
             <input type="number" placeholder="Class (5-12)" value={userClass} onChange={(e) => setUserClass(Number(e.target.value))} min={5} max={12} required />
+            <select value={board} onChange={(e) => setBoard(e.target.value)} required>
+              <option value="CBSE">CBSE</option>
+              <option value="ICSE">ICSE</option>
+              <option value="State">State</option>
+            </select>
           </>
         )}
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
@@ -51,5 +57,7 @@ export default function Login() {
     </div>
   );
 }
+
+
 
 

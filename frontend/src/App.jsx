@@ -12,6 +12,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Learn from "./pages/Learn";
 
 import Upload from "./pages/Upload";
 import Progress from "./pages/Progress";
@@ -82,6 +83,13 @@ function Nav() {
       >
         Home
       </Link>
+      <Link
+        to="/learn"
+        className={location.pathname === "/learn" ? "active" : ""}
+      >
+        Learn
+      </Link>
+
       <Link
         to="/games"
         className={location.pathname === "/games" ? "active" : ""}
@@ -275,6 +283,15 @@ function AppRoutes() {
 
 
         <Route
+          path="/learn"
+          element={
+            <Private>
+              <Learn />
+            </Private>
+          }
+        />
+
+        <Route
           path="/upload"
           element={
             <Private>
@@ -452,6 +469,8 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
 
 
 

@@ -3,6 +3,7 @@ import Card from "../models/Card.js";
 import requireAuth from "../middleware/auth.js";
 
 const router = express.Router();
+
 router.use(requireAuth);
 
 router.get("/", async (req, res) => {
@@ -21,6 +22,7 @@ router.put("/:id", async (req, res) => {
     req.body,
     { new: true }
   );
+
   res.json(card);
 });
 
@@ -45,10 +47,7 @@ router.patch("/:id/bookmark", async (req, res) => {
       bookmarked: card.bookmarked,
     });
   } catch (err) {
-    console.error(
-      "Failed to update bookmark:",
-      err
-    );
+    console.error("Failed to update bookmark:", err);
 
     res.status(500).json({
       error: "Failed to update bookmark",
@@ -57,7 +56,11 @@ router.patch("/:id/bookmark", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  await Card.deleteOne({ _id: req.params.id, userId: req.userId });
+  await Card.deleteOne({
+    _id: req.params.id,
+    userId: req.userId,
+  });
+
   res.json({ success: true });
 });
 

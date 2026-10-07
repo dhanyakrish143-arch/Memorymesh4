@@ -1,4 +1,4 @@
-﻿import express from "express";
+import express from "express";
 import Textbook from "../models/Textbook.js";
 
 const router = express.Router();
@@ -28,6 +28,17 @@ router.get("/", async (req, res) => {
         ? req.query.language.trim()
         : "";
 
+    const board =
+      typeof req.query.board === "string"
+        ? req.query.board.trim()
+        : "";
+
+    if (!["CBSE", "ICSE", "State"].includes(board)) {
+      return res.status(400).json({
+        error: "board must be CBSE, ICSE, or State.",
+      });
+    }
+
     let classNumber = null;
 
     if (rawClass !== undefined) {
@@ -50,6 +61,7 @@ router.get("/", async (req, res) => {
 
     const filter = {
       classNumber,
+      board,
       active: true,
     };
 
@@ -79,6 +91,7 @@ router.get("/", async (req, res) => {
     res.json({
       success: true,
       classNumber,
+      board,
       subject: subject || null,
       language: language || null,
       textbooks,
@@ -100,3 +113,5 @@ function escapeRegExp(value) {
 }
 
 export default router;
+
+

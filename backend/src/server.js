@@ -1,4 +1,4 @@
-﻿import "dotenv/config";
+import "dotenv/config";
 
 import express from "express";
 import path from "path";
@@ -22,6 +22,7 @@ import goalRoutes from "./routes/goal.js";
 import leagueRoutes from "./routes/league.js";
 import socialRoutes from "./routes/social.js";
 import textbookRoutes from "./routes/textbooks.js";
+import learnRoutes from "./routes/learn.js";
 import duelRoutes from "./routes/duel.js";
 import { startLeagueCron } from "./cron/league.js";
 import { registerDuelSocket } from "./socket/duelSocket.js";
@@ -81,7 +82,7 @@ app.use("/api/goal", goalRoutes);
 app.use("/api/league", leagueRoutes);
 app.use("/api/social", socialRoutes);
 app.use("/api/textbooks", textbookRoutes);
-app.use("/api/duel", duelRoutes);
+app.use("/api/learn", learnRoutes);
 
 /*
   Socket.io connection test.
@@ -128,3 +129,7 @@ mongoose
 
     process.exit(1);
   });
+
+
+
+

@@ -1,4 +1,4 @@
-import fs from "fs";
+﻿import fs from "fs";
 import mammoth from "mammoth";
 import { createRequire } from "module";
 
@@ -7,6 +7,10 @@ const pdfParse = require("pdf-parse");
 
 export async function extractTextFromPDF(filePath) {
   const buffer = fs.readFileSync(filePath);
+  return extractTextFromPDFBuffer(buffer);
+}
+
+export async function extractTextFromPDFBuffer(buffer) {
   const data = await pdfParse(buffer);
   return data.text;
 }
@@ -20,14 +24,17 @@ export async function extractText(filePath, mimeType) {
   if (mimeType === "application/pdf") {
     return extractTextFromPDF(filePath);
   }
+
   if (
     mimeType ===
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   ) {
     return extractTextFromDocx(filePath);
   }
+
   if (mimeType === "text/plain") {
     return fs.readFileSync(filePath, "utf-8");
   }
+
   throw new Error(`Unsupported file type: ${mimeType}`);
 }

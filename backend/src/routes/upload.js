@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import multer from "multer";
 import fs from "fs";
 import requireAuth from "../middleware/auth.js";
@@ -13,11 +13,21 @@ router.use(requireAuth);
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+    if (!req.file) {
+      return res.status(400).json({
+        error: "No file uploaded",
+      });
+    }
 
-    const text = await extractText(req.file.path, req.file.mimetype);
+    const text = await extractText(
+      req.file.path,
+      req.file.mimetype
+    );
+
     if (!text || text.trim().length < 20) {
-      return res.status(400).json({ error: "Could not extract readable text from this file" });
+      return res.status(400).json({
+        error: "Could not extract readable text from this file",
+      });
     }
 
     const generated = await generateStudyContent(text);
@@ -27,14 +37,34 @@ router.post("/", upload.single("file"), async (req, res) => {
     res.json(generated);
   } catch (err) {
     console.error("Upload error:", err.message);
-    res.status(500).json({ error: err.message });
+
+    res.status(500).json({
+      error: err.message,
+    });
   }
 });
 
-// Save selected generated flashcards into the user's deck
 router.post("/save-cards", async (req, res) => {
   try {
-    const { flashcards, subject, chapter, class: userClass } = req.body;
+    const {
+      flashcards,
+      subject,
+      chapter,
+      class: userClass,
+      source,
+    } = req.body;
+
+    if (!Array.isArray(flashcards) || flashcards.length === 0) {
+      return res.status(400).json({
+        error: "No flashcards provided",
+      });
+    }
+
+    const cardSource =
+      source === "ncert"
+        ? "ncert"
+        : "upload";
+
     const docs = flashcards.map((f) => ({
       userId: req.userId,
       question: f.question,
@@ -42,12 +72,18 @@ router.post("/save-cards", async (req, res) => {
       subject,
       chapter,
       class: userClass,
-      source: "upload",
+      source: cardSource,
     }));
+
     const saved = await Card.insertMany(docs);
+
     res.json(saved);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Save cards error:", err);
+
+    res.status(500).json({
+      error: err.message,
+    });
   }
 });
 

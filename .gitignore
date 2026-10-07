@@ -1,6 +1,52 @@
-node_modules/
+﻿node_modules/
 .env
 .env.*
 !.env.example
+
 dist/
 build/
+
+textbooks/
+backend/uploads/
+
+*.zip
+*.log
+
+# Temporary/test/backup files
+*.backup
+*.bak
+*.before-*
+*.damaged
+*.corrupted
+*.tmp
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary/debug scripts and test directories
+backend/*-test/
+backend/check-*.mjs
+backend/inspect-*.mjs
+backend/inspect-*.ps1
+backend/verify-*.mjs
+backend/verify-*.ps1
+backend/test-*.mjs
+
+# Generated NCERT manifests/catalogs
+backend/scripts/ncert-*-manifest.json
+backend/scripts/ncert-catalog.html
+
+# Local scratch files
+chapter1.json
+learn.js
+
+# Backup/corrupted frontend copies
+frontend/src/pages/*.backup*
+frontend/src/pages/*.bak
+frontend/src/pages/*.before-*
+frontend/src/pages/*.damaged
+frontend/src/pages/*.corrupted
+frontend/src/pages/Learn.corrupted-before-restore.jsx
+frontend/src/pages/Learn.damaged.jsx
+backend/scripts/ncert-manifest.json

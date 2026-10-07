@@ -1,4 +1,4 @@
-﻿import fs from "fs";
+import fs from "fs";
 import path from "path";
 import mongoose from "mongoose";
 import "dotenv/config";
@@ -26,37 +26,51 @@ function walk(dir) {
 }
 
 function clean(value) {
-  return String(value || "")
-    .trim()
-    .replace(/\s+/g, " ");
+  return String(value || "").trim().replace(/\s+/g, " ");
 }
 
 function extractMetadata(filePath) {
   const relativePath = path.relative(ROOT, filePath);
   const parts = relativePath.split(path.sep);
 
-  const fileName = path.basename(
-    filePath,
-    path.extname(filePath)
-  );
+  const fileName = path.basename(filePath, path.extname(filePath));
 
   const className = clean(parts[0]);
   const subject = clean(parts[1]);
   const language = clean(parts[2]) || "English";
-  const title = clean(fileName);
 
   const classMatch = className.match(/\d+/);
-  const classNumber = classMatch
-    ? Number(classMatch[0])
-    : null;
+  const classNumber = classMatch ? Number(classMatch[0]) : null;
+
+  // NCERT chapter filenames commonly end in 101, 102, 103...
+  // Example: ehev101.pdf -> chapter 1
+  const chapterMatch = fileName.match(/(\d{3})$/);
+
+  let chapterNumber = null;
+
+  if (chapterMatch) {
+    const n = Number(chapterMatch[1]);
+    if (n >= 101 && n <= 199) {
+      chapterNumber = n - 100;
+    }
+  }
+
+  // Full-book PDFs such as ehev1ps.pdf are treated as chapter 1.
+  if (chapterNumber === null && /1ps$/i.test(fileName)) {
+    chapterNumber = 1;
+  }
+
+  if (chapterNumber === null) {
+    chapterNumber = 1;
+  }
 
   return {
     classNumber,
     subject,
     language,
-    title,
-    chapter: "",
-    chapterNumber: null,
+    title: fileName,
+    chapter: `Chapter ${chapterNumber}`,
+    chapterNumber,
     relativePath,
   };
 }
@@ -126,7 +140,7 @@ async function main() {
     );
 
     console.log(
-      `IMPORTED: Class-${book.classNumber} / ${book.subject} / ${book.title}`
+      `IMPORTED: Class-${book.classNumber} / ${book.subject} / ${book.chapter}`
     );
     console.log(`URL: ${sourceUrl}`);
     console.log("");
