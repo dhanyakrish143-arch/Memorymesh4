@@ -66,18 +66,21 @@ Stay faithful to the flashcard content.
     }
   };
 
-  const submit = async (correct) => {
+  const submit = async (rating) => {
     if (submitting || aiLoading) return;
 
     try {
       setSubmitting(true);
 
+      const correct = rating === "got_it";
+
       await client.post("/review/submit", {
         cardId: card._id,
         correct,
+        rating,
       });
 
-      onDone(correct);
+      onDone(correct, rating);
     } catch (err) {
       console.error("Failed to submit review:", err);
       setSubmitting(false);
@@ -171,9 +174,7 @@ Stay faithful to the flashcard content.
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setAiExplanation("")
-                  }
+                  onClick={() => setAiExplanation("")}
                   aria-label="Close explanation"
                 >
                   ×
@@ -194,7 +195,7 @@ Stay faithful to the flashcard content.
               type="button"
               className="review-choice review-choice-wrong"
               disabled={submitting || aiLoading}
-              onClick={() => submit(false)}
+              onClick={() => submit("still_learning")}
             >
               <span className="review-choice-icon">
                 ×
@@ -213,9 +214,30 @@ Stay faithful to the flashcard content.
 
             <button
               type="button"
+              className="review-choice review-choice-moderate"
+              disabled={submitting || aiLoading}
+              onClick={() => submit("moderate")}
+            >
+              <span className="review-choice-icon">
+                ~
+              </span>
+
+              <span>
+                <strong>
+                  Moderate
+                </strong>
+
+                <small>
+                  I almost remembered it
+                </small>
+              </span>
+            </button>
+
+            <button
+              type="button"
               className="review-choice review-choice-right"
               disabled={submitting || aiLoading}
-              onClick={() => submit(true)}
+              onClick={() => submit("got_it")}
             >
               <span className="review-choice-icon">
                 ✓
@@ -240,3 +262,4 @@ Stay faithful to the flashcard content.
     </div>
   );
 }
+

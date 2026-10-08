@@ -1,6 +1,7 @@
 ﻿import fs from "fs";
 import mammoth from "mammoth";
 import { createRequire } from "module";
+import { createWorker } from "tesseract.js";
 
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse");
@@ -20,6 +21,17 @@ export async function extractTextFromDocx(filePath) {
   return result.value;
 }
 
+export async function extractTextFromImage(filePath) {
+  const worker = await createWorker("eng");
+
+  try {
+    const result = await worker.recognize(filePath);
+    return result.data.text;
+  } finally {
+    await worker.terminate();
+  }
+}
+
 export async function extractText(filePath, mimeType) {
   if (mimeType === "application/pdf") {
     return extractTextFromPDF(filePath);
@@ -34,6 +46,14 @@ export async function extractText(filePath, mimeType) {
 
   if (mimeType === "text/plain") {
     return fs.readFileSync(filePath, "utf-8");
+  }
+
+  if (
+    mimeType === "image/png" ||
+    mimeType === "image/jpeg" ||
+    mimeType === "image/webp"
+  ) {
+    return extractTextFromImage(filePath);
   }
 
   throw new Error(`Unsupported file type: ${mimeType}`);

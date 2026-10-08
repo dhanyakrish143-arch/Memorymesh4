@@ -5,6 +5,7 @@ const DEFAULT_SETTINGS = {
   dailyGoal: 10,
   startWeak: true,
   showTips: true,
+  studyLanguage: "English",
 };
 
 export default function Settings() {
@@ -154,6 +155,48 @@ export default function Settings() {
             <div className="settings-row">
               <div>
                 <strong>
+                  Study language
+                </strong>
+
+                <p>
+                  AI content will be shown in English plus your selected language.
+                </p>
+              </div>
+
+              <select
+                value={settings.studyLanguage}
+                onChange={(e) =>
+                  updateSetting(
+                    "studyLanguage",
+                    e.target.value
+                  )
+                }
+              >
+                <option value="English">English</option>
+                <option value="Hindi">Hindi (हिन्दी)</option>
+                <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
+                <option value="Tamil">Tamil (தமிழ்)</option>
+                <option value="Telugu">Telugu (తెలుగు)</option>
+                <option value="Malayalam">Malayalam (മലയാളം)</option>
+                <option value="Bengali">Bengali (বাংলা)</option>
+                <option value="Marathi">Marathi (मराठी)</option>
+                <option value="Gujarati">Gujarati (ગુજરાતી)</option>
+                <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
+                <option value="Urdu">Urdu (اردو)</option>
+                <option value="Spanish">Spanish (Español)</option>
+                <option value="French">French (Français)</option>
+                <option value="German">German (Deutsch)</option>
+                <option value="Portuguese">Portuguese (Português)</option>
+                <option value="Japanese">Japanese (日本語)</option>
+                <option value="Chinese">Chinese (中文)</option>
+                <option value="Korean">Korean (한국어)</option>
+                <option value="Arabic">Arabic (العربية)</option>
+              </select>
+            </div>
+
+            <div className="settings-row">
+              <div>
+                <strong>
                   Daily review goal
                 </strong>
 
@@ -232,3 +275,4 @@ export default function Settings() {
     </div>
   );
 }
+

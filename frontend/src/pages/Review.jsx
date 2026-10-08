@@ -18,6 +18,7 @@ export default function Review() {
   const [missedCards, setMissedCards] = useState([]);
 
   const [reviewFilter, setReviewFilter] = useState("all");
+  const [selectedSubject, setSelectedSubject] = useState("all");
   const [sessionSize, setSessionSize] = useState(null);
 
   const [studySettings] = useState(() => {
@@ -58,8 +59,13 @@ export default function Review() {
 
       const params = {};
 
-      if (location.state?.subject) {
-        params.subject = location.state.subject;
+      const activeSubject =
+        selectedSubject !== "all"
+          ? selectedSubject
+          : location.state?.subject || "";
+
+      if (activeSubject) {
+        params.subject = activeSubject;
       }
 
       if (location.state?.chapter) {
@@ -116,6 +122,7 @@ export default function Review() {
   }, [
     location.state?.subject,
     location.state?.chapter,
+    selectedSubject,
   ]);
 
   const availableCards = useMemo(() => {
@@ -215,7 +222,9 @@ export default function Review() {
     setSessionSize(null);
   };
 
-  const handleDone = (correct) => {
+  const handleDone = (correct, rating = null) => {
+    const currentCard = cards[0];
+
     setCompleted((current) => current + 1);
 
     if (correct) {
@@ -223,13 +232,26 @@ export default function Review() {
     } else {
       setIncorrectAnswers((current) => current + 1);
 
-      setMissedCards((current) => [
-        ...current,
-        cards[0],
-      ]);
+      if (currentCard) {
+        setMissedCards((current) => [
+          ...current,
+          currentCard,
+        ]);
+      }
     }
 
-    setCards((current) => current.slice(1));
+    setCards((current) => {
+      const remaining = current.slice(1);
+
+      // Still learning cards are immediately reinforced
+      // by putting the same card back at the end of the
+      // current session.
+      if (rating === "still_learning" && currentCard) {
+        return [...remaining, currentCard];
+      }
+
+      return remaining;
+    });
   };
 
   if (loading) {
@@ -306,6 +328,56 @@ export default function Review() {
               due
             </span>
           </div>
+        </section>
+
+        <section className="review-subject-card">
+          <div className="review-subject-heading">
+            <span className="eyebrow">
+              SUBJECT
+            </span>
+
+            <h2>
+              What do you want to review?
+            </h2>
+
+            <p>
+              Choose a subject to focus your review session.
+            </p>
+          </div>
+
+          <select
+            className="review-subject-select"
+            value={selectedSubject}
+            onChange={(event) => {
+              setSelectedSubject(event.target.value);
+              setCards([]);
+              setSessionTotal(0);
+              setCompleted(0);
+              setCorrectAnswers(0);
+              setIncorrectAnswers(0);
+              setMissedCards([]);
+              setSessionSize(null);
+            }}
+          >
+            <option value="all">
+              All Subjects
+            </option>
+
+            {[...new Set(
+              allDueCards
+                .map((card) => card.subject)
+                .filter(Boolean)
+            )]
+              .sort()
+              .map((subject) => (
+                <option
+                  key={subject}
+                  value={subject}
+                >
+                  {subject}
+                </option>
+              ))}
+          </select>
         </section>
 
         <section className="review-filter-card">
@@ -818,6 +890,8 @@ export default function Review() {
     </div>
   );
 }
+
+
 
 
 

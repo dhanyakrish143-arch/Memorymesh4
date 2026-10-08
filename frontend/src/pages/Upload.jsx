@@ -2,6 +2,22 @@
 import { useNavigate } from "react-router-dom";
 import client from "../api/client";
 
+function getStudyLanguage() {
+  try {
+    const stored = localStorage.getItem("memorymesh_settings");
+
+    if (!stored) {
+      return "English";
+    }
+
+    const settings = JSON.parse(stored);
+
+    return settings?.studyLanguage || "English";
+  } catch (err) {
+    console.error("Failed to read study language:", err);
+    return "English";
+  }
+}
 export default function Upload() {
   const navigate = useNavigate();
   const [mode, setMode] = useState("file");
@@ -64,6 +80,15 @@ export default function Upload() {
 
     try {
       const formData = new FormData();
+
+      const studyLanguage = getStudyLanguage();
+
+      formData.append("studyLanguage", studyLanguage);
+
+      console.log(
+        "Upload: Using study language:",
+        studyLanguage
+      );
 
       if (mode === "file") {
         formData.append("file", file);
@@ -249,7 +274,7 @@ export default function Upload() {
               <input
                 id="study-file"
                 type="file"
-                accept=".pdf,.docx,.txt"
+                accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.webp"
                 onChange={handleFileChange}
               />
 
@@ -270,7 +295,7 @@ export default function Upload() {
                 <p>
                   {file
                     ? file.name
-                    : "Choose a PDF, DOCX, or TXT file"}
+                    : "Choose a PDF, DOCX, TXT, PNG, JPG, or JPEG file"}
                 </p>
 
                 {!file && (
@@ -593,6 +618,8 @@ Photosynthesis is the process by which green plants make food using sunlight, ca
     </div>
   );
 }
+
+
 
 
 

@@ -19,6 +19,17 @@ router.post("/", upload.single("file"), async (req, res) => {
       });
     }
 
+    const studyLanguage =
+      typeof req.body.studyLanguage === "string" &&
+      req.body.studyLanguage.trim()
+        ? req.body.studyLanguage.trim()
+        : "English";
+
+    console.log(
+      "Upload: Study language:",
+      studyLanguage
+    );
+
     const text = await extractText(
       req.file.path,
       req.file.mimetype
@@ -30,13 +41,21 @@ router.post("/", upload.single("file"), async (req, res) => {
       });
     }
 
-    const generated = await generateStudyContent(text);
+    const generated =
+      await generateStudyContent(
+        text,
+        studyLanguage
+      );
 
     fs.unlink(req.file.path, () => {});
 
     res.json(generated);
   } catch (err) {
     console.error("Upload error:", err.message);
+
+    if (req.file?.path) {
+      fs.unlink(req.file.path, () => {});
+    }
 
     res.status(500).json({
       error: err.message,

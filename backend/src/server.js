@@ -1,4 +1,4 @@
-import "dotenv/config";
+﻿import "dotenv/config";
 
 import express from "express";
 import path from "path";
@@ -19,13 +19,8 @@ import studyPlanRoutes from "./routes/studyPlan.js";
 import gamesRoutes from "./routes/games.js";
 import quizRoutes from "./routes/quiz.js";
 import goalRoutes from "./routes/goal.js";
-import leagueRoutes from "./routes/league.js";
-import socialRoutes from "./routes/social.js";
 import textbookRoutes from "./routes/textbooks.js";
 import learnRoutes from "./routes/learn.js";
-import duelRoutes from "./routes/duel.js";
-import { startLeagueCron } from "./cron/league.js";
-import { registerDuelSocket } from "./socket/duelSocket.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,15 +74,12 @@ app.use("/api/study-plan", studyPlanRoutes);
 app.use("/api/games", gamesRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/goal", goalRoutes);
-app.use("/api/league", leagueRoutes);
-app.use("/api/social", socialRoutes);
 app.use("/api/textbooks", textbookRoutes);
 app.use("/api/learn", learnRoutes);
 
 /*
   Socket.io connection test.
 */
-registerDuelSocket(io);
 
 /* Basic Socket.io connection logging */
 io.on("connection", (socket) => {
@@ -116,8 +108,6 @@ mongoose
           "Server on port " +
             process.env.PORT
         );
-
-        startLeagueCron();
       }
     );
   })
@@ -129,6 +119,8 @@ mongoose
 
     process.exit(1);
   });
+
+
 
 
 

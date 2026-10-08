@@ -169,7 +169,16 @@ router.get("/due", async (req, res) => {
 
 router.post("/submit", async (req, res) => {
   try {
-    const { cardId, correct } = req.body;
+    const { cardId, correct, rating } = req.body;
+
+    const normalizedRating =
+      rating === "got_it" ||
+      rating === "moderate" ||
+      rating === "still_learning"
+        ? rating
+        : Boolean(correct)
+          ? "got_it"
+          : "still_learning";
 
     const card = await Card.findOne({
       _id: cardId,
@@ -182,16 +191,17 @@ router.post("/submit", async (req, res) => {
       });
     }
 
-    const wasCorrect = Boolean(correct);
+    const wasCorrect = normalizedRating === "got_it";
+    const scheduleCorrect = normalizedRating !== "still_learning";
 
-    card.p_l = updateMastery(card.p_l, wasCorrect);
+    card.p_l = updateMastery(card.p_l, normalizedRating);
 
     const {
       s_coefficient,
       nextReviewDate,
     } = computeNextReview(
       card.s_coefficient,
-      wasCorrect
+      normalizedRating
     );
 
     card.s_coefficient = s_coefficient;
@@ -208,6 +218,7 @@ router.post("/submit", async (req, res) => {
     card.reviewHistory.push({
       reviewedAt: new Date(),
       correct: wasCorrect,
+      rating: normalizedRating,
     });
 
     card.mastered = card.p_l > 0.9;
@@ -245,7 +256,12 @@ router.post("/submit", async (req, res) => {
 
       user.lastActiveDate = new Date();
 
-      const xpEarned = wasCorrect ? 10 : 2;
+      const xpEarned =
+        normalizedRating === "got_it"
+          ? 10
+          : normalizedRating === "moderate"
+            ? 5
+            : 2;
 
       user.xp = (user.xp || 0) + xpEarned;
       user.weeklyXp = (user.weeklyXp || 0) + xpEarned;
@@ -535,6 +551,9 @@ router.get("/stats", async (req, res) => {
 });
 
 export default router;
+
+
+
 
 
 

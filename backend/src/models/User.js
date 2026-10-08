@@ -97,19 +97,7 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-
-    leagueTier: {
-      type: String,
-      enum: ["bronze", "silver", "gold", "diamond"],
-      default: "bronze",
-    },
-
-    leagueWeek: {
-      type: String,
-      default: "",
-    },
-
-    level: {
+level: {
       type: Number,
       default: 1,
     },
@@ -138,5 +126,7 @@ const userSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("User", userSchema);
+
+
 
 
