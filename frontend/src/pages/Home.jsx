@@ -118,17 +118,7 @@ export default function Home() {
         </div>
 
         <div className="review-cta-action">
-          {dueCount > 0 ? (
-            <Link to="/review" className="home-primary-button">
-              Start Review
-              <span>→</span>
-            </Link>
-          ) : (
-            <Link to="/upload" className="home-primary-button">
-              Add Cards
-              <span>→</span>
-            </Link>
-          )}
+          {dueCount > 0 && ( <Link to="/review" className="home-primary-button">Start Review <span>→</span></Link> )}
         </div>
       </section>
 
@@ -296,19 +286,6 @@ export default function Home() {
       {/* QUICK ACTIONS */}
       <section className="quick-actions">
 
-        <Link to="/upload" className="quick-action-card">
-          <div className="quick-action-icon green">
-            +
-          </div>
-
-          <div>
-            <h3>Add new cards</h3>
-            <p>Upload study material and build your deck.</p>
-          </div>
-
-          <span className="quick-arrow">→</span>
-        </Link>
-
         <Link to="/cards" className="quick-action-card">
           <div className="quick-action-icon blue">
             ▣
@@ -324,43 +301,6 @@ export default function Home() {
 
       </section>
 
-      {/* GAMES */}
-      <section className="home-games-section">
-
-        <div className="home-panel-header">
-          <div>
-            <span className="home-card-label">GAMES</span>
-            <h2>Learn by playing</h2>
-            <p>Strengthen your memory with quick study games.</p>
-          </div>
-        </div>
-
-        <div className="home-games-grid">
-
-          <Link
-            to="/word-match"
-            className="home-game-card"
-          >
-            <div className="home-game-icon">
-              🧩
-            </div>
-
-            <div className="home-game-content">
-              <span>WORD MATCH</span>
-              <h3>Match the pairs</h3>
-              <p>
-                Match each question with its correct answer.
-              </p>
-            </div>
-
-            <span className="home-game-arrow">
-              →
-            </span>
-          </Link>
-
-        </div>
-
-      </section>
 
       {/* MOTIVATION */}
       <section className="home-motivation">
@@ -381,5 +321,8 @@ export default function Home() {
     </div>
   );
 }
+
+
+
 
 

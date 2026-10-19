@@ -1,346 +1,215 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 import client from "../api/client";
 
 export default function Cards() {
-  const [cards, setCards] = useState([]);
+  const [sets, setSets] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [subjectFilter, setSubjectFilter] = useState("all");
+  const [revealed, setRevealed] = useState({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadCards = async () => {
-      try {
-        const { data } = await client.get("/cards");
-        setCards(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load cards:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    let active = true;
 
-    loadCards();
+    async function loadSets() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const { data } = await client.get("/flashcard-sets");
+
+        if (active) {
+          setSets(Array.isArray(data?.sets) ? data.sets : []);
+        }
+      } catch (err) {
+        console.error("Failed to load published flashcards:", err);
+
+        if (active) {
+          setError(
+            err.response?.data?.error ||
+              "Could not load your class flashcards. Please try again."
+          );
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    loadSets();
+
+    return () => {
+      active = false;
+    };
   }, []);
 
-  const filteredCards = useMemo(() => {
-    const query = search.toLowerCase().trim();
+  const allCards = useMemo(
+    () =>
+      sets.flatMap((set) =>
+        (Array.isArray(set.cards) ? set.cards : []).map((card, index) => ({
+          ...card,
+          _id: `${set._id || set.title}-${index}`,
+          setTitle: set.title,
+          subject: set.subject,
+          chapter: set.chapter,
+          classNumber: set.classNumber,
+          board: set.board,
+        }))
+      ),
+    [sets]
+  );
 
-    return cards.filter((card) => {
+  const subjects = useMemo(
+    () => [...new Set(allCards.map((card) => card.subject).filter(Boolean))].sort(),
+    [allCards]
+  );
+
+  const filteredCards = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    return allCards.filter((card) => {
+      const matchesSubject =
+        subjectFilter === "all" || card.subject === subjectFilter;
+
       const matchesSearch =
         !query ||
         card.question?.toLowerCase().includes(query) ||
         card.answer?.toLowerCase().includes(query) ||
         card.subject?.toLowerCase().includes(query) ||
-        card.chapter?.toLowerCase().includes(query);
+        card.chapter?.toLowerCase().includes(query) ||
+        card.setTitle?.toLowerCase().includes(query);
 
-      const matchesFilter =
-        filter === "all" ||
-        (filter === "mastered" && card.mastered) ||
-        (filter === "learning" && !card.mastered) ||
-        (filter === "saved" && card.bookmarked);
-
-      return matchesSearch && matchesFilter;
+      return matchesSubject && matchesSearch;
     });
-  }, [cards, search, filter]);
+  }, [allCards, search, subjectFilter]);
 
-  const toggleBookmark = async (id) => {
-    try {
-      const { data } = await client.patch(
-        `/cards/${id}/bookmark`
-      );
-
-      setCards((current) =>
-        current.map((card) =>
-          card._id === id
-            ? {
-                ...card,
-                bookmarked: data.bookmarked,
-              }
-            : card
-        )
-      );
-    } catch (err) {
-      console.error(
-        "Failed to update bookmark:",
-        err
-      );
-    }
-  };
-
-  const deleteCard = async (id) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this card?"
-    );
-
-    if (!confirmed) return;
-
-    try {
-      await client.delete(`/cards/${id}`);
-
-      setCards((current) =>
-        current.filter((card) => card._id !== id)
-      );
-    } catch (err) {
-      console.error(
-        "Failed to delete card:",
-        err
-      );
-    }
+  const toggleAnswer = (id) => {
+    setRevealed((current) => ({
+      ...current,
+      [id]: !current[id],
+    }));
   };
 
   if (loading) {
     return (
       <div className="page">
-        <p>Loading your cards...</p>
+        <p>Loading your class flashcards...</p>
       </div>
     );
   }
 
-  const savedCount = cards.filter(
-    (card) => card.bookmarked
-  ).length;
-
   return (
     <div className="page cards-page">
-
       <div className="cards-header">
         <div>
-          <p className="eyebrow">
-            MEMORYMESH
-          </p>
-
-          <h1 className="brand">
-            Your Cards
-          </h1>
-
+          <p className="eyebrow">MEMORYMESH</p>
+          <h1 className="brand">Class Flashcards</h1>
           <p className="subtitle">
-            Browse and manage your flashcards.
+            Study flashcards published by your teacher or administrator.
           </p>
         </div>
 
         <div className="cards-count">
-          <strong>{cards.length}</strong>
+          <strong>{filteredCards.length}</strong>
           <span>cards</span>
         </div>
       </div>
 
       <div className="cards-toolbar">
-
         <input
           type="text"
-          placeholder="Search your cards..."
+          placeholder="Search questions, answers, or chapters..."
           value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
+          onChange={(event) => setSearch(event.target.value)}
           className="cards-search"
         />
 
-        <div className="cards-filters">
-
-          <button
-            type="button"
-            className={
-              filter === "all"
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setFilter("all")
-            }
-          >
-            All
-          </button>
-
-          <button
-            type="button"
-            className={
-              filter === "learning"
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setFilter("learning")
-            }
-          >
-            Learning
-          </button>
-
-          <button
-            type="button"
-            className={
-              filter === "mastered"
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setFilter("mastered")
-            }
-          >
-            Mastered
-          </button>
-
-          <button
-            type="button"
-            className={
-              filter === "saved"
-                ? "active"
-                : ""
-            }
-            onClick={() =>
-              setFilter("saved")
-            }
-          >
-            ★ Saved ({savedCount})
-          </button>
-
-        </div>
-      </div>
-
-      <div className="cards-results">
-        <span>
-          Showing {filteredCards.length} of{" "}
-          {cards.length} cards
-        </span>
-      </div>
-
-      {filteredCards.length === 0 ? (
-        <div className="card cards-empty">
-          <h2>
-            {filter === "saved"
-              ? "No saved cards"
-              : "No cards found"}
-          </h2>
-
-          <p>
-            {filter === "saved"
-              ? "Bookmark important cards and they will appear here."
-              : "Try a different search or upload more study material."}
-          </p>
-        </div>
-      ) : (
-        <div className="cards-list">
-
-          {filteredCards.map((card) => (
-            <div
-              className="card library-card"
-              key={card._id}
-            >
-
-              <div className="library-card-top">
-
-                <div>
-                  {card.subject && (
-                    <span className="card-subject">
-                      {card.subject}
-                    </span>
-                  )}
-
-                  {card.chapter && (
-                    <span className="card-chapter">
-                      {card.chapter}
-                    </span>
-                  )}
-                </div>
-
-                <div className="library-card-top-actions">
-
-                  <button
-                    type="button"
-                    className={`bookmark-card-button ${
-                      card.bookmarked
-                        ? "saved"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      toggleBookmark(card._id)
-                    }
-                    aria-label={
-                      card.bookmarked
-                        ? "Remove saved card"
-                        : "Save card"
-                    }
-                    title={
-                      card.bookmarked
-                        ? "Remove from saved"
-                        : "Save card"
-                    }
-                  >
-                    {card.bookmarked
-                      ? "★"
-                      : "☆"}
-                  </button>
-
-                  <span
-                    className={
-                      card.mastered
-                        ? "card-status mastered"
-                        : "card-status learning"
-                    }
-                  >
-                    {card.mastered
-                      ? "✓ Mastered"
-                      : "Learning"}
-                  </span>
-
-                </div>
-
-              </div>
-
-              <h2>
-                {card.question}
-              </h2>
-
-              <p className="library-answer">
-                {card.answer}
-              </p>
-
-              <div className="library-card-footer">
-
-                <div className="library-card-stats">
-
-                  <span>
-                    Reviews:{" "}
-                    {card.reviewCount || 0}
-                  </span>
-
-                  <span>
-                    Correct:{" "}
-                    {card.correctCount || 0}
-                  </span>
-
-                </div>
-
-                <div className="library-card-actions">
-
-                  <Link
-                    to="/review"
-                    className="study-card-button"
-                  >
-                    Study →
-                  </Link>
-
-                  <button
-                    type="button"
-                    className="delete-card-button"
-                    onClick={() =>
-                      deleteCard(card._id)
-                    }
-                  >
-                    Delete
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
+        <select
+          value={subjectFilter}
+          onChange={(event) => setSubjectFilter(event.target.value)}
+          className="cards-search"
+          aria-label="Filter by subject"
+        >
+          <option value="all">All subjects</option>
+          {subjects.map((subject) => (
+            <option key={subject} value={subject}>
+              {subject}
+            </option>
           ))}
+        </select>
+      </div>
 
+      {error && (
+        <div className="card cards-empty">
+          <h2>Unable to load flashcards</h2>
+          <p>{error}</p>
+          <button type="button" onClick={() => window.location.reload()}>
+            Try again
+          </button>
         </div>
       )}
 
+      {!error && filteredCards.length === 0 && (
+        <div className="card cards-empty">
+          <h2>{allCards.length ? "No cards found" : "No published flashcards yet"}</h2>
+          <p>
+            {allCards.length
+              ? "Try a different search or subject."
+              : "Your administrator has not published flashcards for your class and board yet."}
+          </p>
+        </div>
+      )}
+
+      {!error && filteredCards.length > 0 && (
+        <>
+          <div className="cards-results">
+            Showing {filteredCards.length} of {allCards.length} published cards
+          </div>
+
+          <div className="cards-list">
+            {filteredCards.map((card) => (
+              <article className="card library-card" key={card._id}>
+                <div className="library-card-top">
+                  <div>
+                    {card.subject && (
+                      <span className="card-subject">{card.subject}</span>
+                    )}
+                    {card.chapter && (
+                      <span className="card-chapter">{card.chapter}</span>
+                    )}
+                  </div>
+                  <span className="card-status learning">
+                    {card.board || "School board"}
+                  </span>
+                </div>
+
+                <p className="subtitle">{card.setTitle}</p>
+                <h2>{card.question}</h2>
+
+                {revealed[card._id] && (
+                  <div className="library-answer">
+                    <strong>Answer</strong>
+                    <p>{card.answer}</p>
+                  </div>
+                )}
+
+                <div className="library-card-footer">
+                  <span className="card-chapter">
+                    Class {card.classNumber}
+                  </span>
+                  <button
+                    type="button"
+                    className="study-card-button"
+                    onClick={() => toggleAnswer(card._id)}
+                  >
+                    {revealed[card._id] ? "Hide answer" : "Reveal answer"}
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

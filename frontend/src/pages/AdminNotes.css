@@ -1,0 +1,163 @@
+﻿.admin-notes-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+  color: var(--text-primary, #172033);
+}
+.admin-notes-kicker {
+  margin-bottom: 10px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+.admin-notes-heading,
+.admin-notes-list-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.admin-notes-heading h1 {
+  margin: 0;
+  font-size: clamp(27px, 4vw, 36px);
+}
+.admin-notes-heading p,
+.admin-notes-list-heading p {
+  margin: 8px 0 0;
+  color: #64748b;
+}
+.admin-notes-count {
+  white-space: nowrap;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 13px;
+  font-weight: 700;
+}
+.admin-notes-panel {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: var(--surface, #fff);
+  box-shadow: 0 4px 18px rgba(15, 23, 42, .04);
+}
+.admin-notes-panel h2 {
+  margin: 0;
+  font-size: 19px;
+}
+.admin-notes-help,
+.admin-notes-muted {
+  color: #64748b;
+  font-size: 13px;
+}
+.admin-notes-help { margin: 7px 0 18px; }
+.admin-notes-form,
+.admin-notes-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.admin-notes-form label,
+.admin-notes-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.admin-notes-form input,
+.admin-notes-form select,
+.admin-notes-form textarea,
+.admin-notes-filters input,
+.admin-notes-filters select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 11px 12px;
+  background: var(--input-bg, #fff);
+  color: inherit;
+  font: inherit;
+  font-weight: 400;
+}
+.admin-notes-form textarea { resize: vertical; line-height: 1.6; }
+.admin-notes-wide { grid-column: 1 / -1; }
+.admin-notes-form-actions,
+.admin-note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.admin-notes-page button {
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 14px;
+  background: #4338ca;
+  color: white;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-notes-page button:disabled { opacity: .6; cursor: wait; }
+.admin-notes-page button.secondary {
+  border: 1px solid #cbd5e1;
+  background: transparent;
+  color: inherit;
+}
+.admin-notes-page button.danger { background: #b91c1c; }
+.admin-notes-alert {
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.admin-notes-alert.error { background: #fef2f2; color: #991b1b; }
+.admin-notes-alert.success { background: #ecfdf5; color: #065f46; }
+.admin-notes-filters { margin-top: 18px; grid-template-columns: 2fr 1fr 1fr; }
+.admin-notes-list { display: grid; gap: 12px; margin-top: 18px; }
+.admin-note-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+.admin-note-card-main { min-width: 0; }
+.admin-note-meta,
+.admin-note-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.admin-note-meta span,
+.admin-note-tags span {
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+.admin-note-card h3 { margin: 12px 0 7px; font-size: 16px; }
+.admin-note-preview {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.admin-note-tags { margin-top: 12px; }
+.admin-note-updated { margin: 10px 0 0; color: #94a3b8; font-size: 11px; }
+.admin-note-actions { flex-shrink: 0; align-items: flex-start; }
+.admin-notes-empty { padding: 22px 0; color: #64748b; text-align: center; }
+@media (max-width: 700px) {
+  .admin-notes-page { padding: 22px 14px 40px; }
+  .admin-notes-panel { padding: 16px; }
+  .admin-notes-form,
+  .admin-notes-filters { grid-template-columns: 1fr; }
+  .admin-notes-wide { grid-column: auto; }
+  .admin-note-card { flex-direction: column; }
+  .admin-note-actions { align-self: flex-start; }
+}

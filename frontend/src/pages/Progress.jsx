@@ -47,6 +47,7 @@ export default function Progress() {
 
   const subjects = stats?.subjects ?? [];
   const weeklyActivity = stats?.weeklyActivity ?? [];
+  const weakTopics = stats?.weakTopics ?? [];
 
   const streak = stats?.streak ?? 0;
   const xp = stats?.xp ?? 0;
@@ -257,6 +258,55 @@ export default function Progress() {
         )}
       </div>
 
+      <div className="card progress-section">
+        <div className="progress-section-header">
+          <div>
+            <span className="eyebrow">FOCUS AREAS</span>
+            <h2>Topics to practise</h2>
+          </div>
+        </div>
+
+        {weakTopics.length === 0 ? (
+          <p>No focus areas identified yet. Keep reviewing to build your learning data.</p>
+        ) : (
+          <div className="weak-topics-list">
+            {weakTopics.map((topic) => (
+              <div
+                className="weak-topic-item"
+                key={`${topic.subject}-${topic.chapter}`}
+              >
+                <div className="weak-topic-heading">
+                  <div>
+                    <strong>{topic.chapter}</strong>
+                    <span>{topic.subject}</span>
+                  </div>
+                  <span className="weak-topic-reason">{topic.reason}</span>
+                </div>
+
+                <div className="weak-topic-metrics">
+                  <span>Mastery: {topic.mastery}%</span>
+                  <span>
+                    {topic.accuracy == null
+                      ? "No reviews yet"
+                      : `Accuracy: ${topic.accuracy}%`}
+                  </span>
+                  <span>{topic.reviews} reviews · {topic.totalCards} cards</span>
+                </div>
+
+                <div className="progress-track">
+                  <div
+                    className="progress-fill mastery-fill"
+                    style={{
+                      width: `${Math.min(Math.max(topic.mastery ?? 0, 0), 100)}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
 
       <div className="card progress-section">
         <div className="progress-section-header">
@@ -269,13 +319,38 @@ export default function Progress() {
         {weeklyActivity.length === 0 ? (
           <p>No review activity yet.</p>
         ) : (
-          <div className="weekly-activity">
-            {weeklyActivity.map((day) => (
-              <div className="activity-day" key={day.date}>
-                <strong>{day.reviews}</strong>
-                <span>{new Date(day.date).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}</span>
-              </div>
-            ))}
+          <div className="weekly-chart">
+            {weeklyActivity.map((day) => {
+              const maxDailyReviews = Math.max(
+                1,
+                ...weeklyActivity.map((item) => item.reviews ?? 0)
+              );
+              const reviews = day.reviews ?? 0;
+              const barHeight =
+                reviews > 0
+                  ? Math.max(8, (reviews / maxDailyReviews) * 100)
+                  : 0;
+
+              return (
+                <div className="weekly-chart-day" key={day.date}>
+                  <strong>{reviews}</strong>
+                  <div
+                    className="weekly-chart-track"
+                    title={`${reviews} reviews`}
+                  >
+                    <div
+                      className="weekly-chart-bar"
+                      style={{ height: `${barHeight}%` }}
+                    />
+                  </div>
+                  <span>
+                    {new Date(day.date).toLocaleDateString("en-IN", {
+                      weekday: "short",
+                    })}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -320,6 +395,9 @@ export default function Progress() {
     </div>
   );
 }
+
+
+
 
 
 

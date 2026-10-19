@@ -475,6 +475,64 @@ router.get("/stats", async (req, res) => {
       })
     );
 
+    // Learning analytics: group cards by subject and chapter.
+    const topicsMap = {};
+
+    for (const card of cards) {
+      const subject = (card.subject || "General").trim() || "General";
+      const chapter = (card.chapter || "General").trim() || "General";
+      const key = `${subject}|||${chapter}`;
+
+      if (!topicsMap[key]) {
+        topicsMap[key] = {
+          subject,
+          chapter,
+          totalCards: 0,
+          reviews: 0,
+          correct: 0,
+          masteryTotal: 0,
+        };
+      }
+
+      const topic = topicsMap[key];
+      topic.totalCards += 1;
+      topic.reviews += Number(card.reviewCount || 0);
+      topic.correct += Number(card.correctCount || 0);
+      topic.masteryTotal += Math.max(0, Math.min(1, Number(card.p_l ?? 0.3)));
+    }
+
+    const weakTopics = Object.values(topicsMap)
+      .map((topic) => {
+        const mastery = topic.totalCards > 0
+          ? Math.round((topic.masteryTotal / topic.totalCards) * 100)
+          : 0;
+        const accuracy = topic.reviews > 0
+          ? Math.round((topic.correct / topic.reviews) * 100)
+          : null;
+
+        let reason = "On track";
+        if (topic.reviews === 0) {
+          reason = "Not practised yet";
+        } else if (mastery < 40) {
+          reason = "Low BKT mastery";
+        } else if (topic.reviews >= 3 && accuracy < 60) {
+          reason = "Low review accuracy";
+        } else if (mastery < 70) {
+          reason = "Needs more practice";
+        }
+
+        return {
+          subject: topic.subject,
+          chapter: topic.chapter,
+          totalCards: topic.totalCards,
+          reviews: topic.reviews,
+          mastery,
+          accuracy,
+          reason,
+        };
+      })
+      .filter((topic) => topic.reason !== "On track")
+      .sort((a, b) => a.mastery - b.mastery || (a.accuracy ?? 101) - (b.accuracy ?? 101));
     const weeklyMap = {};
 
     for (let i = 6; i >= 0; i -= 1) {
@@ -521,6 +579,8 @@ router.get("/stats", async (req, res) => {
 
       subjects,
 
+      weakTopics,
+
       weeklyActivity,
 
       totalReviews,
@@ -551,6 +611,8 @@ router.get("/stats", async (req, res) => {
 });
 
 export default router;
+
+
 
 
 

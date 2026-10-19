@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 const noteSchema = new mongoose.Schema(
   {
@@ -32,6 +32,22 @@ const noteSchema = new mongoose.Schema(
       trim: true,
     },
 
+    pdfStorageName: {
+      type: String,
+      default: null,
+    },
+
+    pdfOriginalName: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+
+    pdfMimeType: {
+      type: String,
+      default: null,
+    },
+
     content: {
       type: String,
       required: true,
@@ -62,3 +78,4 @@ const noteSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Note", noteSchema);
+

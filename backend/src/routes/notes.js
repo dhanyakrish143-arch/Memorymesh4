@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import Note from "../models/Note.js";
 import auth from "../middleware/auth.js";
 
@@ -130,6 +130,49 @@ router.get("/subjects", auth, async (req, res) => {
   GET /api/notes/:id
   Get one note.
 */
+
+// STUDENT_SHARED_PDF_ROUTE
+router.get("/:id/pdf", auth, async (req, res) => {
+  try {
+    const User = (await import("../models/User.js")).default;
+    const user = await User.findById(req.userId).select("class board role").lean();
+
+    if (!user) return res.status(401).json({ error: "User not found." });
+
+    const note = await Note.findOne({
+      _id: req.params.id,
+      userId: null,
+      pdfStorageName: { $ne: null },
+      class: user.class,
+      board: user.board,
+    }).select("pdfStorageName pdfOriginalName").lean();
+
+    if (!note) {
+      return res.status(404).json({ error: "PDF not found for your class and board." });
+    }
+
+    const path = await import("path");
+    const fs = await import("fs");
+    const root = path.resolve(process.cwd(), "uploads", "shared-notes");
+    const filename = path.basename(note.pdfStorageName);
+    const filePath = path.join(root, filename);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: "The PDF file is missing from storage." });
+    }
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `inline; filename="${(note.pdfOriginalName || "study-notes.pdf").replace(/["\\\r\n]/g, "_")}"`
+    );
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    return res.sendFile(filePath);
+  } catch (error) {
+    console.error("Student PDF access failed:", error);
+    return res.status(500).json({ error: "Could not open the PDF." });
+  }
+});
 router.get("/:id", auth, async (req, res) => {
   try {
     const User = (await import("../models/User.js")).default;
@@ -283,3 +326,4 @@ router.post("/:id/bookmark", auth, async (req, res) => {
 });
 
 export default router;
+

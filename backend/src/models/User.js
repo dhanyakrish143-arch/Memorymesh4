@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    role: {
+      type: String,
+      enum: ["student", "admin"],
+      default: "student",
+    },
+
     class: {
       type: Number,
       min: 5,
@@ -126,6 +132,7 @@ level: {
 );
 
 export default mongoose.model("User", userSchema);
+
 
 
 

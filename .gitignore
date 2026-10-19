@@ -50,3 +50,16 @@ frontend/src/pages/*.corrupted
 frontend/src/pages/Learn.corrupted-before-restore.jsx
 frontend/src/pages/Learn.damaged.jsx
 backend/scripts/ncert-manifest.json
+
+# Local database and admin cleanup backups
+backups/
+admin-backup-*/
+backend/backend/
+backend/admin-notes-delete.mjs
+backend/admin-notes-dry-run.mjs
+
+# Additional local backup artifacts
+*.admin-backup
+*.incomplete-backup
+*.repair-backup
+frontend/src/App.jsx.bak*

@@ -12,10 +12,17 @@ import { useEffect, useRef, useState } from "react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 import Login from "./pages/Login";
+import AdminLogin from "./pages/AdminLogin";
+import Admin from "./pages/Admin";
+import AdminStudents from "./pages/AdminStudents";
+import AdminLayout from "./pages/AdminLayout";
+import AdminSection from "./pages/AdminSection";
+import AdminNotes from "./pages/AdminNotes";
+import AdminFlashcards from "./pages/AdminFlashcards";
+import AdminQuizzes from "./pages/AdminQuizzes";
 import Home from "./pages/Home";
 import Learn from "./pages/Learn";
 
-import Upload from "./pages/Upload";
 import Progress from "./pages/Progress";
 import Cards from "./pages/Cards";
 import Activity from "./pages/Activity";
@@ -27,7 +34,6 @@ import Settings from "./pages/Settings";
 import StudyAssistant from "./pages/StudyAssistant";
 import Exam from "./pages/Exam";
 import FocusMode from "./pages/FocusMode";
-import Games from "./pages/Games";
 import WordMatch from "./pages/WordMatch";
 import RapidFire from "./pages/RapidFire";
 import FillInStory from "./pages/FillInStory";
@@ -42,6 +48,14 @@ function Private({ children }) {
   return user ? children : <Navigate to="/login" />;
 }
 
+function AdminOnly({ children }) {
+  const { user } = useAuth();
+
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.role !== "admin") return <Navigate to="/" replace />;
+
+  return children;
+}
 function Nav() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -50,8 +64,6 @@ function Nav() {
   const navItems = [
     { path: "/", label: "Home", icon: "🏠" },
     { path: "/learn", label: "Learn", icon: "📚" },
-    { path: "/games", label: "Games", icon: "🎮" },
-    { path: "/upload", label: "Upload", icon: "⬆️" },
     { path: "/cards", label: "Flashcards", icon: "🃏" },
     { path: "/progress", label: "Progress", icon: "📈" },
     { path: "/review", label: "Review", icon: "🔄" },
@@ -67,7 +79,7 @@ function Nav() {
     { path: "/focus-mode", label: "Focus Mode", icon: "🎯" },
   ];
 
-  if (!user) return null;
+  if (!user || user.role === "admin" || location.pathname === "/login" || location.pathname === "/admin-login") return null;
 
   const isActive = (path) => {
     if (path === "/") return location.pathname === "/";
@@ -138,6 +150,26 @@ function App() {
 
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <AdminOnly>
+                <AdminLayout />
+              </AdminOnly>
+            }
+          >
+            <Route index element={<Admin />} />
+            <Route path="students" element={<AdminStudents />} />
+            <Route path="analytics" element={<AdminSection />} />
+            <Route path="notes" element={<AdminNotes />} />
+            <Route path="textbooks" element={<AdminSection />} />
+            <Route path="flashcards" element={<AdminFlashcards />} />
+            <Route path="quizzes" element={<AdminQuizzes />} />
+            <Route path="content" element={<AdminSection />} />
+            <Route path="settings" element={<AdminSection />} />
+            <Route path="profile" element={<AdminSection />} />
+          </Route>
 
           <Route
             path="/"
@@ -161,7 +193,7 @@ function App() {
             path="/upload"
             element={
               <Private>
-                <Upload />
+                <Navigate to="/cards" replace />
               </Private>
             }
           />
@@ -265,14 +297,6 @@ function App() {
             }
           />
 
-          <Route
-            path="/games"
-            element={
-              <Private>
-                <Games />
-              </Private>
-            }
-          />
 
           <Route
             path="/word-match"
@@ -327,4 +351,19 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

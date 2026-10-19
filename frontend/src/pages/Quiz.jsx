@@ -1,124 +1,184 @@
-﻿import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+﻿
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import client from "../api/client";
 
 export default function Quiz() {
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const [quiz, setQuiz] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [quizMeta, setQuizMeta] = useState(null);
+  const [quiz, setQuiz] = useState(null);
+  const [answers, setAnswers] = useState([]);
   const [index, setIndex] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-  const [savingResult, setSavingResult] = useState(false);
-  const [resultSaved, setResultSaved] = useState(false);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const incomingQuiz =
-      location.state?.quiz ||
-      JSON.parse(
-        localStorage.getItem("memorymesh_quiz") || "[]"
+    let active = true;
+
+    async function loadQuizzes() {
+      try {
+        setLoading(true);
+        setError("");
+        const response = await client.get("/quiz/published");
+
+        if (active) {
+          setQuizzes(Array.isArray(response.data) ? response.data : []);
+        }
+      } catch (err) {
+        if (active) {
+          setError(
+            err.response?.data?.error ||
+              "Could not load published quizzes. Please try again."
+          );
+        }
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    loadQuizzes();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function startQuiz(item) {
+    try {
+      setLoading(true);
+      setError("");
+      const response = await client.get(`/quiz/published/${item._id}`);
+
+      setQuizMeta(item);
+      setQuiz(response.data);
+      setAnswers(Array(response.data.questions.length).fill(null));
+      setIndex(0);
+      setResults(null);
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Could not open this quiz."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function chooseAnswer(optionIndex) {
+    if (!quiz || results || submitting) return;
+
+    setAnswers((current) =>
+      current.map((answer, i) => (i === index ? optionIndex : answer))
+    );
+  }
+
+  async function submitQuiz() {
+    if (!quiz || submitting || answers.some((answer) => answer === null)) {
+      setError("Please answer every question before submitting.");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError("");
+
+      const response = await client.post(
+        `/quiz/published/${quiz._id}/submit`,
+        { answers }
       );
 
-    const safeQuiz = Array.isArray(incomingQuiz)
-      ? incomingQuiz.filter(
-          (item) =>
-            item &&
-            typeof item.question === "string" &&
-            Array.isArray(item.options) &&
-            item.options.length === 4 &&
-            Number.isInteger(item.correct_index)
-        )
-      : [];
+      setResults(response.data);
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Could not submit the quiz."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
-    setQuiz(safeQuiz);
-  }, [location.state]);
+  function backToList() {
+    setQuiz(null);
+    setQuizMeta(null);
+    setAnswers([]);
+    setIndex(0);
+    setResults(null);
+    setError("");
+  }
 
-  useEffect(() => {
-    const saveResult = async () => {
-      if (!finished || quiz.length === 0 || resultSaved) {
-        return;
-      }
-
-      setSavingResult(true);
-
-      try {
-        const percentage = Math.round(
-          (score / quiz.length) * 100
-        );
-
-        const subject =
-          localStorage.getItem("memorymesh_quiz_subject") ||
-          "General";
-
-        const chapter =
-          localStorage.getItem("memorymesh_quiz_chapter") ||
-          "General";
-
-        await client.post("/quiz/result", {
-          score,
-          total: quiz.length,
-          percentage,
-          subject,
-          chapter,
-        });
-
-        setResultSaved(true);
-      } catch (err) {
-        console.error(
-          "Failed to save quiz result:",
-          err
-        );
-      } finally {
-        setSavingResult(false);
-      }
-    };
-
-    saveResult();
-  }, [finished, quiz.length, score, resultSaved]);
-
-  if (quiz.length === 0) {
+  if (loading) {
     return (
       <div className="page quiz-page">
-        <div className="quiz-empty card">
-          <div className="quiz-empty-icon">📝</div>
-
-          <span className="eyebrow">QUIZ MODE</span>
-
-          <h1>No quiz available</h1>
-
-          <p>
-            Generate study content first, then start a quiz
-            from the generated material.
-          </p>
-
-          <div className="quiz-empty-actions">
-            <Link to="/upload" className="primary-button">
-              Upload Material
-            </Link>
-
-            <Link to="/learn" className="secondary-button">
-              Go to Learn
-            </Link>
-          </div>
+        <div className="card">
+          <p>Loading quizzes...</p>
         </div>
       </div>
     );
   }
 
-  if (finished) {
-    const percentage = Math.round(
-      (score / quiz.length) * 100
+  if (!quiz) {
+    return (
+      <div className="page quiz-page">
+        <section className="quiz-header">
+          <div>
+            <span className="eyebrow">MEMORYMESH QUIZ</span>
+            <h1>Published quizzes</h1>
+            <p>Choose a quiz assigned by your administrator.</p>
+          </div>
+        </section>
+
+        {error && <div className="card" role="alert">{error}</div>}
+
+        {quizzes.length === 0 ? (
+          <div className="quiz-empty card">
+            <div className="quiz-empty-icon">📝</div>
+            <h2>No published quizzes yet</h2>
+            <p>Check back after your administrator publishes a quiz.</p>
+            <Link to="/activity" className="secondary-button">
+              View Activity
+            </Link>
+          </div>
+        ) : (
+          <div className="quiz-list">
+            {quizzes.map((item) => (
+              <section className="card" key={item._id}>
+                <h2>{item.title}</h2>
+                {item.description && <p>{item.description}</p>}
+                <p>
+                  {item.subject}
+                  {item.chapter ? ` · ${item.chapter}` : ""}
+                </p>
+                <p>
+                  Class {item.classNumber} · {item.board} ·{" "}
+                  {item.questionsCount ?? "Quiz"} 
+                </p>
+                <button
+                  type="button"
+                  className="primary-button"
+                  onClick={() => startQuiz(item)}
+                >
+                  Start Quiz
+                </button>
+              </section>
+            ))}
+          </div>
+        )}
+
+        <p>{/* Keep existing navigation available. */}</p>
+      </div>
     );
+  }
 
-    let message = "Keep practicing!";
-
-    if (percentage >= 80) {
-      message = "Excellent work! 🎉";
-    } else if (percentage >= 60) {
-      message = "Good job! Keep improving.";
-    }
+  if (results) {
+    const percentage = results.percentage;
+    const message =
+      percentage >= 80
+        ? "Excellent work!"
+        : percentage >= 60
+          ? "Good job! Keep improving."
+          : "Keep practicing!";
 
     return (
       <div className="page quiz-page">
@@ -126,16 +186,9 @@ export default function Quiz() {
           <div className="quiz-result-icon">
             {percentage >= 80 ? "🏆" : "🎯"}
           </div>
-
-          <span className="eyebrow">
-            QUIZ COMPLETE
-          </span>
-
+          <span className="eyebrow">QUIZ COMPLETE</span>
           <h1>{message}</h1>
-
-          <p className="quiz-result-subtitle">
-            You completed all {quiz.length} questions.
-          </p>
+          <p className="quiz-result-subtitle">{quiz.title}</p>
 
           <div className="quiz-score-circle">
             <strong>{percentage}%</strong>
@@ -144,57 +197,49 @@ export default function Quiz() {
 
           <div className="quiz-result-stats">
             <div>
-              <strong>{score}</strong>
+              <strong>{results.score}</strong>
               <span>Correct</span>
             </div>
-
             <div>
-              <strong>{quiz.length - score}</strong>
+              <strong>{results.total - results.score}</strong>
               <span>Incorrect</span>
             </div>
-
             <div>
-              <strong>{quiz.length}</strong>
+              <strong>{results.total}</strong>
               <span>Total</span>
             </div>
           </div>
 
-          {savingResult && (
-            <p style={{
-              marginTop: "15px",
-              color: "#718096",
-              fontSize: "12px"
-            }}>
-              Saving your quiz result...
-            </p>
-          )}
-
-          {resultSaved && (
-            <p style={{
-              marginTop: "15px",
-              color: "#4ca900",
-              fontSize: "12px",
-              fontWeight: 800
-            }}>
-              Quiz result saved ✓
-            </p>
-          )}
+          <h2>Answer review</h2>
+          {quiz.questions.map((question, i) => {
+            const result = results.results[i];
+            return (
+              <section className="card" key={question._id || i}>
+                <h3>
+                  {i + 1}. {question.question}
+                </h3>
+                <p>
+                  Your answer:{" "}
+                  {question.options[answers[i]] ?? "Not answered"}
+                </p>
+                <p>
+                  Correct answer:{" "}
+                  {question.options[result.correct_index]}
+                </p>
+                <strong>{result.correct ? "Correct ✓" : "Incorrect ✕"}</strong>
+                {result.explanation && <p>{result.explanation}</p>}
+              </section>
+            );
+          })}
 
           <div className="quiz-result-actions">
             <button
               type="button"
               className="primary-button"
-              onClick={() => {
-                setIndex(0);
-                setSelected(null);
-                setScore(0);
-                setFinished(false);
-                setResultSaved(false);
-              }}
+              onClick={backToList}
             >
-              Try Again
+              Choose Another Quiz
             </button>
-
             <button
               type="button"
               className="secondary-button"
@@ -208,56 +253,20 @@ export default function Quiz() {
     );
   }
 
-  const currentQuestion = quiz[index];
-  const hasAnswered = selected !== null;
-
-  const progress = Math.round(
-    ((index + (hasAnswered ? 1 : 0)) /
-      quiz.length) *
-      100
-  );
-
-  const chooseAnswer = (optionIndex) => {
-    if (hasAnswered) return;
-
-    setSelected(optionIndex);
-
-    if (
-      optionIndex === currentQuestion.correct_index
-    ) {
-      setScore((current) => current + 1);
-    }
-  };
-
-  const nextQuestion = () => {
-    if (index + 1 >= quiz.length) {
-      setFinished(true);
-      return;
-    }
-
-    setIndex((current) => current + 1);
-    setSelected(null);
-  };
+  const currentQuestion = quiz.questions[index];
+  const selected = answers[index];
+  const progress = Math.round(((index + 1) / quiz.questions.length) * 100);
+  const allAnswered = answers.every((answer) => answer !== null);
 
   return (
     <div className="page quiz-page">
-
       <section className="quiz-header">
         <div>
-          <span className="eyebrow">
-            MEMORYMESH QUIZ
-          </span>
-
-          <h1>Test your knowledge</h1>
-
+          <span className="eyebrow">MEMORYMESH QUIZ</span>
+          <h1>{quiz.title}</h1>
           <p>
-            Question {index + 1} of {quiz.length}
+            Question {index + 1} of {quiz.questions.length}
           </p>
-        </div>
-
-        <div className="quiz-score-badge">
-          <span>Score</span>
-          <strong>{score}</strong>
         </div>
       </section>
 
@@ -266,134 +275,96 @@ export default function Quiz() {
           <span>Quiz progress</span>
           <strong>{progress}%</strong>
         </div>
-
         <div className="quiz-progress-track">
           <div
             className="quiz-progress-fill"
-            style={{
-              width: `${progress}%`,
-            }}
+            style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
-      <section className="quiz-question-card card">
+      {error && <div className="card" role="alert">{error}</div>}
 
+      <section className="quiz-question-card card">
         <span className="quiz-question-number">
           QUESTION {index + 1}
         </span>
-
-        <h2>
-          {currentQuestion.question}
-        </h2>
+        <h2>{currentQuestion.question}</h2>
 
         <div className="quiz-options">
-          {currentQuestion.options.map(
-            (option, optionIndex) => {
-              const isSelected =
-                selected === optionIndex;
+          {currentQuestion.options.map((option, optionIndex) => {
+            const isSelected = selected === optionIndex;
+            let className = "quiz-option";
+            if (isSelected) className += " quiz-option-selected";
 
-              const isCorrect =
-                optionIndex ===
-                currentQuestion.correct_index;
+            return (
+              <button
+                type="button"
+                key={optionIndex}
+                className={className}
+                onClick={() => chooseAnswer(optionIndex)}
+                disabled={submitting}
+              >
+                <span className="quiz-option-letter">
+                  {String.fromCharCode(65 + optionIndex)}
+                </span>
+                <span className="quiz-option-text">{option}</span>
+                {isSelected && <span>✓</span>}
+              </button>
+            );
+          })}
+        </div>
 
-              let className = "quiz-option";
+        <div className="quiz-result-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={() => setIndex((current) => Math.max(0, current - 1))}
+            disabled={index === 0 || submitting}
+          >
+            Previous
+          </button>
 
-              if (hasAnswered && isCorrect) {
-                className +=
-                  " quiz-option-correct";
-              } else if (
-                hasAnswered &&
-                isSelected &&
-                !isCorrect
-              ) {
-                className +=
-                  " quiz-option-wrong";
-              } else if (isSelected) {
-                className +=
-                  " quiz-option-selected";
-              }
-
-              return (
-                <button
-                  type="button"
-                  key={optionIndex}
-                  className={className}
-                  onClick={() =>
-                    chooseAnswer(optionIndex)
-                  }
-                  disabled={hasAnswered}
-                >
-                  <span className="quiz-option-letter">
-                    {String.fromCharCode(
-                      65 + optionIndex
-                    )}
-                  </span>
-
-                  <span className="quiz-option-text">
-                    {option}
-                  </span>
-
-                  {hasAnswered && isCorrect && (
-                    <span className="quiz-option-result">
-                      ✓
-                    </span>
-                  )}
-
-                  {hasAnswered &&
-                    isSelected &&
-                    !isCorrect && (
-                      <span className="quiz-option-result">
-                        ✕
-                      </span>
-                    )}
-                </button>
-              );
-            }
+          {index < quiz.questions.length - 1 ? (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => {
+                if (selected === null) {
+                  setError("Please select an answer to continue.");
+                  return;
+                }
+                setError("");
+                setIndex((current) => current + 1);
+              }}
+              disabled={submitting}
+            >
+              Next Question →
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={submitQuiz}
+              disabled={submitting || !allAnswered}
+            >
+              {submitting ? "Submitting..." : "Submit Quiz"}
+            </button>
           )}
         </div>
 
-        {hasAnswered && (
-          <div className="quiz-explanation">
-            <span className="quiz-explanation-icon">
-              💡
-            </span>
-
-            <div>
-              <strong>
-                {selected ===
-                currentQuestion.correct_index
-                  ? "Correct!"
-                  : "Not quite."}
-              </strong>
-
-              <p>
-                {currentQuestion.explanation ||
-                  "Review the material and try again."}
-              </p>
-            </div>
-          </div>
+        {!allAnswered && (
+          <p>Please answer every question before submitting.</p>
         )}
-
-        {hasAnswered && (
-          <button
-            type="button"
-            className="quiz-next-button"
-            onClick={nextQuestion}
-          >
-            {index + 1 === quiz.length
-              ? "Finish Quiz"
-              : "Next Question →"}
-          </button>
-        )}
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={backToList}
+          disabled={submitting}
+        >
+          Exit Quiz
+        </button>
       </section>
-
-      <Link
-        to="/upload"
-        className="quiz-back-link"
-      >
-        ← Generate another quiz
-      </Link>
     </div>
   );
 }

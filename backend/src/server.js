@@ -9,6 +9,10 @@ import cors from "cors";
 import { Server } from "socket.io";
 
 import authRoutes from "./routes/auth.js";
+import adminRoutes from "./routes/admin.js";
+import adminFlashcardsRoutes from "./routes/adminFlashcards.js";
+import adminQuizzesRoutes from "./routes/adminQuizzes.js";
+import flashcardSetsRoutes from "./routes/flashcardSets.js";
 import cardRoutes from "./routes/cards.js";
 import reviewRoutes from "./routes/review.js";
 import uploadRoutes from "./routes/upload.js";
@@ -20,6 +24,7 @@ import gamesRoutes from "./routes/games.js";
 import quizRoutes from "./routes/quiz.js";
 import goalRoutes from "./routes/goal.js";
 import textbookRoutes from "./routes/textbooks.js";
+import adminTextbooksRoutes from "./routes/adminTextbooks.js";
 import learnRoutes from "./routes/learn.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -36,14 +41,14 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST"],
   },
 });
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: ["http://localhost:5173", "http://localhost:5174"],
   })
 );
 
@@ -64,6 +69,10 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin", adminFlashcardsRoutes);
+app.use("/api/admin", adminQuizzesRoutes);
+app.use("/api/flashcard-sets", flashcardSetsRoutes);
 app.use("/api/cards", cardRoutes);
 app.use("/api/review", reviewRoutes);
 app.use("/api/upload", uploadRoutes);
@@ -75,6 +84,7 @@ app.use("/api/games", gamesRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/goal", goalRoutes);
 app.use("/api/textbooks", textbookRoutes);
+app.use("/api/admin/textbooks", adminTextbooksRoutes);
 app.use("/api/learn", learnRoutes);
 
 /*
@@ -99,6 +109,7 @@ io.on("connection", (socket) => {
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
+    console.log("Live database name:", mongoose.connection.db.databaseName);
     console.log("MongoDB connected");
 
     server.listen(
@@ -119,6 +130,12 @@ mongoose
 
     process.exit(1);
   });
+
+
+
+
+
+
 
 
 

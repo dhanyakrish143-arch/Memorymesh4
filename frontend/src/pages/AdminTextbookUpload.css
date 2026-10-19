@@ -1,0 +1,46 @@
+﻿.textbook-upload-card {
+  max-width: 860px;
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--border-color, #d9dee7);
+  border-radius: 16px;
+  background: var(--card-background, #fff);
+}
+.textbook-upload-card h2 { margin-top: 0; }
+.textbook-upload-hint { color: #687386; font-size: 0.92rem; }
+.textbook-upload-form { display: grid; gap: 18px; }
+.textbook-upload-form label { display: grid; gap: 7px; font-weight: 600; }
+.textbook-upload-form input,
+.textbook-upload-form select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #cbd2dc;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.textbook-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.textbook-upload-form .textbook-file-label input { padding: 10px; }
+.textbook-upload-form button {
+  justify-self: start;
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 22px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.textbook-upload-form button:disabled { cursor: wait; opacity: 0.65; }
+.textbook-upload-error { color: #b42318; margin: 0; }
+.textbook-upload-success { color: #167044; margin: 0; }
+@media (max-width: 600px) {
+  .textbook-upload-card { padding: 16px; }
+  .textbook-upload-grid { grid-template-columns: 1fr; }
+}

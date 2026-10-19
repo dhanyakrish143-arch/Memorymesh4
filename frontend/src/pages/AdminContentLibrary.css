@@ -1,0 +1,148 @@
+﻿.content-library-page { min-width: 0; }
+.content-library-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.content-library-heading h1 { margin-bottom: 8px; }
+.content-library-refresh {
+  border: 1px solid var(--border-color, #d8deea);
+  border-radius: 10px;
+  background: var(--card-background, #fff);
+  color: inherit;
+  padding: 10px 15px;
+  font: inherit;
+  cursor: pointer;
+}
+.content-library-refresh:disabled { opacity: .6; cursor: wait; }
+.content-library-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.content-library-metric {
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--border-color, #e0e5ed);
+  border-radius: 14px;
+  background: var(--card-background, #fff);
+}
+.content-library-metric span {
+  display: block;
+  font-size: 13px;
+  opacity: .72;
+}
+.content-library-metric strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 27px;
+  overflow-wrap: anywhere;
+}
+.content-library-panel,
+.content-library-shortcuts {
+  min-width: 0;
+  margin-bottom: 22px;
+  padding: 18px;
+  border: 1px solid var(--border-color, #e0e5ed);
+  border-radius: 15px;
+  background: var(--card-background, #fff);
+}
+.content-library-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.content-library-toolbar input,
+.content-library-toolbar select {
+  min-height: 42px;
+  min-width: 0;
+  border: 1px solid var(--border-color, #d8deea);
+  border-radius: 10px;
+  padding: 9px 12px;
+  background: var(--card-background, #fff);
+  color: inherit;
+  font: inherit;
+}
+.content-library-toolbar input { flex: 1 1 280px; }
+.content-library-toolbar select { flex: 0 1 170px; }
+.content-library-table-wrap { width: 100%; overflow-x: auto; }
+.content-library-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.content-library-table th,
+.content-library-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--border-color, #e6eaf0);
+  vertical-align: top;
+  font-size: 13px;
+}
+.content-library-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  opacity: .7;
+}
+.content-library-table td strong { display: block; overflow-wrap: anywhere; }
+.content-library-subtitle {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  opacity: .7;
+  overflow-wrap: anywhere;
+}
+.content-library-status {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #eef1f5;
+  color: #424b5a;
+  white-space: nowrap;
+}
+.content-library-status.is-live { background: #e5f5eb; color: #216b3a; }
+.content-library-status.is-draft { background: #fff1d9; color: #845500; }
+.content-library-message,
+.content-library-footer { padding: 12px 2px; font-size: 13px; opacity: .75; }
+.content-library-error {
+  padding: 12px;
+  border: 1px solid #e7b5b5;
+  border-radius: 10px;
+}
+.content-library-error button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #d8deea);
+  background: transparent;
+  color: inherit;
+}
+.content-library-shortcuts h2 { margin-top: 0; }
+.content-library-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+.content-library-links a {
+  display: inline-block;
+  padding: 10px 13px;
+  border: 1px solid var(--border-color, #d8deea);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.content-library-links a:hover { text-decoration: underline; }
+.content-library-note { font-size: 12px; line-height: 1.6; opacity: .72; }
+
+@media (max-width: 900px) {
+  .content-library-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .content-library-heading { flex-direction: column; }
+  .content-library-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content-library-panel, .content-library-shortcuts { padding: 12px; }
+  .content-library-toolbar input,
+  .content-library-toolbar select { flex-basis: 100%; width: 100%; }
+}

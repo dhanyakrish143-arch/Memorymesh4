@@ -47,6 +47,7 @@ router.post("/register", async (req, res) => {
       token,
       user: {
         id: user._id,
+        role: user.role || "student",
         name: user.name,
         email: user.email,
         class: user.class,
@@ -96,6 +97,7 @@ router.post("/login", async (req, res) => {
       token,
       user: {
         id: user._id,
+        role: user.role || "student",
         name: user.name,
         email: user.email,
         class: user.class,
@@ -123,6 +125,7 @@ router.get("/me", requireAuth, async (req, res) => {
 
     res.json({
       id: user._id,
+      role: user.role || "student",
       name: user.name,
       email: user.email,
       class: user.class,
@@ -190,6 +193,7 @@ router.put("/profile", requireAuth, async (req, res) => {
       message: "Profile updated successfully",
       user: {
         id: user._id,
+        role: user.role || "student",
         name: user.name,
         email: user.email,
         class: user.class,
@@ -204,3 +208,5 @@ router.put("/profile", requireAuth, async (req, res) => {
 });
 
 export default router;
+
+

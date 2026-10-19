@@ -14566,3 +14566,109 @@ body {
   color: #475569 !important;
   background: #f8fafc !important;
 }
+
+/* MemoryMesh learning analytics styles */
+.weak-topics-list {
+  display: grid;
+  gap: 16px;
+}
+
+.weak-topic-item {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.weak-topic-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.weak-topic-heading strong,
+.weak-topic-heading span {
+  display: block;
+}
+
+.weak-topic-heading strong {
+  margin-bottom: 5px;
+}
+
+.weak-topic-heading span,
+.weak-topic-metrics {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.weak-topic-reason {
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #fff7df;
+  color: #8a5b00 !important;
+  font-size: 12px !important;
+}
+
+.weak-topic-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 12px 0;
+}
+
+.weekly-chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+  min-height: 190px;
+}
+
+.weekly-chart-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.weekly-chart-track {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--border);
+}
+
+.weekly-chart-bar {
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  background: var(--green);
+  transition: height 0.2s ease;
+}
+
+.weekly-chart-day strong {
+  font-size: 14px;
+}
+
+.weekly-chart-day span {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .weak-topic-heading {
+    flex-direction: column;
+  }
+
+  .weekly-chart {
+    gap: 6px;
+  }
+
+  .weak-topic-item {
+    padding: 12px;
+  }
+}

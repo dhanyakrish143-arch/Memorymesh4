@@ -34,11 +34,6 @@ export default function Learn() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const [generating, setGenerating] = useState(false);
-  const [generatedCards, setGeneratedCards] = useState([]);
-  const [generationError, setGenerationError] = useState("");
-  const [savingCards, setSavingCards] = useState(false);
-
   useEffect(() => {
     const loadLearningContent = async () => {
       try {
@@ -273,146 +268,19 @@ export default function Learn() {
   const openSubject = (subject) => {
     setSelectedSubject(subject);
     setSelectedChapter(null);
-    setGeneratedCards([]);
-    setGenerationError("");
   };
 
   const openChapter = (chapter) => {
     setSelectedChapter(chapter);
-    setGeneratedCards([]);
-    setGenerationError("");
   };
 
   const goBackToSubjects = () => {
     setSelectedSubject(null);
     setSelectedChapter(null);
-    setGeneratedCards([]);
-    setGenerationError("");
   };
 
   const goBackToChapters = () => {
     setSelectedChapter(null);
-    setGeneratedCards([]);
-    setGenerationError("");
-  };
-
-  const generateFlashcards = async () => {
-    const textbookId = selectedTextbookChapter?.chapterId;
-
-    if (!textbookId) {
-      setGenerationError(
-        "This chapter does not have a local NCERT PDF available."
-      );
-      return;
-    }
-
-    try {
-      setGenerating(true);
-      setGenerationError("");
-      setGeneratedCards([]);
-
-      const response = await client.post(
-        "/learn/generate-cards",
-        {
-          textbookId,
-        }
-      );
-
-      const cardsFromAI = Array.isArray(response.data?.flashcards)
-        ? response.data.flashcards
-        : [];
-
-      if (!cardsFromAI.length) {
-        throw new Error(
-          "The AI did not generate any flashcards."
-        );
-      }
-
-      setGeneratedCards(
-        cardsFromAI.map((card, index) => ({
-          ...card,
-          _tempId: `${Date.now()}-${index}`,
-          selected: true,
-        }))
-      );
-    } catch (err) {
-      console.error("Flashcard generation failed:", err);
-
-      setGenerationError(
-        err?.response?.data?.error ||
-        err?.message ||
-        "Failed to generate flashcards."
-      );
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  const toggleGeneratedCard = (tempId) => {
-    setGeneratedCards((current) =>
-      current.map((card) =>
-        card._tempId === tempId
-          ? {
-              ...card,
-              selected: !card.selected,
-            }
-          : card
-      )
-    );
-  };
-
-  const saveGeneratedCards = async () => {
-    const selectedCards = generatedCards
-      .filter((card) => card.selected)
-      .map(({ question, answer }) => ({
-        question,
-        answer,
-      }));
-
-    if (!selectedCards.length) {
-      setGenerationError(
-        "Select at least one flashcard to save."
-      );
-      return;
-    }
-
-    try {
-      setSavingCards(true);
-      setGenerationError("");
-
-      await client.post("/upload/save-cards", {
-        flashcards: selectedCards,
-        subject: selectedSubject,
-        chapter: selectedChapter,
-        class: Number(user?.class) || 10,
-        source: "ncert",
-      });
-
-      setGeneratedCards([]);
-
-      setCards((current) => [
-        ...current,
-        ...selectedCards.map((card, index) => ({
-          ...card,
-          _id: `generated-${Date.now()}-${index}`,
-          subject: selectedSubject,
-          chapter: selectedChapter,
-          class: Number(user?.class) || 10,
-          source: "ncert",
-          mastered: false,
-        })),
-      ]);
-    } catch (err) {
-      console.error("Saving NCERT flashcards failed:", err);
-
-      setGenerationError(
-        err?.response?.data?.error ||
-        err?.message ||
-        "Failed to save flashcards."
-      );
-    } finally {
-      setSavingCards(false);
-    }
   };
 
   if (loading) {
@@ -475,13 +343,6 @@ export default function Learn() {
               Upload study material to start building your
               learning library.
             </p>
-
-            <Link
-              to="/upload"
-              className="primary-button"
-            >
-              Upload Material
-            </Link>
           </section>
         ) : (
           <section className="learn-subject-grid">
@@ -581,10 +442,6 @@ export default function Learn() {
               Upload study material for {selectedSubject}
               to create learning content.
             </p>
-
-            <Link to="/upload" className="primary-button">
-              Upload Material
-            </Link>
           </section>
         ) : (
           <section className="learn-chapter-grid">
@@ -740,98 +597,13 @@ export default function Learn() {
                   >
                     📖 Open NCERT
                   </a>
-
-                  <button
-                    type="button"
-                    onClick={generateFlashcards}
-                    disabled={
-                      generating ||
-                      savingCards ||
-                      !book.chapterId
-                    }
-                    className="secondary-button"
-                  >
-                    {generating
-                      ? "Generating..."
-                      : "✨ Generate Flashcards"}
-                  </button>
                 </div>
               </article>
             ))}
           </div>
         </section>
       )}
-
-      {generationError && (
-        <section className="card learn-error">
-          <p>{generationError}</p>
-        </section>
-      )}
-
-      {generatedCards.length > 0 && (
-        <section className="learn-content-section">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">AI GENERATED</p>
-              <h2>Review before saving</h2>
-              <p>
-                Select the cards you want to keep in your
-                {` ${selectedSubject}`} deck.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={saveGeneratedCards}
-              disabled={
-                savingCards ||
-                !generatedCards.some((card) => card.selected)
-              }
-              className="primary-button"
-            >
-              {savingCards
-                ? "Saving..."
-                : `Save ${
-                    generatedCards.filter((card) => card.selected).length
-                  } Cards`}
-            </button>
-          </div>
-
-          <div className="learn-content-grid">
-            {generatedCards.map((card) => (
-              <article
-                key={card._tempId}
-                className={`card learn-flashcard ${
-                  card.selected ? "" : "generated-card-disabled"
-                }`}
-                style={{
-                  cursor: "pointer",
-                  opacity: card.selected ? 1 : 0.5,
-                }}
-                onClick={() =>
-                  toggleGeneratedCard(card._tempId)
-                }
-              >
-                <div className="learn-flashcard-top">
-                  <span className="learn-card-label">
-                    {card.selected
-                      ? "✓ SELECTED"
-                      : "NOT SELECTED"}
-                  </span>
-                </div>
-
-                <h3>{card.question}</h3>
-
-                <div className="learn-answer">
-                  {card.answer}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <section className="learn-content-section">
+<section className="learn-content-section">
         <div className="section-heading">
           <div>
             <p className="eyebrow">FLASHCARDS</p>
@@ -867,14 +639,7 @@ export default function Learn() {
               chapter above.
             </p>
 
-            {chapterTextbooks.length === 0 && (
-              <Link
-                to="/upload"
-                className="primary-button"
-              >
-                Upload Material
-              </Link>
-            )}
+            
           </section>
         ) : (
           <div className="learn-content-grid">
@@ -908,3 +673,9 @@ export default function Learn() {
     </div>
   );
 }
+
+
+
+
+
+
