@@ -1,0 +1,69 @@
+{
+  "createdAt": "2026-10-19T15:14:19.557Z",
+  "collections": [
+    {
+      "collection": "subjects",
+      "documents": 2
+    },
+    {
+      "collection": "leagues",
+      "documents": 5
+    },
+    {
+      "collection": "textbooks",
+      "documents": 307
+    },
+    {
+      "collection": "notifications",
+      "documents": 0
+    },
+    {
+      "collection": "flashcardsets",
+      "documents": 2
+    },
+    {
+      "collection": "quizsets",
+      "documents": 1
+    },
+    {
+      "collection": "achievements",
+      "documents": 0
+    },
+    {
+      "collection": "users",
+      "documents": 8
+    },
+    {
+      "collection": "notes",
+      "documents": 228
+    },
+    {
+      "collection": "studysessions",
+      "documents": 0
+    },
+    {
+      "collection": "friendships",
+      "documents": 1
+    },
+    {
+      "collection": "gamescores",
+      "documents": 8
+    },
+    {
+      "collection": "cards",
+      "documents": 774
+    },
+    {
+      "collection": "reviewlogs",
+      "documents": 0
+    },
+    {
+      "collection": "flashcards",
+      "documents": 0
+    },
+    {
+      "collection": "duels",
+      "documents": 5
+    }
+  ]
+}

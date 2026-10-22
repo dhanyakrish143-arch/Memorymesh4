@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "6a7c77f036ab42d7ef4e7274",
+    "name": "Full Stack Development",
+    "description": "React, Node.js, Express and MongoDB",
+    "color": "#6366f1",
+    "createdAt": "2026-08-12T13:41:04.578Z",
+    "updatedAt": "2026-08-12T13:41:04.578Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a7c80dd2874633ac3780de7",
+    "name": "Data Structures",
+    "description": "Arrays, linked lists, trees, graphs and algorithms",
+    "color": "#10b981",
+    "createdAt": "2026-08-12T14:19:09.066Z",
+    "updatedAt": "2026-08-12T15:30:21.212Z",
+    "__v": 0
+  }
+]

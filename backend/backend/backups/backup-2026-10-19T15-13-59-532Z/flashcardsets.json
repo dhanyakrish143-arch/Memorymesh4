@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "6ad0b997101e7d236d81d311",
+    "title": "Fractions Revision",
+    "description": "Revise fractions, equivalent fractions, and basic fraction operations.",
+    "subject": "Mathematics",
+    "chapter": "Fractions",
+    "classNumber": 5,
+    "board": "CBSE",
+    "cards": [
+      {
+        "question": "What is a fraction?",
+        "answer": "A fraction represents a part of a whole. For example, 1/2 means one of two equal parts.",
+        "_id": "6ad0b997101e7d236d81d312"
+      }
+    ],
+    "published": true,
+    "createdBy": "6a7b5a7045cd3622f3b39112",
+    "createdAt": "2026-10-15T11:31:35.070Z",
+    "updatedAt": "2026-10-15T11:31:35.070Z",
+    "__v": 0
+  },
+  {
+    "_id": "6ad0d5c71c415f455d93bec5",
+    "title": "Solar System – Revision Cards",
+    "description": "Revise the Sun, planets, Earth's natural satellite, and key facts about our solar system.",
+    "subject": "Science",
+    "chapter": "Solar System",
+    "classNumber": 5,
+    "board": "State",
+    "cards": [
+      {
+        "question": "Which star is at the centre of our solar system?",
+        "answer": "The Sun.",
+        "_id": "6ad0d5c71c415f455d93bec6"
+      }
+    ],
+    "published": true,
+    "createdBy": "6a7b5a7045cd3622f3b39112",
+    "createdAt": "2026-10-15T13:31:51.464Z",
+    "updatedAt": "2026-10-15T13:31:51.464Z",
+    "__v": 0
+  }
+]

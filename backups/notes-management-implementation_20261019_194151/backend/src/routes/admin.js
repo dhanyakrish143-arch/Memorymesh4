@@ -1,0 +1,374 @@
+﻿import express from "express";
+import User from "../models/User.js";
+import Card from "../models/Card.js";
+import Note from "../models/Note.js";
+import Textbook from "../models/Textbook.js";
+import FlashcardSet from "../models/FlashcardSet.js";
+import QuizSet from "../models/QuizSet.js";
+import requireAuth from "../middleware/auth.js";
+import requireAdmin from "../middleware/requireAdmin.js";
+
+const router = express.Router();
+
+router.use(requireAuth, requireAdmin);
+// Admin Content Library: metadata only, for shared learning resources.
+router.get("/content-library", async (req, res) => {
+  try {
+    const [notes, textbooks, flashcardSets, quizzes] = await Promise.all([
+      Note.find({ userId: null })
+        .select("subject chapter class board source updatedAt createdAt")
+        .sort({ updatedAt: -1 })
+        .limit(500)
+        .lean(),
+
+      Textbook.find()
+        .select("title subject chapter classNumber board language chapterNumber active sourceUrl updatedAt createdAt")
+        .sort({ updatedAt: -1 })
+        .limit(500)
+        .lean(),
+
+      FlashcardSet.find()
+        .select("title description subject chapter classNumber board cards published updatedAt createdAt")
+        .sort({ updatedAt: -1 })
+        .limit(500)
+        .lean(),
+
+      QuizSet.find()
+        .select("title description subject chapter classNumber board questions published updatedAt createdAt")
+        .sort({ updatedAt: -1 })
+        .limit(500)
+        .lean(),
+    ]);
+
+    const items = [
+      ...notes.map((item) => ({
+        id: String(item._id),
+        type: "Note",
+        title: `${item.subject} — ${item.chapter}`,
+        subject: item.subject,
+        chapter: item.chapter,
+        classNumber: item.class,
+        board: item.board || "NCERT",
+        status: "Shared",
+        count: null,
+        updatedAt: item.updatedAt || item.createdAt,
+      })),
+
+      ...textbooks.map((item) => ({
+        id: String(item._id),
+        type: "Textbook",
+        title: item.title,
+        subject: item.subject,
+        chapter: item.chapter,
+        classNumber: item.classNumber,
+        board: item.board,
+        status: item.active ? "Active" : "Inactive",
+        count: item.chapterNumber ? `Chapter ${item.chapterNumber}` : null,
+        updatedAt: item.updatedAt || item.createdAt,
+      })),
+
+      ...flashcardSets.map((item) => ({
+        id: String(item._id),
+        type: "Flashcard Set",
+        title: item.title,
+        subject: item.subject,
+        chapter: item.chapter,
+        classNumber: item.classNumber,
+        board: item.board,
+        status: item.published ? "Published" : "Draft",
+        count: `${(item.cards || []).length} cards`,
+        updatedAt: item.updatedAt || item.createdAt,
+      })),
+
+      ...quizzes.map((item) => ({
+        id: String(item._id),
+        type: "Quiz",
+        title: item.title,
+        subject: item.subject,
+        chapter: item.chapter,
+        classNumber: item.classNumber,
+        board: item.board,
+        status: item.published ? "Published" : "Draft",
+        count: `${(item.questions || []).length} questions`,
+        updatedAt: item.updatedAt || item.createdAt,
+      })),
+    ];
+
+    items.sort((a, b) =>
+      new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0)
+    );
+
+    res.json({
+      success: true,
+      totals: {
+        notes: notes.length,
+        textbooks: textbooks.length,
+        flashcardSets: flashcardSets.length,
+        quizzes: quizzes.length,
+        all: items.length,
+      },
+      items,
+    });
+  } catch (error) {
+    console.error("Admin content library fetch failed:", error);
+    res.status(500).json({ error: "Could not load the content library." });
+  }
+});
+
+router.get("/overview", async (req, res) => {
+  try {
+    const [totalStudents, activeStudents, totalXp] = await Promise.all([
+      User.countDocuments({ role: "student" }),
+      User.countDocuments({
+        role: "student",
+        lastActiveDate: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
+      }),
+      User.aggregate([
+        { $match: { role: "student" } },
+        { $group: { _id: null, total: { $sum: "$xp" } } },
+      ]),
+    ]);
+
+    res.json({
+      totalStudents,
+      activeStudents,
+      totalXp: totalXp[0]?.total ?? 0,
+    });
+  } catch (err) {
+    console.error("Admin overview error:", err);
+    res.status(500).json({ error: "Unable to load admin overview" });
+  }
+});
+
+router.get("/students", async (req, res) => {
+  try {
+    const students = await User.find({ role: "student" })
+      .select("name email class board xp streak createdAt lastActiveDate")
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean();
+
+    res.json({ students });
+  } catch (err) {
+    console.error("Admin students error:", err);
+    res.status(500).json({ error: "Unable to load students" });
+  }
+});
+
+
+router.get("/analytics", async (req, res) => {
+  try {
+    const now = new Date();
+    const sevenDaysAgo = new Date(
+      now.getTime() - 7 * 24 * 60 * 60 * 1000
+    );
+
+    const students = await User.find({ role: "student" })
+      .select("_id name lastActiveDate")
+      .lean();
+
+    const studentIds = students.map((student) => student._id);
+
+    const cards = studentIds.length
+      ? await Card.find({ userId: { $in: studentIds } })
+          .select("userId subject chapter p_l mastered reviewCount correctCount reviewHistory")
+          .lean()
+      : [];
+
+    const totalCards = cards.length;
+    const totalReviews = cards.reduce(
+      (sum, card) => sum + Number(card.reviewCount || 0), 0
+    );
+    const totalCorrect = cards.reduce(
+      (sum, card) => sum + Number(card.correctCount || 0), 0
+    );
+    const masteredCards = cards.filter(
+      (card) => card.mastered === true
+    ).length;
+
+    const topicsMap = {};
+
+    for (const card of cards) {
+      const subject = card.subject || "General";
+      const chapter = card.chapter || "Uncategorized";
+      const key = JSON.stringify([subject, chapter]);
+
+      if (!topicsMap[key]) {
+        topicsMap[key] = {
+          subject,
+          chapter,
+          totalCards: 0,
+          masteredCards: 0,
+          masteryTotal: 0,
+          reviews: 0,
+          correct: 0
+        };
+      }
+
+      const topic = topicsMap[key];
+      topic.totalCards += 1;
+      topic.masteredCards += card.mastered ? 1 : 0;
+      topic.masteryTotal += Math.max(
+        0, Math.min(1, Number(card.p_l ?? 0.3))
+      );
+      topic.reviews += Number(card.reviewCount || 0);
+      topic.correct += Number(card.correctCount || 0);
+    }
+
+    const weakTopics = Object.values(topicsMap)
+      .map((topic) => ({
+        subject: topic.subject,
+        chapter: topic.chapter,
+        totalCards: topic.totalCards,
+        masteredCards: topic.masteredCards,
+        mastery: Math.round(
+          topic.masteryTotal / topic.totalCards * 100
+        ),
+        reviews: topic.reviews,
+        accuracy: topic.reviews
+          ? Math.round(topic.correct / topic.reviews * 100)
+          : 0
+      }))
+      .filter((topic) => topic.mastery < 70)
+      .sort((a, b) => a.mastery - b.mastery)
+      .slice(0, 10);
+
+    const activityMap = {};
+
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      const key = date.toISOString().slice(0, 10);
+      activityMap[key] = { date: key, reviews: 0, correct: 0 };
+    }
+
+    for (const card of cards) {
+      for (const review of card.reviewHistory || []) {
+        if (!review.reviewedAt) continue;
+
+        const key = new Date(review.reviewedAt)
+          .toISOString().slice(0, 10);
+
+        if (activityMap[key]) {
+          activityMap[key].reviews += 1;
+          if (review.correct) activityMap[key].correct += 1;
+        }
+      }
+    }
+
+    const activeStudents = students.filter(
+      (student) =>
+        student.lastActiveDate &&
+        new Date(student.lastActiveDate) >= sevenDaysAgo
+    ).length;
+
+    res.json({
+      success: true,
+      overview: {
+        totalStudents: students.length,
+        activeStudents,
+        totalCards,
+        totalReviews,
+        totalCorrect,
+        accuracy: totalReviews
+          ? Math.round(totalCorrect / totalReviews * 100)
+          : 0,
+        masteredCards,
+        mastery: totalCards
+          ? Math.round(masteredCards / totalCards * 100)
+          : 0
+      },
+      weeklyActivity: Object.values(activityMap),
+      weakTopics
+    });
+  } catch (err) {
+    console.error("Admin analytics error:", err);
+    res.status(500).json({
+      error: "Unable to load admin analytics"
+    });
+  }
+});
+
+router.get("/students-performance", async (req, res) => {
+  try {
+    const students = await User.find({ role: "student" })
+      .select("name email class board xp streak createdAt lastActiveDate quizHistory")
+      .lean();
+
+    const cardStats = await Card.aggregate([
+      {
+        $group: {
+          _id: "$userId",
+          totalCards: { $sum: 1 },
+          totalReviews: { $sum: { $ifNull: ["$reviewCount", 0] } },
+          correctReviews: { $sum: { $ifNull: ["$correctCount", 0] } },
+          masteredCards: {
+            $sum: { $cond: [{ $eq: ["$mastered", true] }, 1, 0] }
+          }
+        }
+      }
+    ]);
+
+    const statsByUser = new Map(
+      cardStats.map((item) => [String(item._id), item])
+    );
+
+    const results = students.map((student) => {
+      const stats = statsByUser.get(String(student._id)) || {
+        totalCards: 0,
+        totalReviews: 0,
+        correctReviews: 0,
+        masteredCards: 0
+      };
+
+      const quizzes = student.quizHistory || [];
+      const quizAverage = quizzes.length
+        ? Math.round(
+            quizzes.reduce((sum, quiz) => sum + Number(quiz.percentage || 0), 0)
+              / quizzes.length
+          )
+        : null;
+
+      return {
+        id: String(student._id),
+        name: student.name,
+        email: student.email,
+        class: student.class,
+        board: student.board,
+        xp: student.xp || 0,
+        streak: student.streak || 0,
+        createdAt: student.createdAt || null,
+        lastActiveDate: student.lastActiveDate || null,
+        totalCards: stats.totalCards,
+        totalReviews: stats.totalReviews,
+        correctReviews: stats.correctReviews,
+        accuracy: stats.totalReviews
+          ? Math.round(stats.correctReviews / stats.totalReviews * 100)
+          : 0,
+        masteredCards: stats.masteredCards,
+        mastery: stats.totalCards
+          ? Math.round(stats.masteredCards / stats.totalCards * 100)
+          : 0,
+        quizCount: quizzes.length,
+        quizAverage
+      };
+    });
+
+    results.sort((a, b) => {
+      const dateA = a.lastActiveDate ? new Date(a.lastActiveDate).getTime() : 0;
+      const dateB = b.lastActiveDate ? new Date(b.lastActiveDate).getTime() : 0;
+      return dateB - dateA;
+    });
+
+    res.json({ success: true, students: results });
+  } catch (err) {
+    console.error("Student performance error:", err);
+    res.status(500).json({ error: "Unable to load student performance" });
+  }
+});
+export default router;
+
+
+
+
+

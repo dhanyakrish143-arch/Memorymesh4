@@ -1,0 +1,139 @@
+﻿import { useState } from "react";
+import client from "../api/client";
+
+export default function StudyPlan() {
+  const [subject, setSubject] = useState("");
+  const [chapter, setChapter] = useState("");
+  const [minutesPerDay, setMinutesPerDay] = useState(30);
+  const [plan, setPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!subject.trim() || loading) return;
+
+    setLoading(true);
+    setError("");
+    setPlan(null);
+
+    try {
+      const { data } = await client.post("/study-plan/generate", {
+        subject: subject.trim(),
+        chapter: chapter.trim() || undefined,
+        minutesPerDay: Number(minutesPerDay),
+      });
+
+      if (!data?.plan) {
+        throw new Error("The server did not return a study plan.");
+      }
+
+      setPlan(data.plan);
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+          err.message ||
+          "Unable to generate your study plan. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="study-plan-page">
+      <header className="study-plan-heading">
+        <span className="eyebrow">MEMORYMESH AI</span>
+        <h1>Study Planner</h1>
+        <p>Create a focused study schedule for your next learning goal.</p>
+      </header>
+
+      <section className="study-plan-builder">
+        <h2>Build your study plan</h2>
+        <p>Enter what you want to study and how much time you have each day.</p>
+
+        <form className="study-plan-form" onSubmit={handleSubmit}>
+          <label>
+            <span>Subject</span>
+            <input
+              type="text"
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
+              placeholder="e.g. Mathematics"
+              maxLength={120}
+              required
+            />
+          </label>
+
+          <label>
+            <span>Chapter or topic (optional)</span>
+            <input
+              type="text"
+              value={chapter}
+              onChange={(event) => setChapter(event.target.value)}
+              placeholder="e.g. Linear equations"
+              maxLength={160}
+            />
+          </label>
+
+          <label>
+            <span>Study time per day</span>
+            <select
+              value={minutesPerDay}
+              onChange={(event) => setMinutesPerDay(Number(event.target.value))}
+            >
+              <option value={10}>10 minutes</option>
+              <option value={20}>20 minutes</option>
+              <option value={30}>30 minutes</option>
+              <option value={45}>45 minutes</option>
+              <option value={60}>60 minutes</option>
+              <option value={90}>90 minutes</option>
+              <option value={120}>120 minutes</option>
+              <option value={180}>180 minutes</option>
+            </select>
+          </label>
+
+          <button type="submit" disabled={loading || !subject.trim()}>
+            {loading ? "Creating your plan..." : "Generate Study Plan →"}
+          </button>
+        </form>
+
+        {error && (
+          <p className="study-plan-error" role="alert">
+            {error}
+          </p>
+        )}
+      </section>
+
+      {plan && (
+        <section className="study-plan-result" aria-live="polite">
+          <span className="eyebrow">YOUR PERSONAL PLAN</span>
+          <h2>{plan.title || "Your Study Plan"}</h2>
+          {plan.overview && <p>{plan.overview}</p>}
+
+          <div className="study-plan-days">
+            {(plan.days || []).map((day, index) => (
+              <article className="study-plan-day" key={`${day.day ?? index}-${index}`}>
+                <div>
+                  <span className="eyebrow">
+                    DAY {day.day ?? index + 1}
+                  </span>
+                  <h3>{day.title || `Study session ${index + 1}`}</h3>
+                </div>
+
+                <p>{day.minutes ?? minutesPerDay} minutes</p>
+
+                <ul>
+                  {(day.tasks || []).map((task, taskIndex) => (
+                    <li key={`${taskIndex}-${task}`}>{task}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}

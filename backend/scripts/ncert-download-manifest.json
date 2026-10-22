@@ -1,0 +1,3962 @@
+[
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Ganit-Mela",
+    "code": "ehmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Riyazi Mela",
+    "code": "eumm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Tamil)",
+    "code": "etmmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Marathi)",
+    "code": "emrmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Odia)",
+    "code": "eormm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Punjabi)",
+    "code": "epnmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Manipuri)",
+    "code": "emnmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Kannada)",
+    "code": "eknmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Nepali)",
+    "code": "enpmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Konkani)",
+    "code": "ekomm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Assamese)",
+    "code": "easmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Bodo)",
+    "code": "ebdmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Bengali)",
+    "code": "ebnmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Dogri)",
+    "code": "edgmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Malayalam)",
+    "code": "emlmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Telugu)",
+    "code": "etlmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Kashmiri)",
+    "code": "eksmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Gujarati)",
+    "code": "egjmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Sindhi)",
+    "code": "esimm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Santhali)",
+    "code": "esnmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Maithili)",
+    "code": "emtmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "Mathematics",
+    "title": "Math-Mela (Sanskrit)",
+    "code": "eskmm1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Hamara Adbhut Sansar",
+    "code": "ehev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Hamari Hairatangez Duniya",
+    "code": "euev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Odia)",
+    "code": "eorev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Gujarati)",
+    "code": "egjev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Santhali)",
+    "code": "esnev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Dogri)",
+    "code": "edgev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Malayalam)",
+    "code": "emlev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Sanskrit)",
+    "code": "eskev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Bengali)",
+    "code": "ebnev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Nepali)",
+    "code": "enpev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Kannada)",
+    "code": "eknev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Punjabi)",
+    "code": "epnev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Tamil)",
+    "code": "etmev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Manipuri)",
+    "code": "emnev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Marathi)",
+    "code": "emrev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Telugu)",
+    "code": "etlev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Assamese)",
+    "code": "easev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Kashmiri)",
+    "code": "eksev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Bodo)",
+    "code": "ebdev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Maithili)",
+    "code": "emtev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Konkani)",
+    "code": "ekoev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 5,
+    "subject": "The World Around Us",
+    "title": "Our Wonderous World (Sindhi)",
+    "code": "esiev1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Hindi",
+    "title": "Vasant",
+    "code": "fhvs1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Hindi",
+    "title": "Durva",
+    "code": "fhdv1",
+    "first": 0,
+    "last": 28
+  },
+  {
+    "classNumber": 6,
+    "subject": "Hindi",
+    "title": "Bal Ram Katha",
+    "code": "fhbr1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "English",
+    "title": "Honeysuckle",
+    "code": "fehl1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 6,
+    "subject": "English",
+    "title": "A Pact With The Sun",
+    "code": "fepw1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Hindi)",
+    "code": "fhgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Odia)",
+    "code": "forgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Bodo)",
+    "code": "fbdgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Malayalam)",
+    "code": "fmlgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Punjabi)",
+    "code": "fpngp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Sanskrit)",
+    "code": "fskgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Kannada)",
+    "code": "fkngp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Tamil)",
+    "code": "ftmgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Marathi)",
+    "code": "fmrgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Bengali)",
+    "code": "fbngp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Telugu)",
+    "code": "ftlgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Maithili)",
+    "code": "fmtgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Dogri)",
+    "code": "fdggp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Nepali)",
+    "code": "fnpgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Urdu)",
+    "code": "fugp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Assamese)",
+    "code": "fasgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Gujarati)",
+    "code": "fgjgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Manipuri)",
+    "code": "fmngp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Konkani)",
+    "code": "fkogp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Santhali)",
+    "code": "fsngp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Sindhi)",
+    "code": "fsigp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash (Kashmiri)",
+    "code": "fksgp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "The Earth Our Habitat",
+    "code": "fess2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Hamare Ateet",
+    "code": "fhss1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Social And Political Life",
+    "code": "fess3",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Samajik Evem Rajnitik Jeevan",
+    "code": "fhss3",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Prithavi Hamara Avas (Bhugol)",
+    "code": "fhss2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Hamare Mazi(Urdu)",
+    "code": "fuhm1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Zameen Hamara Maskan(Urdu)",
+    "code": "fuzm1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Samazi Aur Siyasi Zindagi(Urdu)",
+    "code": "fuss1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond",
+    "code": "fees1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Samaj Ka Aadhyan: Bharat or uske aage",
+    "code": "fhes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Kannada)",
+    "code": "fknes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Kashmiri)",
+    "code": "fkses1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Odia)",
+    "code": "fores1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Manipuri)",
+    "code": "fmnes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Marathi)",
+    "code": "fmres1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Punjabi)",
+    "code": "fpnes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Dogri)",
+    "code": "fdges1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Gujrati)",
+    "code": "fgjes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Malayalam)",
+    "code": "fmles1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Sanskrit)",
+    "code": "fskes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Bengali)",
+    "code": "fbnes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Bodo)",
+    "code": "fbdes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Maithili)",
+    "code": "fmtes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Nepali)",
+    "code": "fnpes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Tamil)",
+    "code": "ftmes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Telugu)",
+    "code": "ftles1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Muashre Ki Daryaft Hindustan aur Us Se Aage (Urdu)",
+    "code": "fues1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Santhali)",
+    "code": "fsnes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Assamese)",
+    "code": "fases1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Konkani)",
+    "code": "fkoes1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond (Sindhi)",
+    "code": "fsies1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Jigyasa",
+    "code": "fhcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Tajassus",
+    "code": "fucu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Malayalam)",
+    "code": "fmlcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Tamil)",
+    "code": "ftmcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Kannada)",
+    "code": "fkncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Maithili)",
+    "code": "fmtcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Punjabi)",
+    "code": "fpncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Bengali)",
+    "code": "fbncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Odia)",
+    "code": "forcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Konkani)",
+    "code": "fkocu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Manipuri)",
+    "code": "fmncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Nepali)",
+    "code": "fnpcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Sanskrit)",
+    "code": "fskcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Telugu)",
+    "code": "ftlcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Assamese)",
+    "code": "fascu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Marathi)",
+    "code": "fmrcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Bodo)",
+    "code": "fbdcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Dogri)",
+    "code": "fdgcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Gujarati)",
+    "code": "fgjcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Santhali)",
+    "code": "fsncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Kashmiri)",
+    "code": "fkscu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Curiosity (Sindhi)",
+    "code": "fsicu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Vigyan",
+    "code": "fhsc1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "Science",
+    "code": "fesc1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 6,
+    "subject": "Science",
+    "title": "science-VI(Urdu)",
+    "code": "fuse1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II",
+    "code": "gegp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Hindi)",
+    "code": "ghgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Urdu)",
+    "code": "gugp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Hindi)",
+    "code": "ghgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Bengali)",
+    "code": "gbngp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Gujarati)",
+    "code": "ggjgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Punjabi)",
+    "code": "gpngp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Nepali)",
+    "code": "gnpgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Dogri)",
+    "code": "gdggp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Tamil)",
+    "code": "gtmgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Telugu)",
+    "code": "gtlgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Marathi)",
+    "code": "gmrgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Kannada)",
+    "code": "gkngp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Bodo)",
+    "code": "gbdgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Odia)",
+    "code": "gorgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Assamese)",
+    "code": "gasgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Konkani)",
+    "code": "gkogp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Manipuri)",
+    "code": "gmngp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Sanskrit)",
+    "code": "gskgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Sindhi)",
+    "code": "gsigp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Kashmiri)",
+    "code": "gksgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Maithili)",
+    "code": "gmtgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Malayalam)",
+    "code": "gmlgp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash(Santhali)",
+    "code": "gsngp1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Gujarati)",
+    "code": "ggjgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Kannada)",
+    "code": "gkngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Marathi)",
+    "code": "gmrgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Odia)",
+    "code": "gorgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Punjabi)",
+    "code": "gpngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Assamese)",
+    "code": "gasgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Bengali)",
+    "code": "gbngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Tamil)",
+    "code": "gtmgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Malayalam)",
+    "code": "gmlgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Telugu)",
+    "code": "gtlgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Dogri)",
+    "code": "gdggp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Bodo)",
+    "code": "gbdgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Nepali)",
+    "code": "gnpgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Sindhi)",
+    "code": "gsigp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Manipuri)",
+    "code": "gmngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Maithili)",
+    "code": "gmtgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Konkani)",
+    "code": "gkogp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Sanskrit)",
+    "code": "gskgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Santhali)",
+    "code": "gsngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash-II (Kashmiri)",
+    "code": "gksgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Jigyasa",
+    "code": "ghcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Tajassus",
+    "code": "gucu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Marathi)",
+    "code": "gmrcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Odia)",
+    "code": "gorcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Bengali)",
+    "code": "gbncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Punjabi)",
+    "code": "gpncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Assamese)",
+    "code": "gascu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Tamil)",
+    "code": "gtmcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Nepali)",
+    "code": "gnpcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Manipuri)",
+    "code": "gmncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Telugu)",
+    "code": "gtlcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Bodo)",
+    "code": "gbdcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Santhali)",
+    "code": "gsncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Kannada)",
+    "code": "gkncu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Dogri)",
+    "code": "gdgcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Konkani)",
+    "code": "gkocu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Kashmiri)",
+    "code": "gkscu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Malayalam)",
+    "code": "gmlcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Maithili)",
+    "code": "gmtcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Sanskrit)",
+    "code": "gskcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Sindhi)",
+    "code": "gsicu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Science",
+    "title": "Curiosity (Gujarati)",
+    "code": "ggjcu1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Samaj Ka Aadhyan: Bharat or uske aage Part-I",
+    "code": "ghes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II",
+    "code": "gees2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Samaj Ka Aadhyan: Bharat or uske aage Part-II",
+    "code": "ghes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Muashrey ki Daryaft - Hindustan aur Uske age Part-I",
+    "code": "gues1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Muashrey ki Daryaft - Hindustan aur Uske age Part-II",
+    "code": "gues2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Odia)",
+    "code": "gores1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Marathi)",
+    "code": "gmres1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Punjabi)",
+    "code": "gpnes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Konkani)",
+    "code": "gkoes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Malayalam)",
+    "code": "gmles1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Kannada)",
+    "code": "gknes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Dogri)",
+    "code": "gdges1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Manipuri)",
+    "code": "gmnes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Nepali)",
+    "code": "gnpes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Sanskrit)",
+    "code": "gskes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Maithili)",
+    "code": "gmtes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Assamese)",
+    "code": "gases1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Bengali)",
+    "code": "gbnes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Bodo)",
+    "code": "gbdes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Gujarati)",
+    "code": "ggjes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Tamil)",
+    "code": "gtmes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Santhali)",
+    "code": "gsnes1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Sindhi)",
+    "code": "gsies1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Telugu)",
+    "code": "gtles1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Kashmiri)",
+    "code": "gkses1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Gujarati)",
+    "code": "ggjes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Kannada)",
+    "code": "gknes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Odia)",
+    "code": "gores2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Punjabi)",
+    "code": "gpnes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Bengali)",
+    "code": "gbnes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Tamil)",
+    "code": "gtmes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Malayalam)",
+    "code": "gmles2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Assamese)",
+    "code": "gases2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Marathi)",
+    "code": "gmres2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Sanskrit)",
+    "code": "gskes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Konkani)",
+    "code": "gkoes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Manipuri)",
+    "code": "gmnes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Sindhi)",
+    "code": "gsies2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Nepali)",
+    "code": "gnpes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Bodo)",
+    "code": "gbdes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Kashmiri)",
+    "code": "gkses2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Santhali)",
+    "code": "gsnes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Dogri)",
+    "code": "gdges2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 7,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II (Maithili)",
+    "code": "gmtes2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II",
+    "code": "hegp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Hindi)",
+    "code": "hhgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II (Hindi)",
+    "code": "hhgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Urdu)",
+    "code": "hugp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Punjabi)",
+    "code": "hpngp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Maithili)",
+    "code": "hmtgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Marathi)",
+    "code": "hmrgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Bengali)",
+    "code": "hbngp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Bodo)",
+    "code": "hbdgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Nepali)",
+    "code": "hnpgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Odia)",
+    "code": "horgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Kannada)",
+    "code": "hkngp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Telugu)",
+    "code": "htlgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Dogri)",
+    "code": "hdggp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Konkani)",
+    "code": "hkogp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Tamil)",
+    "code": "htmgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Kashmiri)",
+    "code": "hksgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Manipuri)",
+    "code": "hmngp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Sanskrit)",
+    "code": "hskgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Santhali)",
+    "code": "hsngp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Malayalam)",
+    "code": "hmlgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Sindhi)",
+    "code": "hsigp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Assamese)",
+    "code": "hasgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-I (Gujarati)",
+    "code": "hgjgp1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Kannada)",
+    "code": "hkngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Odia)",
+    "code": "horgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Punjabi)",
+    "code": "hpngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Gujarati)",
+    "code": "hgjgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Tamil)",
+    "code": "htmgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Malayalam)",
+    "code": "hmlgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Assamese)",
+    "code": "hasgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Marathi)",
+    "code": "hmrgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Telugu)",
+    "code": "htlgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Bengali)",
+    "code": "hbngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Santhali)",
+    "code": "hsngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Sindhi)",
+    "code": "hsigp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Manipuri)",
+    "code": "hmngp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Bodo)",
+    "code": "hbdgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Dogri)",
+    "code": "hdggp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Sanskrit)",
+    "code": "hskgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Nepali)",
+    "code": "hnpgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Konkani)",
+    "code": "hkogp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Kashmiri)",
+    "code": "hksgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganita Prakash Part-II(Maithili)",
+    "code": "hmtgp2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Jigyasa",
+    "code": "hhcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Tajassus",
+    "code": "hucu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Punjabi)",
+    "code": "hpncu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Tamil)",
+    "code": "htmcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Odia)",
+    "code": "horcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Assamese)",
+    "code": "hascu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Marathi)",
+    "code": "hmrcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Bengali)",
+    "code": "hbncu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Dogri)",
+    "code": "hdgcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Telugu)",
+    "code": "htlcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Bodo)",
+    "code": "hbdcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Gujarati)",
+    "code": "hgjcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Manipuri)",
+    "code": "hmncu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Sanskrit)",
+    "code": "hskcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Malayalam)",
+    "code": "hmlcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Kannada)",
+    "code": "hkncu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Konkani)",
+    "code": "hkocu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Maithili)",
+    "code": "hmtcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Nepali)",
+    "code": "hnpcu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Santhali)",
+    "code": "hsncu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Sindhi)",
+    "code": "hsicu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Curiosity (Kashmiri)",
+    "code": "hkscu1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Samaj Ka Aadhyan: Bharat or uske aage Part-I",
+    "code": "hhes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Muashrey ki Daryaft - Hindustan Aur Uske Age Part-I ",
+    "code": "hues1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-II",
+    "code": "hees2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Odia) ",
+    "code": "hores1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Sanskrit) ",
+    "code": "hskes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Malayalam) ",
+    "code": "hmles1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Punjabi) ",
+    "code": "hpnes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Gujarati) ",
+    "code": "hgjes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Bengali) ",
+    "code": "hbnes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Tamil) ",
+    "code": "htmes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Nepali) ",
+    "code": "hnpes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Manipuri) ",
+    "code": "hmnes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Kannada) ",
+    "code": "hknes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Marathi) ",
+    "code": "hmres1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Dogri) ",
+    "code": "hdges1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Assamese) ",
+    "code": "hases1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Konkani) ",
+    "code": "hkoes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Maithili) ",
+    "code": "hmtes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Bodo) ",
+    "code": "hbdes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Kashmiri) ",
+    "code": "hkses1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Santhali) ",
+    "code": "hsnes1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Telugu) ",
+    "code": "htles1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Exploring Society India and Beyond Part-I (Sindhi) ",
+    "code": "hsies1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 8,
+    "subject": "English",
+    "title": "It So Happend",
+    "code": "heih1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Ganit",
+    "code": "hhmh1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Mathematics",
+    "title": "Riyazi(Urdu)",
+    "code": "huhi1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 8,
+    "subject": "Hindi",
+    "title": "Durva",
+    "code": "hhdv1",
+    "first": 0,
+    "last": 19
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Vigyan",
+    "code": "hhsc1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 8,
+    "subject": "Science",
+    "title": "Science(Urdu)",
+    "code": "huse1",
+    "first": 0,
+    "last": 18
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Sansadhan Avam Vikas(Bhugol)",
+    "code": "hhss4",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Social And Political Life",
+    "code": "hess3",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Samajik Avam Rajnatik Jeevan",
+    "code": "hhss3",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Our-Pasts-III  ",
+    "code": "hess2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Hamare Atit-III (Itihas) ",
+    "code": "hhss1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Hamare Atit-III (Bhag-II) ",
+    "code": "hhss2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Wasayel aur Taraqqui(Urdu)",
+    "code": "hugy1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Samaji Aur Siyasi Zindagi(Urdu)",
+    "code": "huss1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Hamare Maazi-III (Urdu)",
+    "code": "huhm1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 8,
+    "subject": "Social Science",
+    "title": "Hamare Maazi Part-II(Urdu)",
+    "code": "huhm2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "English",
+    "title": "Moments Supplementary Reader",
+    "code": "iemo1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 9,
+    "subject": "Hindi",
+    "title": "Reva",
+    "code": "reva1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 9,
+    "subject": "Hindi",
+    "title": "Kshitij",
+    "code": "ihks1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 9,
+    "subject": "Hindi",
+    "title": "Sprash",
+    "code": "ihsp1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 9,
+    "subject": "Hindi",
+    "title": "Kritika",
+    "code": "ihkr1",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 9,
+    "subject": "Hindi",
+    "title": "Sanchayan",
+    "code": "ihsa1",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 9,
+    "subject": "Mathematics",
+    "title": "Ganita Manjari PART-II",
+    "code": "iemh2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "Mathematics",
+    "title": "Ganita Manjari (Hindi)",
+    "code": "ihmh1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 9,
+    "subject": "Mathematics",
+    "title": "Ganit Manjari (Urdu)",
+    "code": "iumh1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 9,
+    "subject": "Science",
+    "title": "Anveshan",
+    "code": "ihsc1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 9,
+    "subject": "Science",
+    "title": "Science (Urdu)",
+    "code": "iusc1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Loktantrik Rajniti-I",
+    "code": "ihss4",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Contemporary India-I",
+    "code": "iess1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Samkalin Bharat-I",
+    "code": "ihss1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Arthashastra",
+    "code": "ihss2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Economics",
+    "code": "iess2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "India and the Contemporary World-I",
+    "code": "iess3",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Bharat Aur Samkalin Vishwa-I",
+    "code": "ihss3",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Jamhuri Syasat(Urdu)-I",
+    "code": "iuss4",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Hindustan Aur Asri Dunia-I(Urdu)",
+    "code": "iuhi1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Aasri Hindustan (Urdu)-I",
+    "code": "iuss1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 9,
+    "subject": "Social Science",
+    "title": "Mashiyat (Urdu)",
+    "code": "iuss2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sanskrit",
+    "title": "Shashwati",
+    "code": "khsk2",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 11,
+    "subject": "Accountancy",
+    "title": "Lekhashastra-I",
+    "code": "khac1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Accountancy",
+    "title": "Accountancy-II",
+    "code": "keac2",
+    "first": 0,
+    "last": 2
+  },
+  {
+    "classNumber": 11,
+    "subject": "Accountancy",
+    "title": "Lekhashastra-II",
+    "code": "khac2",
+    "first": 0,
+    "last": 2
+  },
+  {
+    "classNumber": 11,
+    "subject": "Accountancy",
+    "title": "Khatadari-I(Urdu)",
+    "code": "kuac1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Accountancy",
+    "title": "Khatadari-II(Urdu)",
+    "code": "kuac2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Business Studies",
+    "title": "Vyavsay Adhyanan",
+    "code": "khbs1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 11,
+    "subject": "Business Studies",
+    "title": "Karobari Mutalah I",
+    "code": "kubs1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Rasayan Vigyan bhag-I",
+    "code": "khch1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Keemiya I",
+    "code": "kuch1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Chemistry Part II",
+    "code": "kech2",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Rasayan Vigyan bhag-II",
+    "code": "khch2",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Keemiya II",
+    "code": "kuch2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Chemistry",
+    "title": "Online Chemistry book Part I",
+    "code": "keep5",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 11,
+    "subject": "Mathematics",
+    "title": "Ganit",
+    "code": "khmh1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 11,
+    "subject": "Mathematics",
+    "title": "Riyazi I",
+    "code": "kumh1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 11,
+    "subject": "Biology",
+    "title": "Jeev Vigyan",
+    "code": "khbo1",
+    "first": 0,
+    "last": 19
+  },
+  {
+    "classNumber": 11,
+    "subject": "Biology",
+    "title": "Hayatiyaat",
+    "code": "kubo1",
+    "first": 0,
+    "last": 22
+  },
+  {
+    "classNumber": 11,
+    "subject": "Biology",
+    "title": "Hayatiyaat II",
+    "code": "kubo2",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 11,
+    "subject": "Biology",
+    "title": "Human Ecology and Family Sciences Part I ",
+    "code": "kehe1",
+    "first": 0,
+    "last": 2
+  },
+  {
+    "classNumber": 11,
+    "subject": "Home Science",
+    "title": "Human Ecology and Family Sciences Part II ",
+    "code": "kehe2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 11,
+    "subject": "Home Science",
+    "title": "Manav Paristhitiki evm pariwar vigyan Bhag-I ",
+    "code": "khhe1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Home Science",
+    "title": "Manav Paristhitiki evm pariwar vigyan Bhag-II ",
+    "code": "khhe2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Home Science",
+    "title": "Insani Mahauliyat aur Uloom e Khandandari-I ",
+    "code": "kuim1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "Home Science",
+    "title": "Insani Mahauliyat aur Uloom e Khandandari Part-II ",
+    "code": "kuim2",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 11,
+    "subject": "Psychology",
+    "title": "Manovigyan",
+    "code": "khpy1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Psychology",
+    "title": "Nafsiyaat ",
+    "code": "kupy1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 11,
+    "subject": "Economics",
+    "title": "Statistics for Economics",
+    "code": "kest1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Economics",
+    "title": "Sankhyiki",
+    "code": "khst1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Economics",
+    "title": "Bhartiya Airthryavstha Ka Vikas ",
+    "code": "khec1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Economics",
+    "title": "Hindustan Ki Moaashi Tarraqqi(Urdu)",
+    "code": "kuec1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "Economics",
+    "title": "Shumariyaat Bar-e-Mushiyat(Urdu)",
+    "code": "kusc1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Bhautique Bhugol ke Mool Sidhant",
+    "code": "khgy2",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Tabai Gugraphiya ke Mubadiyat",
+    "code": "kugy2",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Hindustan Tabi'i Mahaul (Urdu)",
+    "code": "kugy1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Pratical Work in Geography",
+    "code": "kegy3",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Bhugol Main Prayogatmak Karya",
+    "code": "khgy3",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "India Physical Environment",
+    "code": "kegy1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Bhart Bhautik Paryabaran",
+    "code": "khgy1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Jughrafia Mein Aamli Kam (Urdu)",
+    "code": "kugy3",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Geography",
+    "title": "Tabi'i Jughraiya Ka Mubadiyat (Urdu)",
+    "code": "kugm1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 11,
+    "subject": "Physics",
+    "title": "Bhautiki-I",
+    "code": "khph1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Physics",
+    "title": "Tabiyaat-I",
+    "code": "kuph1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Physics",
+    "title": "Physics Part-II",
+    "code": "keph2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Physics",
+    "title": "Bhautiki-II",
+    "code": "khph2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Physics",
+    "title": "Tabiyaat-II",
+    "code": "kuph2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "Hindi",
+    "title": "Aroh",
+    "code": "khar1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sociology",
+    "title": "Samaj Shastra Parichay-I",
+    "code": "khsy1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sociology",
+    "title": "Samajiyaat Ka Tarf",
+    "code": "kusy1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sociology",
+    "title": "Understanding Society",
+    "code": "kesy2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sociology",
+    "title": "Samaj ka Bodh",
+    "code": "khsy2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Sociology",
+    "title": "Mutala-e-Muashira",
+    "code": "kusy2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "English",
+    "title": "Hornbill",
+    "code": "kehb1",
+    "first": 0,
+    "last": 14
+  },
+  {
+    "classNumber": 11,
+    "subject": "English",
+    "title": "Snapshots Suppl.Reader English",
+    "code": "kesp1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 11,
+    "subject": "Political Science",
+    "title": "Raajneeti Sidhant",
+    "code": "khps1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 11,
+    "subject": "Political Science",
+    "title": "Hindustani Aain aur Kaam",
+    "code": "kups1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "Political Science",
+    "title": "India Constitution at Work",
+    "code": "keps2",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "Political Science",
+    "title": "Bharat ka Samvidhan Sidhant aur Vyavhar",
+    "code": "khps2",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "Political Science",
+    "title": "Siyasi Nazaria",
+    "code": "kups2",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 11,
+    "subject": "History",
+    "title": "Vishwa Itihas Ke Kuch Vishay",
+    "code": "khhs1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 11,
+    "subject": "History",
+    "title": "Tareekh-e-Alam per Mabni Mauzuaat Part I",
+    "code": "kuta1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 11,
+    "subject": "Urdu",
+    "title": "Dhanak",
+    "code": "kudh1",
+    "first": 0,
+    "last": 27
+  },
+  {
+    "classNumber": 11,
+    "subject": "Urdu",
+    "title": "Gulistan e Adab",
+    "code": "kuga1",
+    "first": 0,
+    "last": 22
+  },
+  {
+    "classNumber": 11,
+    "subject": "Urdu",
+    "title": "Khyabane Urdu",
+    "code": "kuku1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 11,
+    "subject": "Computer Science",
+    "title": "Computer Science - Urdu",
+    "code": "kucs1",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 12,
+    "subject": "Accountancy",
+    "title": "Accountancy Part-II",
+    "code": "leac2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Accountancy",
+    "title": "Lekhashastra Part-I",
+    "code": "lhac1",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "Accountancy",
+    "title": "Lekhashastra Part-II",
+    "code": "lhac2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Accountancy",
+    "title": "Khatadari-I(Urdu)",
+    "code": "luac1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Accountancy",
+    "title": "Khatadari-II(Urdu)",
+    "code": "luac2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Mathematics",
+    "title": "Mathematics Part-II",
+    "code": "lemh2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Mathematics",
+    "title": "Ganit-I",
+    "code": "lhmh1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Mathematics",
+    "title": "Ganit-II",
+    "code": "lhmh2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Mathematics",
+    "title": "Riyazi-I",
+    "code": "lumh1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Mathematics",
+    "title": "Riyazi-II",
+    "code": "lumh2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Physics",
+    "title": "Physics Part-II",
+    "code": "leph2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Physics",
+    "title": "Bhautiki-I",
+    "code": "lhph1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Physics",
+    "title": "Bhautiki-II",
+    "code": "lhph2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Physics",
+    "title": "Tabiyaat-I",
+    "code": "luph1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Physics",
+    "title": "Tabiyaat-II",
+    "code": "luph2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Hindi",
+    "title": "Aroh",
+    "code": "lhar1",
+    "first": 0,
+    "last": 15
+  },
+  {
+    "classNumber": 12,
+    "subject": "Hindi",
+    "title": "Vitan",
+    "code": "lhvt1",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 12,
+    "subject": "English",
+    "title": "Flamingo",
+    "code": "lefl1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 12,
+    "subject": "English",
+    "title": "Vistas",
+    "code": "levt1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Biology",
+    "title": "Jeev Vigyan",
+    "code": "lhbo1",
+    "first": 0,
+    "last": 13
+  },
+  {
+    "classNumber": 12,
+    "subject": "Biology",
+    "title": "Hayatiyaat",
+    "code": "lubo1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 12,
+    "subject": "Biology",
+    "title": "Human Ecology and Family Sciences Part I ",
+    "code": "lehe1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Bharatiya Itihas ke kuchh Vishay-I",
+    "code": "lhhs1",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Themes in Indian History-II",
+    "code": "lehs2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Bharatiya Itihas ke kuchh Vishay-II ",
+    "code": "lhhs2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Themes in Indian History-III",
+    "code": "lehs3",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Bharatiya Itihas ke kuchh Vishay-III",
+    "code": "lhhs3",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Tareekh-e-Hind ke Mauzuaat-I(Urdu)",
+    "code": "luth1",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Tareekh-e-Hind ke Mauzuaat-II(Urdu)",
+    "code": "luth2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "History",
+    "title": "Tareekh-e-Hind ke Mauzuaat-III(Urdu)",
+    "code": "luth3",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": "Manav Bhugol Ke Mool Sidhant",
+    "code": "lhgy1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": "Bhugol main peryojnatmak pryogatmak karye",
+    "code": "lhgy3",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": "India -People And Economy",
+    "code": "legy2",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": "Bharat log aur arthvyasastha(Bhugol)",
+    "code": "lhgy2",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": "Insani Jughrafia Ke Buniyadi Usool(Urdu)",
+    "code": "lufh1",
+    "first": 0,
+    "last": 10
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": " Hindustan Awam Aur Maishat(Urdu)",
+    "code": "lugy1",
+    "first": 0,
+    "last": 12
+  },
+  {
+    "classNumber": 12,
+    "subject": "Geography",
+    "title": " Jughrafia Mein Aamli Kam(Urdu)",
+    "code": "lugy3",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Psychology",
+    "title": "Manovigyan",
+    "code": "lhpy1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Psychology",
+    "title": "Nafsiat(Urdu)",
+    "code": "lupy1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sociology",
+    "title": "Bhartiya Samaj",
+    "code": "lhsy1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sociology",
+    "title": "Social Change and Development in India",
+    "code": "lesy2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sociology",
+    "title": "Bharat main Samajik Parivartan aur Vikas",
+    "code": "lhsy2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sociology",
+    "title": "Hindustani Samaj(Urdu)",
+    "code": "luis1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sociology",
+    "title": "Hindustan Mein Samaji Tabdili Aur Taraqqi(Urdu)",
+    "code": "lusy2",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Chemistry",
+    "title": "Chemistry-II",
+    "code": "lech2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Chemistry",
+    "title": "Rasayan vigyan bhag I",
+    "code": "lhch1",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Chemistry",
+    "title": "Rasayan vigyan bhag II",
+    "code": "lhch2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Chemistry",
+    "title": "Keemiya-I",
+    "code": "luch1",
+    "first": 0,
+    "last": 9
+  },
+  {
+    "classNumber": 12,
+    "subject": "Chemistry",
+    "title": "Keemiya-II",
+    "code": "luch2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Sanskrit",
+    "title": "Shaswati",
+    "code": "lhsk2",
+    "first": 0,
+    "last": 11
+  },
+  {
+    "classNumber": 12,
+    "subject": "Home Science",
+    "title": "Human Ecology and Family Sciences Part II ",
+    "code": "lehe2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Home Science",
+    "title": "Manav Paristhitik avam Parivar Vigyan Bhag 1 ",
+    "code": "lehh1",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Home Science",
+    "title": "Manav Paristhitiki avam Parivar Vigyan Bhag 2",
+    "code": "lehh2",
+    "first": 0,
+    "last": 7
+  },
+  {
+    "classNumber": 12,
+    "subject": "Economics",
+    "title": "Introductory Macroeconomics",
+    "code": "leec1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Economics",
+    "title": "Vyashthi Arthshasrta",
+    "code": "lhec2",
+    "first": 0,
+    "last": 5
+  },
+  {
+    "classNumber": 12,
+    "subject": "Economics",
+    "title": "Samashty Arthshastra Ek Parichay",
+    "code": "lhec1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Economics",
+    "title": "Juzvi Maashiyat ka Taruf(Urdu)",
+    "code": "lume1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Economics",
+    "title": "Kulli Maashiyat Ka Taruf(Urdu)",
+    "code": "lume2",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Business Studies",
+    "title": "Vyavasai Adhyan-I",
+    "code": "lhbs1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Business Studies",
+    "title": "Business Studies-II",
+    "code": "lebs2",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 12,
+    "subject": "Business Studies",
+    "title": "Vyavasai Adhyan-II",
+    "code": "lhbs2",
+    "first": 0,
+    "last": 3
+  },
+  {
+    "classNumber": 12,
+    "subject": "Business Studies",
+    "title": "Karobari Uloom I(Urdu)",
+    "code": "lubs1",
+    "first": 0,
+    "last": 8
+  },
+  {
+    "classNumber": 12,
+    "subject": "Business Studies",
+    "title": "Karobari Uloom II(Urdu)",
+    "code": "lubs2",
+    "first": 0,
+    "last": 4
+  },
+  {
+    "classNumber": 12,
+    "subject": "Urdu",
+    "title": "Khayaban-e-Urdu",
+    "code": "luku1",
+    "first": 0,
+    "last": 6
+  },
+  {
+    "classNumber": 12,
+    "subject": "Urdu",
+    "title": "Nai Awaz",
+    "code": "luna1",
+    "first": 0,
+    "last": 16
+  },
+  {
+    "classNumber": 12,
+    "subject": "Urdu",
+    "title": "Dhanak",
+    "code": "ludh1",
+    "first": 0,
+    "last": 12
+  }
+]

@@ -1,0 +1,238 @@
+﻿import { useEffect, useMemo, useState } from "react";
+import client from "../api/client";
+
+const COMMON_SUBJECTS = [
+  "Mathematics",
+  "Science",
+  "English",
+  "Hindi",
+  "Social Science",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "History",
+  "Geography",
+  "Civics",
+  "Economics",
+  "Computer Science",
+  "Environmental Studies",
+  "Sanskrit",
+  "Kannada",
+  "Tamil",
+  "Telugu",
+  "Urdu",
+  "French",
+  "Accountancy",
+  "Business Studies",
+  "Political Science",
+  "Psychology",
+  "Sociology",
+  "Other / Custom Subject",
+];
+
+export default function StudyPlan() {
+  const [subject, setSubject] = useState("");
+  const [customSubject, setCustomSubject] = useState("");
+  const [chapter, setChapter] = useState("");
+  const [minutesPerDay, setMinutesPerDay] = useState(30);
+  const [availableSubjects, setAvailableSubjects] = useState([]);
+  const [plan, setPlan] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSubjects() {
+      try {
+        const { data } = await client.get("/notes/subjects");
+        if (active && Array.isArray(data?.subjects)) {
+          setAvailableSubjects(data.subjects.filter(
+            (item) => typeof item === "string" && item.trim()
+          ));
+        }
+      } catch {
+        // Common subjects remain available if notes cannot be loaded.
+      }
+    }
+
+    loadSubjects();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const subjects = useMemo(
+    () => [
+      ...new Set([...COMMON_SUBJECTS.filter((s) => s !== "Other / Custom Subject"), ...availableSubjects]),
+    ].sort((a, b) => a.localeCompare(b)),
+    [availableSubjects]
+  );
+
+  const selectedSubject =
+    subject === "Other / Custom Subject" ? customSubject.trim() : subject.trim();
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!selectedSubject || loading) return;
+
+    setLoading(true);
+    setError("");
+    setPlan(null);
+
+    try {
+      const { data } = await client.post("/study-plan/generate", {
+        subject: selectedSubject,
+        chapter: chapter.trim() || undefined,
+        minutesPerDay: Number(minutesPerDay),
+      });
+
+      if (!data?.plan) {
+        throw new Error("The server did not return a study plan.");
+      }
+
+      setPlan(data.plan);
+    } catch (err) {
+      setError(
+        err.response?.data?.error ||
+          err.message ||
+          "Unable to generate your study plan. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="study-plan-page">
+      <header className="study-plan-hero">
+        <div>
+          <span className="eyebrow">MEMORYMESH · SMART LEARNING</span>
+          <h1>Study Planner</h1>
+          <p>Build a realistic, personalised plan for your next learning goal.</p>
+        </div>
+        <div className="study-plan-hero-icon" aria-hidden="true">✦</div>
+      </header>
+
+      <section className="study-plan-builder">
+        <div className="study-plan-heading">
+          <h2>Plan your study sessions</h2>
+          <p>Choose a subject, add a topic if you like, and set your daily study time.</p>
+        </div>
+
+        <form className="study-plan-form" onSubmit={handleSubmit}>
+          <label>
+            <span>Subject</span>
+            <select
+              value={subject}
+              onChange={(event) => {
+                setSubject(event.target.value);
+                setError("");
+              }}
+              required
+            >
+              <option value="">Choose a subject</option>
+              {subjects.map((item) => (
+                <option key={item} value={item}>{item}</option>
+              ))}
+              <option value="Other / Custom Subject">Other / Custom Subject</option>
+            </select>
+          </label>
+
+          {subject === "Other / Custom Subject" && (
+            <label>
+              <span>Your subject</span>
+              <input
+                type="text"
+                value={customSubject}
+                onChange={(event) => setCustomSubject(event.target.value)}
+                placeholder="Enter any subject"
+                maxLength={120}
+                required
+              />
+            </label>
+          )}
+
+          <label>
+            <span>Chapter or topic <small>(optional)</small></span>
+            <input
+              type="text"
+              value={chapter}
+              onChange={(event) => setChapter(event.target.value)}
+              placeholder="e.g. Linear equations"
+              maxLength={160}
+            />
+          </label>
+
+          <label>
+            <span>Study time per day</span>
+            <select
+              value={minutesPerDay}
+              onChange={(event) => setMinutesPerDay(Number(event.target.value))}
+            >
+              {[10, 20, 30, 45, 60, 90, 120, 180].map((minutes) => (
+                <option key={minutes} value={minutes}>
+                  {minutes} minutes
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button
+            className="study-plan-generate-button"
+            type="submit"
+            disabled={loading || !selectedSubject}
+          >
+            {loading ? "Creating your plan…" : "Generate my study plan →"}
+          </button>
+        </form>
+
+        {error && <p className="study-plan-error" role="alert">{error}</p>}
+      </section>
+
+      {plan && (
+        <section className="study-plan-result" aria-live="polite">
+          <div className="study-plan-result-header">
+            <div>
+              <span className="eyebrow">YOUR PERSONAL PLAN</span>
+              <h2>{plan.title || `${selectedSubject} study plan`}</h2>
+              {plan.overview && <p>{plan.overview}</p>}
+            </div>
+            <div className="study-plan-time">
+              {minutesPerDay}
+              <span>MIN / DAY</span>
+            </div>
+          </div>
+
+          <div className="study-plan-days">
+            {(plan.days || []).map((day, index) => (
+              <article className="study-plan-day" key={`${day.day ?? index}-${index}`}>
+                <div className="study-plan-day-number">{day.day ?? index + 1}</div>
+                <div className="study-plan-day-body">
+                  <div className="study-plan-day-top">
+                    <div>
+                      <span className="eyebrow">DAY {day.day ?? index + 1}</span>
+                      <h3>{day.title || `Study session ${index + 1}`}</h3>
+                    </div>
+                    <span className="study-plan-minutes">
+                      {day.minutes ?? minutesPerDay} min
+                    </span>
+                  </div>
+                  <div className="study-plan-tasks">
+                    {(day.tasks || []).map((task, taskIndex) => (
+                      <div className="study-plan-task" key={`${taskIndex}-${task}`}>
+                        <span>{taskIndex + 1}</span>
+                        <p>{task}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}

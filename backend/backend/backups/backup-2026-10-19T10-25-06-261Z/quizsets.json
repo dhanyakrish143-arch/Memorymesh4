@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "6ad5cafba4cb667321578370",
+    "title": "Basic Science Quiz",
+    "description": "A short quiz about plants and their parts.",
+    "subject": "Science",
+    "chapter": "Plants",
+    "classNumber": 5,
+    "board": "State",
+    "questions": [
+      {
+        "question": "Which part of a plant absorbs water from the soil?",
+        "options": [
+          "Root",
+          "Stem",
+          "Leaf",
+          "Flower"
+        ],
+        "correct_index": 0,
+        "explanation": "Roots absorb water and minerals from the soil.",
+        "_id": "6ad5cafba4cb667321578371"
+      }
+    ],
+    "published": true,
+    "createdBy": "6a7b5a7045cd3622f3b39112",
+    "createdAt": "2026-10-19T07:47:07.892Z",
+    "updatedAt": "2026-10-19T07:47:12.476Z",
+    "__v": 0
+  }
+]

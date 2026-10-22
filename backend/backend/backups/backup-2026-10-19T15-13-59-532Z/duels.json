@@ -1,0 +1,444 @@
+[
+  {
+    "_id": "6a91624cd405b0ef2ea3f20f",
+    "challenger": "6a8ee6f0419d3471a2b3ad87",
+    "opponent": "6a91608ad405b0ef2ea3f0b6",
+    "status": "cancelled",
+    "challengerScore": 0,
+    "opponentScore": 0,
+    "currentQuestion": 0,
+    "winner": null,
+    "roomId": "7756d8e9-e4cc-4b8c-b192-cc0ed6ccbb07",
+    "startedAt": null,
+    "completedAt": "2026-08-28T10:34:49.263Z",
+    "questions": [],
+    "createdAt": "2026-08-28T10:26:20.074Z",
+    "updatedAt": "2026-08-28T10:34:49.264Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a9165a0a554ad98485b4613",
+    "challenger": "6a8ee6f0419d3471a2b3ad87",
+    "opponent": "6a91608ad405b0ef2ea3f0b6",
+    "status": "cancelled",
+    "challengerScore": 0,
+    "opponentScore": 0,
+    "winner": null,
+    "roomId": "b9af42ae-8b33-4160-9ff0-b732a2d1a1ab",
+    "startedAt": "2026-08-28T10:43:44.065Z",
+    "completedAt": "2026-08-28T11:06:03.811Z",
+    "questions": [
+      {
+        "question": "What is a chemical reaction?",
+        "answer": "A process where substances change into new substances, involving breaking and forming of bonds.",
+        "options": [
+          "A process where substances change into new substances, involving breaking and forming of bonds.",
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "To understand how natural features like mountains, rivers, and plains influence human settlement and activities.",
+          "It helps students appreciate different types of work and the role of work in society."
+        ]
+      },
+      {
+        "question": "Which theme covers the beginnings of Indian civilization?",
+        "answer": "Theme B – Tapestry of the Past.",
+        "options": [
+          "Theme B – Tapestry of the Past.",
+          "It explains how laws are made, how leaders are chosen, and how citizens participate in decision making.",
+          "Work contributes to personal growth, economic development, and societal well‑being.",
+          "How historical events are recorded and interpreted over time."
+        ]
+      },
+      {
+        "question": "How are oceans and continents related?",
+        "answer": "Oceans cover about 71% of Earth’s surface, while continents are the large landmasses.",
+        "options": [
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "To understand human societies, cultures, and the environment.",
+          "It looks at how people produce, distribute, and consume goods and services in local and global contexts.",
+          "Oceans cover about 71% of Earth’s surface, while continents are the large landmasses."
+        ]
+      },
+      {
+        "question": "How can we identify a chemical reaction?",
+        "answer": "By observing changes in state, colour, evolution of gas, or temperature change.",
+        "options": [
+          "They can be indicated above or below the arrow, e.g., temperature, pressure, catalyst.",
+          "To understand human societies, cultures, and the environment.",
+          "By observing changes in state, colour, evolution of gas, or temperature change.",
+          "Adjusting coefficients so that the number of atoms of each element is equal on both sides, obeying conservation of mass."
+        ]
+      },
+      {
+        "question": "What is Social Science?",
+        "answer": "The study of human society and social relationships.",
+        "options": [
+          "To understand human societies, cultures, and the environment.",
+          "It refers to many different cultures and traditions coexisting within one nation.",
+          "It helps students appreciate different types of work and the role of work in society.",
+          "The study of human society and social relationships."
+        ]
+      }
+    ],
+    "responses": [
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 0,
+        "selectedOption": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "correct": false,
+        "answeredAt": "2026-08-28T10:45:35.072Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 1,
+        "selectedOption": "Work contributes to personal growth, economic development, and societal well‑being.",
+        "correct": false,
+        "answeredAt": "2026-08-28T10:45:56.523Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 2,
+        "selectedOption": "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+        "correct": false,
+        "answeredAt": "2026-08-28T10:45:58.760Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 3,
+        "selectedOption": "Adjusting coefficients so that the number of atoms of each element is equal on both sides, obeying conservation of mass.",
+        "correct": false,
+        "answeredAt": "2026-08-28T10:46:01.459Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 4,
+        "selectedOption": "It helps students appreciate different types of work and the role of work in society.",
+        "correct": false,
+        "answeredAt": "2026-08-28T10:46:04.300Z"
+      }
+    ],
+    "createdAt": "2026-08-28T10:40:32.948Z",
+    "updatedAt": "2026-08-28T11:06:03.812Z",
+    "__v": 6
+  },
+  {
+    "_id": "6a916bfdabc4787ceeacaf9c",
+    "challenger": "6a8ee6f0419d3471a2b3ad87",
+    "opponent": "6a91608ad405b0ef2ea3f0b6",
+    "status": "cancelled",
+    "challengerScore": 0,
+    "opponentScore": 3,
+    "winner": null,
+    "roomId": "fa1e34b4-baa2-415e-86dc-7908959b8dc7",
+    "startedAt": "2026-08-28T11:35:26.846Z",
+    "completedAt": "2026-08-28T11:53:21.705Z",
+    "questions": [
+      {
+        "question": "What is a combination reaction?",
+        "answer": "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+        "options": [
+          "(s) solid, (l) liquid, (g) gas, (aq) aqueous.",
+          "Theme B – Tapestry of the Past.",
+          "The idea that many cultures and communities coexist within one nation.",
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂."
+        ]
+      },
+      {
+        "question": "What is the role of reaction conditions in an equation?",
+        "answer": "They can be indicated above or below the arrow, e.g., temperature, pressure, catalyst.",
+        "options": [
+          "They can be indicated above or below the arrow, e.g., temperature, pressure, catalyst.",
+          "(s) solid, (l) liquid, (g) gas, (aq) aqueous.",
+          "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO.",
+          "A step‑by‑step approach to balance equations by adjusting coefficients until all atoms are equal."
+        ]
+      },
+      {
+        "question": "Name one theme that deals with economic activities.",
+        "answer": "Theme E – Economic Life Around Us.",
+        "options": [
+          "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO.",
+          "A process where substances change into new substances, involving breaking and forming of bonds.",
+          "Theme B – Tapestry of the Past.",
+          "Theme E – Economic Life Around Us."
+        ]
+      },
+      {
+        "question": "Which theme focuses on India's cultural roots?",
+        "answer": "Theme A – India and the World – Land and the People.",
+        "options": [
+          "Theme A – India and the World – Land and the People.",
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "How historical events are recorded and interpreted over time.",
+          "A process where substances change into new substances, involving breaking and forming of bonds."
+        ]
+      },
+      {
+        "question": "Which theme deals with governance and democracy?",
+        "answer": "Theme D – Governance and Democracy.",
+        "options": [
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "Theme A – India and the World – Land and the People.",
+          "Theme D – Governance and Democracy.",
+          "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO."
+        ]
+      }
+    ],
+    "responses": [
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 0,
+        "selectedOption": "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+        "correct": true,
+        "answeredAt": "2026-08-28T11:35:28.474Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 1,
+        "selectedOption": "They can be indicated above or below the arrow, e.g., temperature, pressure, catalyst.",
+        "correct": true,
+        "answeredAt": "2026-08-28T11:35:32.448Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 2,
+        "selectedOption": "A process where substances change into new substances, involving breaking and forming of bonds.",
+        "correct": false,
+        "answeredAt": "2026-08-28T11:35:35.454Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 3,
+        "selectedOption": "Theme A – India and the World – Land and the People.",
+        "correct": true,
+        "answeredAt": "2026-08-28T11:35:39.013Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 4,
+        "selectedOption": "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO.",
+        "correct": false,
+        "answeredAt": "2026-08-28T11:35:52.521Z"
+      }
+    ],
+    "createdAt": "2026-08-28T11:07:41.540Z",
+    "updatedAt": "2026-08-28T11:53:21.709Z",
+    "__v": 6
+  },
+  {
+    "_id": "6a9176e4a28b80dbdf52fe6b",
+    "challenger": "6a8ee6f0419d3471a2b3ad87",
+    "opponent": "6a91608ad405b0ef2ea3f0b6",
+    "status": "cancelled",
+    "currentQuestion": 0,
+    "challengerScore": 0,
+    "opponentScore": 0,
+    "winner": null,
+    "roomId": "9ab544ae-6612-4fc3-a9d9-98070a3eb344",
+    "startedAt": "2026-08-28T11:54:32.791Z",
+    "completedAt": "2026-08-28T11:58:50.525Z",
+    "questions": [
+      {
+        "question": "Which two types of local government are mentioned?",
+        "answer": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "options": [
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "Theme E – Economic Life Around Us.",
+          "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO."
+        ]
+      },
+      {
+        "question": "Why clean magnesium ribbon before burning?",
+        "answer": "To remove surface impurities that could interfere with the reaction and affect the observation.",
+        "options": [
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "A step‑by‑step approach to balance equations by adjusting coefficients until all atoms are equal.",
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "To remove surface impurities that could interfere with the reaction and affect the observation."
+        ]
+      },
+      {
+        "question": "What is the hit‑and‑trial method?",
+        "answer": "A step‑by‑step approach to balance equations by adjusting coefficients until all atoms are equal.",
+        "options": [
+          "It highlights the importance and dignity of work in society.",
+          "(s) solid, (l) liquid, (g) gas, (aq) aqueous.",
+          "A step‑by‑step approach to balance equations by adjusting coefficients until all atoms are equal.",
+          "Local Government in Rural Areas and Local Government in Urban Areas."
+        ]
+      },
+      {
+        "question": "How can we identify a chemical reaction?",
+        "answer": "By observing changes in state, colour, evolution of gas, or temperature change.",
+        "options": [
+          "By observing changes in state, colour, evolution of gas, or temperature change.",
+          "Theme E – Economic Life Around Us.",
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "Adjusting coefficients so that the number of atoms of each element is equal on both sides, obeying conservation of mass."
+        ]
+      },
+      {
+        "question": "Which theme deals with governance and democracy?",
+        "answer": "Theme D – Governance and Democracy.",
+        "options": [
+          "To remove surface impurities that could interfere with the reaction and affect the observation.",
+          "Theme D – Governance and Democracy.",
+          "By observing changes in state, colour, evolution of gas, or temperature change.",
+          "Understanding geography and mapping of places."
+        ]
+      }
+    ],
+    "responses": [
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 0,
+        "selectedOption": "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+        "correct": false,
+        "answeredAt": "2026-08-28T11:54:35.798Z"
+      }
+    ],
+    "createdAt": "2026-08-28T11:54:12.917Z",
+    "updatedAt": "2026-08-28T11:58:50.527Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a9178398a322f2ea3f8c558",
+    "challenger": "6a8ee6f0419d3471a2b3ad87",
+    "opponent": "6a91608ad405b0ef2ea3f0b6",
+    "status": "completed",
+    "currentQuestion": 4,
+    "challengerScore": 0,
+    "opponentScore": 0,
+    "winner": null,
+    "roomId": "91d3e3fd-d33e-4da7-83e8-684ad14a7804",
+    "startedAt": "2026-08-28T12:04:43.660Z",
+    "completedAt": "2026-08-28T12:05:26.578Z",
+    "questions": [
+      {
+        "question": "Which two types of local government are mentioned?",
+        "answer": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "options": [
+          "Theme D – Governance and Democracy.",
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "It highlights the importance and dignity of work in society.",
+          "(s) solid, (l) liquid, (g) gas, (aq) aqueous."
+        ]
+      },
+      {
+        "question": "What symbols denote physical states in equations?",
+        "answer": "(s) solid, (l) liquid, (g) gas, (aq) aqueous.",
+        "options": [
+          "The idea that many cultures and communities coexist within one nation.",
+          "Local Government in Rural Areas and Local Government in Urban Areas.",
+          "Understanding geography and mapping of places.",
+          "(s) solid, (l) liquid, (g) gas, (aq) aqueous."
+        ]
+      },
+      {
+        "question": "What is the focus of \"Locating Places on the Earth\"?",
+        "answer": "Understanding geography and mapping of places.",
+        "options": [
+          "Understanding geography and mapping of places.",
+          "They can be indicated above or below the arrow, e.g., temperature, pressure, catalyst.",
+          "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+          "Local Government in Rural Areas and Local Government in Urban Areas."
+        ]
+      },
+      {
+        "question": "What is a chemical equation?",
+        "answer": "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO.",
+        "options": [
+          "Adjusting coefficients so that the number of atoms of each element is equal on both sides, obeying conservation of mass.",
+          "Theme D – Governance and Democracy.",
+          "A concise representation of a reaction using chemical formulas and an arrow, e.g., Mg + O₂ → MgO.",
+          "To remove surface impurities that could interfere with the reaction and affect the observation."
+        ]
+      },
+      {
+        "question": "What is the significance of \"The Value of Work\"?",
+        "answer": "It highlights the importance and dignity of work in society.",
+        "options": [
+          "How historical events are recorded and interpreted over time.",
+          "The idea that many cultures and communities coexist within one nation.",
+          "It highlights the importance and dignity of work in society.",
+          "Local Government in Rural Areas and Local Government in Urban Areas."
+        ]
+      }
+    ],
+    "responses": [
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 0,
+        "selectedOption": "Theme D – Governance and Democracy.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:04:45.964Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 0,
+        "selectedOption": "Theme D – Governance and Democracy.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:04:54.348Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 1,
+        "selectedOption": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:04:57.107Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 1,
+        "selectedOption": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:01.213Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 2,
+        "selectedOption": "A reaction where two or more reactants form a single product, e.g., CaO + H₂O → Ca(OH)₂.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:05.468Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 2,
+        "selectedOption": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:09.793Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 3,
+        "selectedOption": "Adjusting coefficients so that the number of atoms of each element is equal on both sides, obeying conservation of mass.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:13.290Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 3,
+        "selectedOption": "Theme D – Governance and Democracy.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:18.548Z"
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "questionIndex": 4,
+        "selectedOption": "How historical events are recorded and interpreted over time.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:23.151Z"
+      },
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "questionIndex": 4,
+        "selectedOption": "Local Government in Rural Areas and Local Government in Urban Areas.",
+        "correct": false,
+        "answeredAt": "2026-08-28T12:05:26.389Z"
+      }
+    ],
+    "createdAt": "2026-08-28T11:59:53.683Z",
+    "updatedAt": "2026-08-28T12:05:26.580Z",
+    "__v": 11
+  }
+]

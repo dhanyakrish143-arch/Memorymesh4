@@ -1,0 +1,98 @@
+[
+  {
+    "_id": "6a8465d3ca02c76351d38600",
+    "week": "2026-W34",
+    "tier": "bronze",
+    "members": [
+      {
+        "userId": "6a845cdcca02c76351d385ff",
+        "xp": 0
+      }
+    ],
+    "promotions": [],
+    "demotions": [],
+    "createdAt": "2026-08-18T14:01:55.973Z",
+    "__v": 1
+  },
+  {
+    "_id": "6a9153e410b0e6e33182a824",
+    "week": "2026-08-24",
+    "tier": "bronze",
+    "members": [
+      {
+        "userId": "6a91608ad405b0ef2ea3f0b6",
+        "xp": 0
+      },
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "xp": 0
+      }
+    ],
+    "promotions": [
+      "6a91608ad405b0ef2ea3f0b6",
+      "6a8ee6f0419d3471a2b3ad87"
+    ],
+    "demotions": [],
+    "createdAt": "2026-08-28T09:24:52.052Z",
+    "updatedAt": "2026-08-28T11:17:39.660Z",
+    "__v": 3,
+    "finalized": false
+  },
+  {
+    "_id": "6a96415f5a59dc6e8a219bf3",
+    "week": "2026-08-31",
+    "tier": "bronze",
+    "members": [
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "xp": 22
+      }
+    ],
+    "promotions": [
+      "6a8ee6f0419d3471a2b3ad87"
+    ],
+    "demotions": [],
+    "finalized": false,
+    "createdAt": "2026-09-01T03:07:11.884Z",
+    "updatedAt": "2026-09-03T12:57:49.279Z",
+    "__v": 2
+  },
+  {
+    "_id": "6a9eb8878deddb3c0291012e",
+    "week": "2026-09-07",
+    "tier": "bronze",
+    "members": [
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "xp": 0
+      }
+    ],
+    "promotions": [
+      "6a8ee6f0419d3471a2b3ad87"
+    ],
+    "demotions": [],
+    "finalized": false,
+    "createdAt": "2026-09-07T13:13:43.158Z",
+    "updatedAt": "2026-09-07T13:13:44.062Z",
+    "__v": 1
+  },
+  {
+    "_id": "6aabce2757e33b32252544bd",
+    "week": "2026-09-14",
+    "tier": "bronze",
+    "members": [
+      {
+        "userId": "6a8ee6f0419d3471a2b3ad87",
+        "xp": 0
+      }
+    ],
+    "promotions": [
+      "6a8ee6f0419d3471a2b3ad87"
+    ],
+    "demotions": [],
+    "finalized": false,
+    "createdAt": "2026-09-17T11:25:27.529Z",
+    "updatedAt": "2026-09-17T11:25:27.670Z",
+    "__v": 1
+  }
+]

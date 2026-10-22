@@ -1,0 +1,61 @@
+{
+  "_id": "6a8ee6f0419d3471a2b3ad87",
+  "name": "dhanya",
+  "email": "dhanya@123",
+  "passwordHash": "$2b$12$EH37EaXaCeQx6j.9d2ZXjua1CUBsKxFGl8epELezgX7.GL9ER0WXC",
+  "class": 5,
+  "board": "State",
+  "streak": 3,
+  "streakFreezes": 0,
+  "gems": 261,
+  "xp": 557,
+  "level": 6,
+  "hearts": 5,
+  "lastHeartRefill": "2026-08-26T13:15:28.892Z",
+  "lastActiveDate": "2026-10-09T10:23:29.297Z",
+  "createdAt": "2026-08-26T13:15:28.896Z",
+  "updatedAt": "2026-10-19T07:49:11.242Z",
+  "__v": 8,
+  "achievements": [
+    "first_review",
+    "first_mastered",
+    "10_correct",
+    "50_reviews",
+    "3_day_streak",
+    "100_reviews"
+  ],
+  "quizHistory": [
+    {
+      "score": 4,
+      "total": 10,
+      "percentage": 40,
+      "subject": "General",
+      "chapter": "General",
+      "completedAt": "2026-08-27T15:20:56.322Z",
+      "_id": "6a9055d8b966ae2f75064060"
+    },
+    {
+      "score": 6,
+      "total": 10,
+      "percentage": 60,
+      "subject": "General",
+      "chapter": "General",
+      "completedAt": "2026-09-17T12:29:33.751Z",
+      "_id": "6aabdd2da38ad27b43061a2e"
+    },
+    {
+      "score": 1,
+      "total": 1,
+      "percentage": 100,
+      "subject": "Science",
+      "chapter": "Plants",
+      "completedAt": "2026-10-19T07:49:11.233Z",
+      "_id": "6ad5cb77a4cb66732157839e"
+    }
+  ],
+  "weeklyXp": 242,
+  "weeklyXpResetAt": "2026-09-17T11:25:27.130Z",
+  "leagueTier": "bronze",
+  "leagueWeek": "2026-09-14",
+  "role": "student"
+}

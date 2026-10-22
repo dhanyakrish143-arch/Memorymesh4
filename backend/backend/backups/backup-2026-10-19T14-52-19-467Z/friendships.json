@@ -1,0 +1,11 @@
+[
+  {
+    "_id": "6a9160a2d405b0ef2ea3f0d3",
+    "requester": "6a91608ad405b0ef2ea3f0b6",
+    "recipient": "6a8ee6f0419d3471a2b3ad87",
+    "status": "accepted",
+    "createdAt": "2026-08-28T10:19:14.096Z",
+    "updatedAt": "2026-08-28T10:21:10.224Z",
+    "__v": 0
+  }
+]
