@@ -1,101 +1,124 @@
 ﻿import React, { useEffect, useState } from "react";
-import client from "../api/client";
-import { CLASS_5_SUBJECTS } from "./class5Data";
-import { CLASS_6_SUBJECTS } from "./class6Data";
 import "./Learn.css";
 
+const CLASSES = [5, 6, 7, 8, 9, 10];
+const SUBJECTS = ["All", "English", "Mathematics", "Science", "Social Science", "Hindi", "Kannada"];
+const BACKEND_URL = "http://localhost:5000";
+
 export default function Learn() {
-  const [currentClass, setCurrentClass] = useState(5);
-  const [selectedSubject, setSelectedSubject] = useState("all");
-  const [dbBooks, setDbBooks] = useState([]);
+  const [selectedClass, setSelectedClass] = useState(5);
+  const [selectedSubject, setSelectedSubject] = useState("All");
+  const [textbooks, setTextbooks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeModal, setActiveModal] = useState(null);
 
-  const fallbackDataset = currentClass === 6 ? CLASS_6_SUBJECTS : CLASS_5_SUBJECTS;
-
-  useEffect(() => {
-    client.get(`/textbooks?class=${currentClass}`)
-      .then((res) => {
-        if (res.data?.success && Array.isArray(res.data.textbooks)) {
-          setDbBooks(res.data.textbooks);
+  const fetchBooks = async () => {
+    try {
+      setLoading(true);
+      // Fetch directly from the backend server to avoid any client interceptor redirects
+      const token = localStorage.getItem("token") || "";
+      const res = await fetch(`${BACKEND_URL}/api/textbooks?class=${selectedClass}`, {
+        headers: {
+          "Authorization": token ? `Bearer ${token}` : "",
+          "Content-Type": "application/json"
         }
-      })
-      .catch(() => {});
-  }, [currentClass]);
+      });
+      const data = await res.json();
+      console.log(`[Learn] Fetched textbooks for Class ${selectedClass}:`, data);
 
-  const handleOpenPdf = (subject, chNum, defaultTitle) => {
-    // 1. Check if an official PDF was uploaded through Admin for this subject & chapter
-    const uploadedMatch = dbBooks.find(
-      (b) => b.subject.toLowerCase() === subject.toLowerCase() && Number(b.chapterNumber) === Number(chNum)
-    );
-
-    let pdfUrl = uploadedMatch ? uploadedMatch.sourceUrl : null;
-
-    // 2. If not uploaded yet, use the verified local multi-page backup
-    if (!pdfUrl) {
-      const s = subject.toLowerCase();
-      let prefix = "science";
-      if (s.includes("english")) prefix = "english";
-      else if (s.includes("math")) prefix = "maths";
-      else if (s.includes("social")) prefix = "social";
-      else if (s.includes("hindi")) prefix = "hindi";
-      else if (s.includes("kannada")) prefix = "kannada";
-      pdfUrl = `/textbooks/${prefix}_ch${chNum}.pdf`;
+      if (data?.success && Array.isArray(data.textbooks)) {
+        setTextbooks(data.textbooks);
+      } else if (Array.isArray(data)) {
+        setTextbooks(data);
+      } else {
+        setTextbooks([]);
+      }
+    } catch (err) {
+      console.error("[Learn] Error fetching textbooks:", err);
+      setTextbooks([]);
+    } finally {
+      setLoading(false);
     }
-
-    setActiveModal({
-      title: defaultTitle,
-      subject,
-      url: pdfUrl
-    });
   };
 
-  const displayedSubjects = selectedSubject === "all"
-    ? fallbackDataset
-    : fallbackDataset.filter((s) => s.subject === selectedSubject);
+  useEffect(() => {
+    fetchBooks();
+  }, [selectedClass]);
+
+  const displayedBooks = selectedSubject === "All"
+    ? textbooks
+    : textbooks.filter((b) => b.subject?.toLowerCase() === selectedSubject.toLowerCase());
+
+  const getFullPdfUrl = (sourceUrl) => {
+    if (!sourceUrl) return "";
+    if (sourceUrl.startsWith("http://") || sourceUrl.startsWith("https://")) {
+      return sourceUrl;
+    }
+    const cleanPath = sourceUrl.startsWith("/") ? sourceUrl : `/${sourceUrl}`;
+    return `${BACKEND_URL}${cleanPath}`;
+  };
 
   return (
     <div style={{ padding: "32px 48px 60px", maxWidth: "1280px", margin: "0 auto", boxSizing: "border-box" }}>
-      {/* Page Header */}
+      {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
         <div>
           <span style={{ fontSize: "11px", fontWeight: "800", color: "#10b981", letterSpacing: "0.08em", textTransform: "uppercase" }}>
             CURRICULUM LIBRARY & STUDY HUB
           </span>
           <h1 style={{ fontSize: "28px", fontWeight: "900", color: "#0f172a", margin: "4px 0" }}>
-            Class {currentClass} Digital Curriculum Hub
+            Class {selectedClass} Textbooks
           </h1>
           <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
-            Official NCERT chapter reader running offline inside the portal.
+            Official textbook library managed by the curriculum portal.
           </p>
         </div>
-        <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "8px 16px", textAlign: "right" }}>
-          <strong style={{ display: "block", color: "#0f172a", fontSize: "14px" }}>Class {currentClass}</strong>
-          <span style={{ color: "#f97316", fontSize: "12px", fontWeight: "700" }}>State NCERT</span>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <button
+            onClick={fetchBooks}
+            style={{
+              background: "#ffffff",
+              border: "1px solid #cbd5e1",
+              borderRadius: "8px",
+              padding: "8px 14px",
+              fontSize: "12.5px",
+              fontWeight: "700",
+              color: "#334155",
+              cursor: "pointer"
+            }}
+          >
+            🔄 Refresh Books
+          </button>
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "8px 16px", textAlign: "right" }}>
+            <strong style={{ display: "block", color: "#0f172a", fontSize: "14px" }}>Class {selectedClass}</strong>
+            <span style={{ color: "#f97316", fontSize: "12px", fontWeight: "700" }}>State / NCERT</span>
+          </div>
         </div>
       </div>
 
-      {/* Grade Selector */}
+      {/* Grade Selector Pills */}
       <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "22px" }}>
         <span style={{ fontSize: "12px", fontWeight: "800", color: "#0f172a", marginRight: "6px" }}>
           SELECT GRADE:
         </span>
-        {[5, 6].map((cls) => (
+        {CLASSES.map((cls) => (
           <button
             key={cls}
             type="button"
             onClick={() => {
-              setCurrentClass(cls);
-              setSelectedSubject("all");
+              setSelectedClass(cls);
+              setSelectedSubject("All");
             }}
             style={{
               padding: "7px 18px",
               borderRadius: "8px",
-              border: currentClass === cls ? "2px solid #059669" : "1px solid #cbd5e1",
-              background: currentClass === cls ? "#059669" : "#ffffff",
-              color: currentClass === cls ? "#ffffff" : "#475569",
+              border: selectedClass === cls ? "2px solid #059669" : "1px solid #cbd5e1",
+              background: selectedClass === cls ? "#059669" : "#ffffff",
+              color: selectedClass === cls ? "#ffffff" : "#475569",
               fontSize: "13px",
               fontWeight: "800",
-              cursor: "pointer"
+              cursor: "pointer",
+              transition: "all 0.15s ease"
             }}
           >
             Class {cls}
@@ -103,10 +126,10 @@ export default function Learn() {
         ))}
       </div>
 
-      {/* Filter Bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "12px" }}>
+      {/* Filter Subject Bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
         <span style={{ fontSize: "13px", fontWeight: "700", color: "#475569" }}>
-          Showing {displayedSubjects.length} Core Subjects
+          Available Textbooks ({displayedBooks.length})
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Filter Subject:</span>
@@ -115,101 +138,89 @@ export default function Learn() {
             onChange={(e) => setSelectedSubject(e.target.value)}
             style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "13px", fontWeight: "600" }}
           >
-            <option value="all">All Subjects</option>
-            {fallbackDataset.map((s) => (
-              <option key={s.subject} value={s.subject}>{s.subject}</option>
+            {SUBJECTS.map((s) => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Cards Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px" }}>
-        {displayedSubjects.map((item) => (
-          <div
-            key={item.subject}
-            style={{
-              background: "#ffffff",
-              border: "1px solid #e2e8f0",
-              borderRadius: "14px",
-              padding: "20px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)"
-            }}
-          >
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-                <span style={{ fontSize: "11px", fontWeight: "800", color: "#059669", background: "#ecfdf5", padding: "3px 8px", borderRadius: "6px" }}>
-                  {item.subject}
-                </span>
-                <span style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>
-                  Class {currentClass} Official
-                </span>
-              </div>
-
-              <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0f172a", margin: "0 0 10px" }}>
-                {item.title}
-              </h3>
-
-              <p style={{ fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", margin: "12px 0 6px" }}>
-                Official Syllabus Chapters:
-              </p>
-
-              <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "13px" }}>
-                {item.chapters.map((ch) => (
-                  <li key={ch.num} style={{ marginBottom: "8px" }}>
-                    <button
-                      type="button"
-                      onClick={() => handleOpenPdf(item.subject, ch.num, ch.title)}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        padding: 0,
-                        color: "#0284c7",
-                        fontSize: "13px",
-                        fontWeight: "600",
-                        textAlign: "left",
-                        cursor: "pointer",
-                        textDecoration: "underline"
-                      }}
-                    >
-                      {ch.title} ↗
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div style={{ paddingTop: "14px", borderTop: "1px solid #f1f5f9", marginTop: "14px" }}>
-              <button
-                type="button"
-                onClick={() => handleOpenPdf(item.subject, 1, item.chapters[0].title)}
+      {/* Content Area */}
+      {loading ? (
+        <div style={{ padding: "60px", textAlign: "center", color: "#64748b", fontSize: "15px", fontWeight: "600" }}>
+          Loading library from server...
+        </div>
+      ) : displayedBooks.length === 0 ? (
+        <div style={{ background: "#ffffff", border: "1px dashed #cbd5e1", borderRadius: "14px", padding: "60px 20px", textAlign: "center" }}>
+          <span style={{ fontSize: "36px", display: "block", marginBottom: "12px" }}>📚</span>
+          <h3 style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a", margin: "0 0 6px" }}>
+            No Textbooks Uploaded for Class {selectedClass}
+          </h3>
+          <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
+            Upload official PDF chapters through the Admin Dashboard to display them here.
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }}>
+          {displayedBooks.map((book) => {
+            const resolvedUrl = getFullPdfUrl(book.sourceUrl);
+            return (
+              <div
+                key={book._id}
                 style={{
-                  width: "100%",
-                  background: "#0f172a",
-                  color: "#ffffff",
-                  fontWeight: "700",
-                  fontSize: "13px",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  border: "none",
-                  cursor: "pointer",
+                  background: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "14px",
+                  padding: "20px",
                   display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px"
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)"
                 }}
               >
-                <span>📖</span> Open In-Portal Digital Reader
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: "800", color: "#059669", background: "#ecfdf5", padding: "3px 8px", borderRadius: "6px" }}>
+                      {book.subject}
+                    </span>
+                    <span style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>
+                      Class {book.class}
+                    </span>
+                  </div>
+                  <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0f172a", margin: "0 0 8px" }}>
+                    {book.title}
+                  </h3>
+                  <span style={{ fontSize: "13px", color: "#475569", fontWeight: "600" }}>
+                    Chapter {book.chapterNumber || 1} {book.chapterName ? `— ${book.chapterName}` : ""}
+                  </span>
+                </div>
 
-      {/* Reader Modal */}
+                <div style={{ paddingTop: "14px", borderTop: "1px solid #f1f5f9", marginTop: "16px" }}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal({ ...book, fullUrl: resolvedUrl })}
+                    style={{
+                      width: "100%",
+                      background: "#0f172a",
+                      color: "#ffffff",
+                      fontWeight: "700",
+                      fontSize: "13px",
+                      padding: "10px",
+                      borderRadius: "8px",
+                      border: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    📖 Read Textbook PDF
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Modal */}
       {activeModal && (
         <div style={{
           position: "fixed",
@@ -245,16 +256,16 @@ export default function Learn() {
             }}>
               <div>
                 <span style={{ fontSize: "11px", fontWeight: "800", color: "#34d399", textTransform: "uppercase" }}>
-                  {activeModal.subject} — Grade {currentClass}
+                  {activeModal.subject} — Class {activeModal.class}
                 </span>
                 <h2 style={{ fontSize: "16px", fontWeight: "700", margin: "2px 0 0" }}>
-                  {activeModal.title}
+                  {activeModal.title} {activeModal.chapterName ? `(${activeModal.chapterName})` : ""}
                 </h2>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <button
                   type="button"
-                  onClick={() => window.open(activeModal.url, "_blank")}
+                  onClick={() => window.open(activeModal.fullUrl, "_blank")}
                   style={{ background: "#334155", color: "#ffffff", border: "none", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}
                 >
                   Full Tab ↗
@@ -268,11 +279,10 @@ export default function Learn() {
                 </button>
               </div>
             </div>
-
             <div style={{ flex: 1, background: "#f8fafc" }}>
               <iframe
-                src={`${activeModal.url}#toolbar=1&navpanes=0`}
-                title="Reader Modal"
+                src={`${activeModal.fullUrl}#toolbar=1`}
+                title="Textbook Viewer"
                 style={{ width: "100%", height: "100%", border: "none" }}
               />
             </div>

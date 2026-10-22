@@ -1,4 +1,4 @@
-﻿import express from "express";
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -18,6 +18,12 @@ app.use("/textbooks", express.static(path.join(__dirname, "public", "textbooks")
 
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
+app.use('/textbooks/uploads', express.static(process.cwd() + '/uploads'));
+app.use('/textbooks/uploads', express.static(process.cwd() + '/public/textbooks'));
+app.use('/textbooks', express.static(process.cwd() + '/public/textbooks'));
+app.use('/textbooks/uploads', express.static(process.cwd() + '/uploads'));
+app.use('/textbooks/uploads', express.static(process.cwd() + '/public/textbooks'));
+app.use('/textbooks', express.static(process.cwd() + '/public/textbooks'));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/cards", cardRoutes);

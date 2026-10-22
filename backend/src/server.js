@@ -1,8 +1,9 @@
-﻿import notificationsRoutes from "./routes/notifications.js";
+﻿import path from 'path';
+import notificationsRoutes from "./routes/notifications.js";
 import "dotenv/config";
 
 import express from "express";
-import path from "path";
+
 import { fileURLToPath } from "url";
 import http from "http";
 import mongoose from "mongoose";
@@ -55,6 +56,9 @@ app.use(
 );
 
 app.use(express.json());
+app.use('/textbooks/uploads', express.static('D:/Memorymesh4/textbooks/uploads'));
+app.use('/textbooks', express.static('D:/Memorymesh4/frontend/public/textbooks'));
+app.use('/textbooks', express.static('D:/Memorymesh4/textbooks'));
 
 // Static delivery for State NCERT Textbooks with explicit PDF headers
 app.use(
@@ -146,6 +150,12 @@ mongoose
 
     process.exit(1);
   });
+
+
+
+
+
+
 
 
 
