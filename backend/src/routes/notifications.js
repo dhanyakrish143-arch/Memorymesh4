@@ -1,0 +1,126 @@
+﻿import express from "express";
+import mongoose from "mongoose";
+import requireAuth from "../middleware/auth.js";
+import User from "../models/User.js";
+import Notification from "../models/Notification.js";
+
+const router = express.Router();
+
+router.use(requireAuth);
+
+async function getStudent(req, res) {
+  const user = await User.findById(req.userId).select("role class board").lean();
+
+
+  if (!user) {
+    res.status(401).json({ error: "User not found." });
+    return null;
+  }
+
+  if (user.role !== "student" && !(user.role == null && Number.isInteger(user.class) && user.class >= 5 && user.class <= 12 && ["CBSE", "ICSE", "State"].includes(user.board))) {
+    res.status(403).json({ error: "Student access required." });
+    return null;
+  }
+
+  return user;
+}
+
+function relevantQuery(user) {
+  return {
+    $and: [
+      {
+        $or: [
+          { classNumber: user.class },
+          { classNumber: null },
+        ],
+      },
+      {
+        $or: [
+          { board: user.board },
+          { board: null },
+        ],
+      },
+    ],
+  };
+}
+
+router.get("/", async (req, res) => {
+  try {
+    const user = await getStudent(req, res);
+    if (!user) return;
+
+    const query = relevantQuery(user);
+
+    const [items, unreadCount] = await Promise.all([
+      Notification.find(query)
+        .sort({ createdAt: -1 })
+        .limit(50)
+        .lean(),
+      Notification.countDocuments({
+        ...query,
+        readBy: { $ne: new mongoose.Types.ObjectId(req.userId) },
+      }),
+    ]);
+
+    const userId = String(req.userId);
+
+    res.json({
+      notifications: items.map((item) => ({
+        ...item,
+        isRead: (item.readBy || []).some((id) => String(id) === userId),
+        readBy: undefined,
+      })),
+      unreadCount,
+    });
+  } catch (error) {
+    console.error("Fetch notifications failed:", error);
+    res.status(500).json({ error: "Could not load notifications." });
+  }
+});
+
+router.patch("/:id/read", async (req, res) => {
+  try {
+    const user = await getStudent(req, res);
+    if (!user) return;
+
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: "Invalid notification ID." });
+    }
+
+    const result = await Notification.updateOne(
+      { _id: req.params.id, ...relevantQuery(user) },
+      { $addToSet: { readBy: req.userId } }
+    );
+
+    if (!result.matchedCount) {
+      return res.status(404).json({ error: "Notification not found." });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Mark notification read failed:", error);
+    res.status(500).json({ error: "Could not update notification." });
+  }
+});
+
+router.patch("/read-all", async (req, res) => {
+  try {
+    const user = await getStudent(req, res);
+    if (!user) return;
+
+    await Notification.updateMany(
+      relevantQuery(user),
+      { $addToSet: { readBy: req.userId } }
+    );
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Mark all notifications read failed:", error);
+    res.status(500).json({ error: "Could not update notifications." });
+  }
+});
+
+export default router;
+
+
+

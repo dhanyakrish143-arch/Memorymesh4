@@ -1,5 +1,6 @@
 ﻿import express from "express";
 import FlashcardSet from "../models/FlashcardSet.js";
+import { createResourceNotification } from "../utils/createResourceNotification.js";
 import requireAuth from "../middleware/auth.js";
 import requireAdmin from "../middleware/requireAdmin.js";
 
@@ -132,11 +133,27 @@ router.patch("/flashcard-sets/:id/publish", async (req, res) => {
       return res.status(400).json({ error: "published must be true or false." });
     }
 
-    const set = await FlashcardSet.findByIdAndUpdate(
-      req.params.id,
-      { published: req.body.published },
-      { new: true }
-    );
+    const set = await FlashcardSet.findById(req.params.id);
+
+    if (!set) {
+      return res.status(404).json({ error: "Flashcard set not found." });
+    }
+
+    const wasPublished = set.published === true;
+    set.published = req.body.published;
+    await set.save();
+
+    if (!wasPublished && set.published) {
+      await createResourceNotification({
+        title: "New flashcards available",
+        message: `${set.title || set.name || "A flashcard set"} is now available for Class ${set.classNumber}.`,
+        type: "flashcard",
+        resourceId: set._id,
+        link: "/cards",
+        classNumber: set.classNumber,
+        board: set.board,
+      });
+    }
 
     if (!set) {
       return res.status(404).json({ error: "Flashcard set not found." });
@@ -165,3 +182,4 @@ router.delete("/flashcard-sets/:id", async (req, res) => {
 });
 
 export default router;
+

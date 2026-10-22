@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
+import "./Settings.css";
 
 const DEFAULT_SETTINGS = {
   sessionSize: 10,
@@ -14,10 +15,7 @@ export default function Settings() {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(
-        "memorymesh_settings"
-      );
-
+      const stored = localStorage.getItem("memorymesh_settings");
       if (stored) {
         setSettings({
           ...DEFAULT_SETTINGS,
@@ -25,16 +23,12 @@ export default function Settings() {
         });
       }
     } catch (err) {
-      console.error(
-        "Failed to load settings:",
-        err
-      );
+      console.error("Failed to load settings:", err);
     }
   }, []);
 
   const updateSetting = (key, value) => {
     setSaved(false);
-
     setSettings((current) => ({
       ...current,
       [key]: value,
@@ -42,237 +36,179 @@ export default function Settings() {
   };
 
   const saveSettings = () => {
-    localStorage.setItem(
-      "memorymesh_settings",
-      JSON.stringify(settings)
-    );
-
+    localStorage.setItem("memorymesh_settings", JSON.stringify(settings));
     setSaved(true);
+    setTimeout(() => setSaved(false), 3500);
   };
 
   return (
-    <div className="page settings-page">
-
-      <section className="settings-hero">
+    <div className="settings-studio-wrapper">
+      {/* Configuration Header */}
+      <div className="settings-header-pane">
         <div>
-          <span className="eyebrow">
-            MEMORYMESH SETTINGS
-          </span>
-
-          <h1 className="brand">
-            Settings
-          </h1>
-
-          <p className="subtitle">
-            Customize how you study and review.
+          <span className="settings-tagline">Cognitive Engine Configuration</span>
+          <h1 className="settings-main-title">Learning Preferences</h1>
+          <p className="settings-main-subtitle">
+            Configure default interval session sizes, priority ordering algorithms, and multilingual study prompts.
           </p>
         </div>
-      </section>
 
-      <section className="card settings-card">
+        <div className="settings-status-badge">
+          <span className="badge-status-dot" />
+          <span className="badge-status-text">Client Preferences Synced</span>
+        </div>
+      </div>
 
-        <div className="settings-section">
-          <span className="eyebrow">
-            REVIEW
-          </span>
+      <div className="settings-console-card">
+        {/* SECTION 1: COGNITIVE RECALL ENGINE */}
+        <div className="settings-block">
+          <div className="settings-block-header">
+            <div>
+              <h3>Spaced Repetition Engine</h3>
+              <p>Tailor how active recall sessions are prioritized and batched.</p>
+            </div>
+            <span className="section-pill">Algorithm</span>
+          </div>
 
-          <h2>
-            Review preferences
-          </h2>
-
-          <div className="settings-list">
-
-            <div className="settings-row">
-              <div>
-                <strong>
-                  Default session size
-                </strong>
-
-                <p>
-                  Number of cards selected when you start a review.
-                </p>
+          <div className="settings-items-list">
+            <div className="settings-tile">
+              <div className="tile-info">
+                <strong>Default Session Batch Size</strong>
+                <span>The maximum number of scheduled cards queued when launching a review cycle.</span>
               </div>
-
-              <select
-                value={settings.sessionSize}
-                onChange={(e) =>
-                  updateSetting(
-                    "sessionSize",
-                    Number(e.target.value)
-                  )
-                }
-              >
-                <option value={10}>10 cards</option>
-                <option value={20}>20 cards</option>
-                <option value={30}>30 cards</option>
-              </select>
+              <div className="tile-control">
+                <select
+                  value={settings.sessionSize}
+                  onChange={(e) => updateSetting("sessionSize", Number(e.target.value))}
+                  className="settings-select"
+                >
+                  <option value={10}>10 Cards (Recommended)</option>
+                  <option value={20}>20 Cards</option>
+                  <option value={30}>30 Cards</option>
+                </select>
+              </div>
             </div>
 
-            <div className="settings-row">
-              <div>
-                <strong>
-                  Start with weak cards
-                </strong>
-
-                <p>
-                  Put lower-mastery cards first when reviewing.
-                </p>
+            <div className="settings-tile">
+              <div className="tile-info">
+                <strong>Prioritize Low-Mastery Cards</strong>
+                <span>Position difficult and forgotten concepts at the beginning of each queue.</span>
               </div>
-
-              <button
-                type="button"
-                className={`settings-toggle ${
-                  settings.startWeak ? "active" : ""
-                }`}
-                onClick={() =>
-                  updateSetting(
-                    "startWeak",
-                    !settings.startWeak
-                  )
-                }
-                aria-pressed={settings.startWeak}
-              >
-                <span />
-              </button>
+              <div className="tile-control">
+                <button
+                  type="button"
+                  className={`toggle-switch-track ${settings.startWeak ? "active" : ""}`}
+                  onClick={() => updateSetting("startWeak", !settings.startWeak)}
+                  aria-pressed={settings.startWeak}
+                >
+                  <span className="toggle-switch-thumb" />
+                </button>
+              </div>
             </div>
-
           </div>
         </div>
 
-        <div className="settings-divider" />
+        <div className="settings-block-divider" />
 
-        <div className="settings-section">
-          <span className="eyebrow">
-            STUDY
-          </span>
+        {/* SECTION 2: STUDY EXPERIENCE & GOALS */}
+        <div className="settings-block">
+          <div className="settings-block-header">
+            <div>
+              <h3>Study Workspace & Goals</h3>
+              <p>Personalize translation prompts, daily targets, and heuristic assistance.</p>
+            </div>
+            <span className="section-pill">Workspace</span>
+          </div>
 
-          <h2>
-            Study preferences
-          </h2>
-
-          <div className="settings-list">
-
-            <div className="settings-row">
-              <div>
-                <strong>
-                  Study language
-                </strong>
-
-                <p>
-                  AI content will be shown in English plus your selected language.
-                </p>
+          <div className="settings-items-list">
+            <div className="settings-tile">
+              <div className="tile-info">
+                <strong>Study Language</strong>
+                <span>AI explanations and chapter aids will display in your selected language alongside English.</span>
               </div>
-
-              <select
-                value={settings.studyLanguage}
-                onChange={(e) =>
-                  updateSetting(
-                    "studyLanguage",
-                    e.target.value
-                  )
-                }
-              >
-                <option value="English">English</option>
-                <option value="Hindi">Hindi (हिन्दी)</option>
-                <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
-                <option value="Tamil">Tamil (தமிழ்)</option>
-                <option value="Telugu">Telugu (తెలుగు)</option>
-                <option value="Malayalam">Malayalam (മലയാളം)</option>
-                <option value="Bengali">Bengali (বাংলা)</option>
-                <option value="Marathi">Marathi (मराठी)</option>
-                <option value="Gujarati">Gujarati (ગુજરાતી)</option>
-                <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
-                <option value="Urdu">Urdu (اردو)</option>
-                <option value="Spanish">Spanish (Español)</option>
-                <option value="French">French (Français)</option>
-                <option value="German">German (Deutsch)</option>
-                <option value="Portuguese">Portuguese (Português)</option>
-                <option value="Japanese">Japanese (日本語)</option>
-                <option value="Chinese">Chinese (中文)</option>
-                <option value="Korean">Korean (한국어)</option>
-                <option value="Arabic">Arabic (العربية)</option>
-              </select>
+              <div className="tile-control">
+                <select
+                  value={settings.studyLanguage}
+                  onChange={(e) => updateSetting("studyLanguage", e.target.value)}
+                  className="settings-select"
+                >
+                  <option value="English">English</option>
+                  <option value="Hindi">Hindi (हिन्दी)</option>
+                  <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
+                  <option value="Tamil">Tamil (தமிழ்)</option>
+                  <option value="Telugu">Telugu (తెలుగు)</option>
+                  <option value="Malayalam">Malayalam (മലയാളം)</option>
+                  <option value="Bengali">Bengali (বাংলা)</option>
+                  <option value="Marathi">Marathi (मराठी)</option>
+                  <option value="Gujarati">Gujarati (ગુજરાતી)</option>
+                  <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
+                  <option value="Urdu">Urdu (اردو)</option>
+                  <option value="Spanish">Spanish (Español)</option>
+                  <option value="French">French (Français)</option>
+                  <option value="German">German (Deutsch)</option>
+                  <option value="Portuguese">Portuguese (Português)</option>
+                  <option value="Japanese">Japanese (日本語)</option>
+                  <option value="Chinese">Chinese (中文)</option>
+                  <option value="Korean">Korean (한국어)</option>
+                  <option value="Arabic">Arabic (العربية)</option>
+                </select>
+              </div>
             </div>
 
-            <div className="settings-row">
-              <div>
-                <strong>
-                  Daily review goal
-                </strong>
-
-                <p>
-                  Set the number of reviews you want to complete each day.
-                </p>
+            <div className="settings-tile">
+              <div className="tile-info">
+                <strong>Daily Target Volume</strong>
+                <span>Target completed cards per day to maintain active learning streaks.</span>
               </div>
-
-              <select
-                value={settings.dailyGoal}
-                onChange={(e) =>
-                  updateSetting(
-                    "dailyGoal",
-                    Number(e.target.value)
-                  )
-                }
-              >
-                <option value={5}>5 reviews</option>
-                <option value={10}>10 reviews</option>
-                <option value={20}>20 reviews</option>
-                <option value={30}>30 reviews</option>
-              </select>
+              <div className="tile-control">
+                <select
+                  value={settings.dailyGoal}
+                  onChange={(e) => updateSetting("dailyGoal", Number(e.target.value))}
+                  className="settings-select"
+                >
+                  <option value={5}>5 Reviews / Day</option>
+                  <option value={10}>10 Reviews / Day (Standard)</option>
+                  <option value={20}>20 Reviews / Day</option>
+                  <option value={30}>30 Reviews / Day</option>
+                </select>
+              </div>
             </div>
 
-            <div className="settings-row">
-              <div>
-                <strong>
-                  Study tips
-                </strong>
-
-                <p>
-                  Show helpful hints during review sessions.
-                </p>
+            <div className="settings-tile">
+              <div className="tile-info">
+                <strong>Contextual Recall Hints</strong>
+                <span>Provide mnemonic clues and memory prompts when lingering on a question.</span>
               </div>
-
-              <button
-                type="button"
-                className={`settings-toggle ${
-                  settings.showTips ? "active" : ""
-                }`}
-                onClick={() =>
-                  updateSetting(
-                    "showTips",
-                    !settings.showTips
-                  )
-                }
-                aria-pressed={settings.showTips}
-              >
-                <span />
-              </button>
+              <div className="tile-control">
+                <button
+                  type="button"
+                  className={`toggle-switch-track ${settings.showTips ? "active" : ""}`}
+                  onClick={() => updateSetting("showTips", !settings.showTips)}
+                  aria-pressed={settings.showTips}
+                >
+                  <span className="toggle-switch-thumb" />
+                </button>
+              </div>
             </div>
-
           </div>
         </div>
 
-        <div className="settings-footer">
-
+        {/* Console Action Footer */}
+        <div className="settings-actions-footer">
           {saved && (
-            <span className="settings-saved">
-              ✓ Settings saved
+            <span className="settings-saved-indicator">
+              ✓ Preferences saved to local profile
             </span>
           )}
-
           <button
             type="button"
-            className="primary-button"
+            className="settings-save-button"
             onClick={saveSettings}
           >
-            Save Settings
+            Save Preferences →
           </button>
-
         </div>
-
-      </section>
-
+      </div>
     </div>
   );
 }
-

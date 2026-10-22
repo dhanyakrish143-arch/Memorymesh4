@@ -1,13 +1,14 @@
-﻿import { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import client from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
+import "./Profile.css";
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
 
   const [name, setName] = useState("");
   const [userClass, setUserClass] = useState(10);
-  const [board, setBoard] = useState("CBSE");
+  const [board, setBoard] = useState("State");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -16,6 +17,8 @@ export default function Profile() {
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
+    let active = true;
+
     const loadProfile = async () => {
       try {
         setLoading(true);
@@ -23,25 +26,28 @@ export default function Profile() {
 
         const { data } = await client.get("/auth/me");
 
-        setName(data.name || "");
-        setUserClass(data.class || 10);
-        setBoard(data.board || "CBSE");
+        if (active) {
+          setName(data.name || "");
+          setUserClass(data.class || 10);
+          setBoard(data.board || "State");
+        }
       } catch (err) {
-        console.error(
-          "Failed to load profile:",
-          err
-        );
-
-        setError(
-          err.response?.data?.error ||
-          "Unable to load your profile."
-        );
+        console.error("Failed to load profile:", err);
+        if (active) {
+          setError(
+            err.response?.data?.error ||
+              "Unable to load your profile details."
+          );
+        }
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     loadProfile();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleSave = async (e) => {
@@ -52,33 +58,24 @@ export default function Profile() {
     setSuccess("");
 
     try {
-      const { data } = await client.put(
-        "/auth/profile",
-        {
-          name,
-          class: Number(userClass),
-          board,
-        }
-      );
+      const { data } = await client.put("/auth/profile", {
+        name,
+        class: Number(userClass),
+        board: "State",
+      });
 
-      updateUser(data.user);
+      if (data?.user) {
+        updateUser(data.user);
+        setName(data.user.name);
+        setUserClass(data.user.class);
+        setBoard(data.user.board || "State");
+      }
 
-      setName(data.user.name);
-      setUserClass(data.user.class);
-      setBoard(data.user.board);
-
-      setSuccess(
-        "Your profile has been updated successfully."
-      );
+      setSuccess("Profile settings successfully updated.");
     } catch (err) {
-      console.error(
-        "Failed to update profile:",
-        err
-      );
-
+      console.error("Failed to update profile:", err);
       setError(
-        err.response?.data?.error ||
-        "Unable to update your profile."
+        err.response?.data?.error || "Unable to save your profile changes."
       );
     } finally {
       setSaving(false);
@@ -87,170 +84,130 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="page profile-page">
-        <div className="progress-loading">
-          <div className="loader" />
-          <p>Loading your profile...</p>
+      <div className="profile-studio-wrapper">
+        <div className="profile-loading-state">
+          <div className="profile-spinner" />
+          <p>Retrieving student credentials...</p>
         </div>
       </div>
     );
   }
 
+  const initial = name ? name.trim().charAt(0).toUpperCase() : "S";
+
   return (
-    <div className="page profile-page">
-
-      <section className="profile-hero">
+    <div className="profile-studio-wrapper">
+      {/* Header */}
+      <div className="profile-header-pane">
         <div>
-          <span className="eyebrow">
-            MEMORYMESH ACCOUNT
-          </span>
-
-          <h1 className="brand">
-            Your Profile
-          </h1>
-
-          <p className="subtitle">
-            Keep your learning details up to date.
+          <span className="profile-tagline">Student Account Administration</span>
+          <h1 className="profile-main-title">Profile Settings</h1>
+          <p className="profile-main-subtitle">
+            Manage your verified identity, educational grade tier, and curriculum board parameters.
           </p>
         </div>
 
-        
-      </section>
+        <div className="profile-status-badge">
+          <span className="status-grade-text">Class {userClass}</span>
+          <span className="status-board-text">{board} Board</span>
+        </div>
+      </div>
 
-      <section className="card profile-card">
-
-        <div className="profile-section-heading">
-          <span className="eyebrow">
-            PERSONAL DETAILS
-          </span>
-
-          <h2>
-            Account information
-          </h2>
+      {/* Profile Card Console */}
+      <div className="profile-console-card">
+        {/* User Identity Mini-Bar */}
+        <div className="profile-avatar-bar">
+          <div className="profile-avatar-circle">{initial}</div>
+          <div className="profile-avatar-details">
+            <h3>{name || "Enrolled Student"}</h3>
+            <p>{user?.email || "student@memorymesh.internal"}</p>
+          </div>
+          <div className="profile-verified-chip">
+            <span className="chip-dot" /> Verified Academic Account
+          </div>
         </div>
 
-        <form
-          onSubmit={handleSave}
-          className="profile-form"
-        >
+        {error && (
+          <div className="profile-alert-banner alert-error" role="alert">
+            <span>⚠️ {error}</span>
+          </div>
+        )}
 
-          <label className="profile-field">
-            <span>
-              Full name
-            </span>
+        {success && (
+          <div className="profile-alert-banner alert-success" role="alert">
+            <span>✓ {success}</span>
+          </div>
+        )}
 
+        <form onSubmit={handleSave} className="profile-form-grid">
+          <div className="profile-field-group">
+            <label className="field-label">Student Full Name</label>
             <input
               type="text"
               value={name}
-              onChange={(e) =>
-                setName(e.target.value)
-              }
-              placeholder="Your name"
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Full Name"
               required
+              className="profile-input"
             />
-          </label>
+          </div>
 
-          <label className="profile-field">
-            <span>
-              Email
-            </span>
-
+          <div className="profile-field-group">
+            <label className="field-label">
+              Academic Email Address <span className="field-locked-tag">🔒 Read-Only</span>
+            </label>
             <input
               type="email"
               value={user?.email || ""}
               disabled
+              className="profile-input input-disabled"
             />
+            <span className="field-hint-text">
+              Institutional email identifiers are permanently bound to your study logs.
+            </span>
+          </div>
 
-            <small>
-              Email cannot be changed here.
-            </small>
-          </label>
-
-          <div className="profile-form-row">
-
-            <label className="profile-field">
-              <span>
-                Class
-              </span>
-
+          <div className="profile-row-split">
+            <div className="profile-field-group">
+              <label className="field-label">Academic Class Tier</label>
               <select
                 value={userClass}
-                onChange={(e) =>
-                  setUserClass(e.target.value)
-                }
+                onChange={(e) => setUserClass(Number(e.target.value))}
+                className="profile-select"
               >
-                {Array.from(
-                  { length: 8 },
-                  (_, index) => index + 5
-                ).map((value) => (
-                  <option
-                    key={value}
-                    value={value}
-                  >
-                    Class {value}
+                {[5, 6, 7, 8, 9, 10].map((cls) => (
+                  <option key={cls} value={cls}>
+                    Class {cls}
                   </option>
                 ))}
               </select>
-            </label>
+              <span className="field-hint-text">Active range: Class 5 to Class 10.</span>
+            </div>
 
-            <label className="profile-field">
-              <span>
-                Board
-              </span>
-
+            <div className="profile-field-group">
+              <label className="field-label">Education Board</label>
               <select
                 value={board}
-                onChange={(e) =>
-                  setBoard(e.target.value)
-                }
+                onChange={(e) => setBoard(e.target.value)}
+                className="profile-select"
               >
-                <option value="CBSE">
-                  CBSE
-                </option>
-
-                <option value="ICSE">
-                  ICSE
-                </option>
-
-                <option value="State">
-                  State Board
-                </option>
+                <option value="State">State Board</option>
               </select>
-            </label>
-
+              <span className="field-hint-text">Strictly isolated to State syllabus.</span>
+            </div>
           </div>
 
-          {error && (
-            <div className="profile-message profile-message-error">
-              {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="profile-message profile-message-success">
-              {success}
-            </div>
-          )}
-
-          <div className="profile-actions">
-
+          <div className="profile-actions-bar">
             <button
               type="submit"
-              className="primary-button"
               disabled={saving}
+              className="profile-submit-btn"
             >
-              {saving
-                ? "Saving..."
-                : "Save Changes"}
+              {saving ? "Saving Changes..." : "Save Profile Changes →"}
             </button>
-
           </div>
-
         </form>
-
-      </section>
-
+      </div>
     </div>
   );
 }
-

@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+﻿import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
@@ -10,13 +10,19 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userClass, setUserClass] = useState(10);
-  const [board, setBoard] = useState("CBSE");
+  const [board, setBoard] = useState("State");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { login, adminLogin, register } = useAuth();
   const navigate = useNavigate();
+
+  const handleRoleToggle = (adminMode) => {
+    setIsAdminLogin(adminMode);
+    if (adminMode) setIsRegister(false);
+    setError("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +35,7 @@ export default function Login() {
           name,
           email,
           password,
-          class: userClass,
+          class: Number(userClass),
           board,
         });
       } else {
@@ -46,257 +52,248 @@ export default function Login() {
       setError(
         err.response?.data?.error ||
           err.response?.data?.message ||
-          "Unable to continue. Please check your details and try again."
+          "Authentication failed. Please check your credentials."
       );
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleMode = () => {
-    setIsRegister((current) => !current);
-    setError("");
-  };
-
   return (
-    <main className="mm-auth-page">
-      <section className="mm-auth-shell">
-        <aside className="mm-auth-visual">
-          <a className="mm-brand" href="/" aria-label="MemoryMesh home">
-            <span className="mm-brand-mark">M</span>
-            <span>MemoryMesh</span>
-          </a>
+    <div className="login-stage-root">
+      <div className="mesh-gradient-1" />
+      <div className="mesh-gradient-2" />
+      <div className="mesh-grid" />
 
-          <div className="mm-visual-content">
-            <span className="mm-eyebrow">
-              YOUR LEARNING JOURNEY STARTS HERE
-            </span>
+      <div className="login-frame-container">
+        {/* LEFT COLUMN: ARCHITECTURAL PLATFORM VALUE */}
+        <div className="stage-left">
+          <div className="brand-badge-group">
+            <div className="brand-cube">M</div>
+            <div>
+              <span className="brand-logo-text">MemoryMesh</span>
+              <span className="brand-tagline-text">Curriculum & Recall Studio</span>
+            </div>
+          </div>
 
-            <h1>
-              Learn smarter.
-              <br />
-              <span>Remember longer.</span>
+          <div className="hero-text-block">
+            <h1 className="hero-heading">
+              Smarter syllabus retention through spaced repetition.
             </h1>
-
-            <p>
-              Build better study habits, strengthen your memory, and make
-              every learning session count.
+            <p className="hero-subheading">
+              Automated cognitive recall intervals and verified learning materials
+              strictly organized for your board curriculum.
             </p>
+          </div>
 
-            <div className="mm-learning-card">
-              <div className="mm-card-top">
-                <span className="mm-card-icon">âœ¦</span>
-                <span className="mm-card-label">YOUR NEXT BIG IDEA</span>
-                <span className="mm-live-dot" />
+          {/* Clean Metric Highlights (Replaced the fake flashcard) */}
+          <div className="platform-highlights-grid">
+            <div className="highlight-metric-card">
+              <div className="metric-icon">🎯</div>
+              <div className="metric-info">
+                <strong>Curriculum Isolation</strong>
+                <span>Only published textbooks & notes matching your exact class & board.</span>
               </div>
+            </div>
 
-              <div className="mm-memory-visual" aria-hidden="true">
-                <div className="mm-orbit mm-orbit-one" />
-                <div className="mm-orbit mm-orbit-two" />
-                <div className="mm-orbit mm-orbit-three" />
-                <div className="mm-orbit-core">M</div>
-                <span className="mm-node mm-node-one">âœ¦</span>
-                <span className="mm-node mm-node-two">+</span>
-                <span className="mm-node mm-node-three">â—Ž</span>
-                <span className="mm-node mm-node-four">âŒ˜</span>
+            <div className="highlight-metric-card">
+              <div className="metric-icon">⚡</div>
+              <div className="metric-info">
+                <strong>Spaced Interval Scheduling</strong>
+                <span>Scientific 1d, 3d, and 7d review queues to prevent forgetting curves.</span>
               </div>
+            </div>
 
-              <div className="mm-card-caption">
-                <div>
-                  <strong>Connect the dots.</strong>
-                  <span>Turn knowledge into lasting memories.</span>
-                </div>
-                <span className="mm-arrow">â†—</span>
+            <div className="highlight-metric-card">
+              <div className="metric-icon">📊</div>
+              <div className="metric-info">
+                <strong>Active Progress Analytics</strong>
+                <span>Live accuracy scoring, streak records, and completion insights.</span>
               </div>
             </div>
           </div>
 
-          <div className="mm-visual-footer">
-            <span>Curiosity today. Confidence tomorrow.</span>
-            <span>MEMORYMESH Â©</span>
+          <div className="stage-proof-pills">
+            <div className="proof-pill">
+              <span className="pill-dot" /> Class 5 to 10 Supported
+            </div>
+            <div className="proof-pill">
+              <span>🔒</span> Session Encrypted
+            </div>
           </div>
-        </aside>
+        </div>
 
-        <section className="mm-auth-form-side">
-          <div className="mm-mobile-brand">
-            <span className="mm-brand-mark">M</span>
-            <span>MemoryMesh</span>
-          </div>
+        {/* RIGHT COLUMN: MODERN FROSTED CONSOLE */}
+        <div className="stage-right">
+          <div className="auth-glass-box">
+            {/* Segmented Switcher */}
+            <div className="auth-tab-segment">
+              <button
+                type="button"
+                className={`tab-segment-btn ${!isAdminLogin ? "active" : ""}`}
+                onClick={() => handleRoleToggle(false)}
+              >
+                🎓 Student
+              </button>
+              <button
+                type="button"
+                className={`tab-segment-btn ${isAdminLogin ? "active" : ""}`}
+                onClick={() => handleRoleToggle(true)}
+              >
+                ⚡ Admin
+              </button>
+            </div>
 
-          <div className="mm-form-wrap">
-            <div className="mm-form-heading">
-              <span className="mm-form-eyebrow">
-                {isRegister ? "GET STARTED" : isAdminLogin ? "ADMINISTRATOR ACCESS" : "WELCOME BACK"}
-              </span>
-
-              <h2>
-                {isRegister ? "Create your account" : isAdminLogin ? "Admin sign in." : "Good to see you."}
-              </h2>
-
+            <div className="auth-box-header">
+              <h2>{isAdminLogin ? "Admin Sign In" : isRegister ? "Create Account" : "Sign In"}</h2>
               <p>
-                {isRegister
-                  ? "Set up your account and start learning your way."
-                  : "Sign in to continue your learning journey."}
+                {isAdminLogin
+                  ? "Access administrative console and curriculum publishing."
+                  : isRegister
+                  ? "Select your class and board to unlock syllabus notes."
+                  : "Welcome back! Enter your details to continue."}
               </p>
             </div>
 
-            <div className="mm-mode-switch" aria-label="Account options" style={{ display: isAdminLogin ? "none" : undefined }}>
-              <button
-                type="button"
-                className={!isRegister ? "active" : ""}
-                onClick={() => {
-                  setIsRegister(false);
-                  setError("");
-                }}
-              >
-                Sign in
-              </button>
+            {error && (
+              <div className="auth-alert-banner">
+                <span>⚠️ {error}</span>
+              </div>
+            )}
 
-              <button
-                type="button"
-                className={isRegister ? "active" : ""}
-                onClick={() => {
-                  setIsRegister(true);
-                  setError("");
-                }}
-              >
-                Create account
-              </button>
-            </div>
-
-            <form className="mm-auth-form" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="auth-inputs-stack">
               {isRegister && (
-                <>
-                  <div className="mm-field">
-                    <label htmlFor="mm-name">Full name</label>
-                    <input
-                      id="mm-name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      autoComplete="name"
-                      required
-                    />
-                  </div>
-
-                  <div className="mm-form-row">
-                    <div className="mm-field">
-                      <label htmlFor="mm-class">Class</label>
-                      <select
-                        id="mm-class"
-                        value={userClass}
-                        onChange={(e) =>
-                          setUserClass(Number(e.target.value))
-                        }
-                        required
-                      >
-                        {[5, 6, 7, 8, 9, 10, 11, 12].map((grade) => (
-                          <option key={grade} value={grade}>
-                            Class {grade}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="mm-field">
-                      <label htmlFor="mm-board">Board</label>
-                      <select
-                        id="mm-board"
-                        value={board}
-                        onChange={(e) => setBoard(e.target.value)}
-                        required
-                      >
-                        <option value="CBSE">CBSE</option>
-                        <option value="ICSE">ICSE</option>
-                        <option value="State">State</option>
-                      </select>
-                    </div>
-                  </div>
-                </>
+                <div className="auth-input-item">
+                  <label>Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Alex Morgan"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="auth-input-field"
+                    autoComplete="name"
+                  />
+                </div>
               )}
 
-              <div className="mm-field">
-                <label htmlFor="mm-email">Email address</label>
+              <div className="auth-input-item">
+                <label>Academic Email</label>
                 <input
-                  id="mm-email"
                   type="email"
-                  placeholder="you@example.com"
+                  required
+                  placeholder="student@school.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="auth-input-field"
                   autoComplete="email"
-                  required
                 />
               </div>
 
-              <div className="mm-field">
-                <label htmlFor="mm-password">Password</label>
-
-                <div className="mm-password-wrap">
-                  <input
-                    id="mm-password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete={
-                      isRegister ? "new-password" : "current-password"
-                    }
-                    required
-                  />
-
+              <div className="auth-input-item">
+                <div className="label-row-between">
+                  <label>Password</label>
                   <button
-                    className="mm-password-toggle"
                     type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="btn-text-reveal"
                   >
                     {showPassword ? "Hide" : "Show"}
                   </button>
                 </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  placeholder="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="auth-input-field"
+                  autoComplete={isRegister ? "new-password" : "current-password"}
+                />
               </div>
 
-              {error && (
-                <div className="mm-error" role="alert">
-                  <span aria-hidden="true">!</span>
-                  {error}
+              {isRegister && (
+                <div className="auth-grid-split">
+                  <div className="auth-input-item">
+                    <label>Grade / Class</label>
+                    <select
+                      value={userClass}
+                      onChange={(e) => setUserClass(Number(e.target.value))}
+                      className="auth-select-field"
+                    >
+                      {[5, 6, 7, 8, 9, 10].map((cls) => (
+                        <option key={cls} value={cls}>
+                          Class {cls}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="auth-input-item">
+                    <label>Board</label>
+                    <select
+                    value={board}
+                    onChange={(e) => setBoard(e.target.value)}
+                    className="auth-select-field"
+                  >
+                    <option value="State">State</option>
+                  </select>
+                  </div>
                 </div>
               )}
 
               <button
-                className="mm-submit"
                 type="submit"
                 disabled={loading}
+                className={`auth-action-btn ${isAdminLogin ? "admin-action" : ""}`}
               >
                 {loading
-                  ? "Please wait..."
+                  ? "Authenticating..."
+                  : isAdminLogin
+                  ? "Authorize Console Access →"
                   : isRegister
-                    ? "Create my account"
-                    : "Sign in to MemoryMesh"}
-                {!loading && <span aria-hidden="true">â†’</span>}
+                  ? "Complete Registration →"
+                  : "Sign In →"}
               </button>
             </form>
 
-            <button type="button" onClick={() => { setIsAdminLogin(value => !value); setIsRegister(false); setError(""); }} style={{ display: "block", margin: "16px auto", background: "none", border: 0, color: "#269d18", cursor: "pointer", fontWeight: 700 }}>{isAdminLogin ? "← Back to student login" : "Admin Login"}</button>
-<p className="mm-switch-copy" style={{ display: isAdminLogin ? "none" : undefined }}> 
-              {isRegister
-                ? "Already have an account?"
-                : "New to MemoryMesh?"}{" "}
-              <button type="button" onClick={toggleMode}>
-                {isRegister ? "Sign in" : "Create an account"}
-              </button>
-            </p>
-
-            <div className="mm-form-bottom">
-              <span className="mm-security-icon">âœ“</span>
-              Your learning journey, securely connected.
-            </div>
+            {!isAdminLogin && (
+              <div className="auth-switch-caption">
+                {isRegister ? (
+                  <p>
+                    Already registered?{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsRegister(false);
+                        setError("");
+                      }}
+                      className="btn-switch-link"
+                    >
+                      Sign In
+                    </button>
+                  </p>
+                ) : (
+                  <p>
+                    New to MemoryMesh?{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsRegister(true);
+                        setError("");
+                      }}
+                      className="btn-switch-link"
+                    >
+                      Create student account
+                    </button>
+                  </p>
+                )}
+              </div>
+            )}
           </div>
-        </section>
-      </section>
-    </main>
+        </div>
+      </div>
+    </div>
   );
 }
-
-
 

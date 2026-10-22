@@ -65,3 +65,303 @@ a {
   border-color: #84cc16;
   color: #16a34a;
 }
+
+/* =========================================================
+   STUDENT PORTAL & SIDEBAR SAAS REFINEMENTS
+   ========================================================= */
+
+/* Ensure body and #root span full screen without artificial margins */
+html, body, #root {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  background-color: #f8fafc !important;
+}
+
+/* Layout container holding sidebar and main content */
+.app-layout,
+.app-container,
+.main-layout {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Student Sidebar styling */
+.sidebar {
+  width: 250px !important;
+  min-width: 250px !important;
+  background: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 20px 16px !important;
+  box-sizing: border-box !important;
+  position: sticky !important;
+  top: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+.sidebar-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-bottom: 18px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  margin-bottom: 16px !important;
+}
+
+.sidebar-brand-icon {
+  width: 38px !important;
+  height: 38px !important;
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 19px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25) !important;
+}
+
+.sidebar-brand-name {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.15 !important;
+}
+
+.sidebar-brand-subtitle {
+  font-size: 10.5px !important;
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.sidebar-section-title {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  color: #94a3b8 !important;
+  padding: 12px 10px 6px !important;
+  text-transform: uppercase !important;
+}
+
+.sidebar-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 9px 12px !important;
+  border-radius: 10px !important;
+  color: #475569 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  transition: all 0.15s ease !important;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  text-align: left !important;
+}
+
+.sidebar-link:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.sidebar-link-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: #64748b !important;
+  transition: color 0.15s ease !important;
+}
+
+.sidebar-link.active {
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+  font-weight: 700 !important;
+}
+
+.sidebar-link.active .sidebar-link-icon {
+  color: #10b981 !important;
+}
+
+.sidebar-logout {
+  color: #dc2626 !important;
+  margin-top: auto !important;
+}
+
+.sidebar-logout:hover {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+}
+
+.sidebar-logout .sidebar-link-icon {
+  color: #dc2626 !important;
+}
+
+/* Ensure Student Main Content Area Expands Across Viewport */
+main,
+.main-content,
+.content-area,
+.learn-page,
+.curriculum-page {
+  flex: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 28px 36px 60px !important;
+}
+
+/* =========================================================
+   STUDENT SHELL & EDGE-TO-EDGE VIEWPORT FIX
+   ========================================================= */
+
+.student-shell {
+  display: flex !important;
+  width: 100vw !important;
+  max-width: 100% !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #f8fafc !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+/* Sidebar pinned cleanly to the left */
+.student-shell .sidebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 250px !important;
+  min-width: 250px !important;
+  height: 100vh !important;
+  background: #ffffff !important;
+  border-right: 1px solid #e2e8f0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 20px 16px !important;
+  z-index: 40 !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Main content fills the entire remaining width without gaps */
+.student-main-content {
+  margin-left: 250px !important;
+  flex: 1 !important;
+  width: calc(100vw - 250px) !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  background: #f8fafc !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Ensure student subpages expand edge-to-edge */
+.student-main-content main,
+.student-main-content .achievements-page,
+.student-main-content .dashboard-container,
+.student-main-content .progress-container,
+.student-main-content .quiz-container,
+.student-main-content .study-page-container {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 28px 36px 60px !important;
+}
+
+/* In case student-shell wraps admin login/login where Nav is null */
+.student-shell:not(:has(.sidebar)) .student-main-content {
+  margin-left: 0 !important;
+  width: 100vw !important;
+}
+
+/* =========================================================
+   STUDENT PORTAL FULL-WIDTH EDGE-TO-EDGE EXPANSION
+   ========================================================= */
+
+/* Remove artificial max-width constraints on student page wrappers */
+.student-main-content,
+.student-main-content > div,
+.student-main-content main,
+.student-main-content .dashboard-container,
+.student-main-content .home-container,
+.student-main-content .notifications-page,
+.student-main-content .notifications-container,
+.student-main-content .learn-page,
+.student-main-content .curriculum-page,
+.student-main-content .progress-container,
+.student-main-content .study-page-container {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Ensure notifications card list expands full width */
+.notifications-page,
+.notifications-container {
+  padding: 32px 40px !important;
+  width: 100% !important;
+}
+
+.notifications-list,
+.notifications-items {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Home / Dashboard grid layout expanding naturally */
+.student-main-content .dashboard-grid,
+.student-main-content .stats-grid,
+.student-main-content .cards-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* =========================================================
+   GLOBAL BRAND MARK (ADMIN & STUDENT EXACT 1:1)
+   ========================================================= */
+.admin-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.admin-brand-mark {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 19px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.25) !important;
+}
+
+.admin-brand strong {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.3px !important;
+}

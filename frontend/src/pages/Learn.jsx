@@ -1,681 +1,284 @@
-﻿import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+﻿import React, { useEffect, useState } from "react";
 import client from "../api/client";
-import { useAuth } from "../contexts/AuthContext";
-
-const DEFAULT_SUBJECTS = [];
-
-const BACKEND_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
-).replace(/\/api\/?$/, "");
-
-const resolveTextbookUrl = (url) => {
-  if (!url) return "";
-
-  if (/^https?:\/\//i.test(url)) {
-    return url;
-  }
-
-  return `${BACKEND_URL}${url.startsWith("/") ? "" : "/"}${url}`;
-};
+import { CLASS_5_SUBJECTS } from "./class5Data";
+import { CLASS_6_SUBJECTS } from "./class6Data";
+import "./Learn.css";
 
 export default function Learn() {
-  const navigate = useNavigate();
-  const { user } = useAuth();
+  const [currentClass, setCurrentClass] = useState(5);
+  const [selectedSubject, setSelectedSubject] = useState("all");
+  const [dbBooks, setDbBooks] = useState([]);
+  const [activeModal, setActiveModal] = useState(null);
 
-  const [cards, setCards] = useState([]);
-  const [notes, setNotes] = useState([]);
-  const [subjects, setSubjects] = useState(DEFAULT_SUBJECTS);
-  const [textbooks, setTextbooks] = useState([]);
-
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedChapter, setSelectedChapter] = useState(null);
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const fallbackDataset = currentClass === 6 ? CLASS_6_SUBJECTS : CLASS_5_SUBJECTS;
 
   useEffect(() => {
-    const loadLearningContent = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const classNumber = Number(user?.class) || 10;
-
-        const subjectsToLoad = [
-          "English",
-          "Mathematics",
-          "Science",
-          "Social Science",
-          "Hindi",
-        ];
-
-        const responses = await Promise.all(
-          subjectsToLoad.map((subject) =>
-            client.get(
-              `/learn/chapters?class=${classNumber}&subject=${encodeURIComponent(subject)}`
-            )
-          )
-        );
-
-        const books = [];
-        const discoveredSubjects = [];
-
-        responses.forEach((response, index) => {
-          const data = response.data;
-
-          if (!data?.success) return;
-
-          const subject = subjectsToLoad[index];
-
-          discoveredSubjects.push(subject);
-
-          if (data.textbook) {
-            books.push({
-              ...data.textbook,
-              chapters: data.chapters || [],
-            });
-          }
-        });
-
-        setTextbooks(books);
-        setCards([]);
-        setNotes([]);
-        setSubjects([...new Set(discoveredSubjects)]);
-      } catch (err) {
-        console.error("Failed to load Learn content:", err);
-        console.error(
-          "Learn API error:",
-          err?.response?.data || err?.message
-        );
-
-        setError(
-          err?.response?.data?.message ||
-          err?.response?.data?.error ||
-          err?.message ||
-          "Unable to load your learning content."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadLearningContent();
-  }, [user?.class]);
-
-  const subjectCards = useMemo(() => {
-    if (!selectedSubject) return [];
-
-    return cards.filter(
-      (card) =>
-        card.subject?.trim().toLowerCase() ===
-        selectedSubject.trim().toLowerCase()
-    );
-  }, [cards, selectedSubject]);
-
-  const subjectNotes = useMemo(() => {
-    if (!selectedSubject) return [];
-
-    return notes.filter(
-      (note) =>
-        note.subject?.trim().toLowerCase() ===
-        selectedSubject.trim().toLowerCase()
-    );
-  }, [notes, selectedSubject]);
-
-  const subjectTextbooks = useMemo(() => {
-    if (!selectedSubject) return [];
-
-    return textbooks.filter(
-      (book) =>
-        book.subject?.trim().toLowerCase() ===
-        selectedSubject.trim().toLowerCase()
-    );
-  }, [textbooks, selectedSubject]);
-
-  const chapters = useMemo(() => {
-    const chapterMap = new Map();
-
-    subjectCards.forEach((card) => {
-      if (card.chapter?.trim()) {
-        const name = card.chapter.trim();
-
-        if (!chapterMap.has(name)) {
-          chapterMap.set(name, {
-            name,
-            index: Number.MAX_SAFE_INTEGER,
-            source: "local",
-          });
+    client.get(`/textbooks?class=${currentClass}`)
+      .then((res) => {
+        if (res.data?.success && Array.isArray(res.data.textbooks)) {
+          setDbBooks(res.data.textbooks);
         }
-      }
-    });
+      })
+      .catch(() => {});
+  }, [currentClass]);
 
-    subjectNotes.forEach((note) => {
-      if (note.chapter?.trim()) {
-        const name = note.chapter.trim();
-
-        if (!chapterMap.has(name)) {
-          chapterMap.set(name, {
-            name,
-            index: Number.MAX_SAFE_INTEGER,
-            source: "local",
-          });
-        }
-      }
-    });
-
-    subjectTextbooks.forEach((book) => {
-      const bookChapters = Array.isArray(book.chapters)
-        ? book.chapters
-        : [];
-
-      bookChapters.forEach((chapter, index) => {
-        if (!chapter?.name?.trim()) return;
-
-        const name = chapter.name.trim();
-
-        chapterMap.set(name, {
-          name,
-          index:
-            Number.isFinite(Number(chapter.index))
-              ? Number(chapter.index)
-              : index + 1,
-          source: "textbook",
-          id: chapter.id,
-          url: chapter.url,
-          textbookUrl: chapter.textbookUrl || book.url,
-          textbookName: book.name,
-        });
-      });
-    });
-
-    return [...chapterMap.values()].sort((a, b) => {
-      const bookA = String(a.name || "").split(" - Chapter")[0].trim();
-      const bookB = String(b.name || "").split(" - Chapter")[0].trim();
-
-      const bookOrder = bookA.localeCompare(bookB);
-
-      if (bookOrder !== 0) {
-        return bookOrder;
-      }
-
-      return Number(a.index || 0) - Number(b.index || 0);
-    });
-  }, [subjectCards, subjectNotes, subjectTextbooks]);
-
-  const chapterCards = useMemo(() => {
-    if (!selectedChapter) return [];
-
-    return subjectCards.filter(
-      (card) =>
-        (card.chapter?.trim() || "General") === selectedChapter
+  const handleOpenPdf = (subject, chNum, defaultTitle) => {
+    // 1. Check if an official PDF was uploaded through Admin for this subject & chapter
+    const uploadedMatch = dbBooks.find(
+      (b) => b.subject.toLowerCase() === subject.toLowerCase() && Number(b.chapterNumber) === Number(chNum)
     );
-  }, [subjectCards, selectedChapter]);
 
-  const chapterNotes = useMemo(() => {
-    if (!selectedChapter) return [];
+    let pdfUrl = uploadedMatch ? uploadedMatch.sourceUrl : null;
 
-    return subjectNotes.filter(
-      (note) =>
-        (note.chapter?.trim() || "General") === selectedChapter
-    );
-  }, [subjectNotes, selectedChapter]);
+    // 2. If not uploaded yet, use the verified local multi-page backup
+    if (!pdfUrl) {
+      const s = subject.toLowerCase();
+      let prefix = "science";
+      if (s.includes("english")) prefix = "english";
+      else if (s.includes("math")) prefix = "maths";
+      else if (s.includes("social")) prefix = "social";
+      else if (s.includes("hindi")) prefix = "hindi";
+      else if (s.includes("kannada")) prefix = "kannada";
+      pdfUrl = `/textbooks/${prefix}_ch${chNum}.pdf`;
+    }
 
-  const chapterTextbooks = useMemo(() => {
-    if (!selectedChapter) return [];
-
-    const matches = [];
-
-    subjectTextbooks.forEach((book) => {
-      const bookChapters = Array.isArray(book.chapters)
-        ? book.chapters
-        : [];
-
-      bookChapters.forEach((chapter) => {
-        if (chapter?.name?.trim() === selectedChapter) {
-          matches.push({
-            ...book,
-            chapter: chapter.name,
-            chapterNumber: chapter.index,
-            chapterId: chapter.id,
-            sourceUrl:
-              chapter.textbookUrl ||
-              chapter.url ||
-              book.sourceUrl ||
-              book.url,
-          });
-        }
-      });
+    setActiveModal({
+      title: defaultTitle,
+      subject,
+      url: pdfUrl
     });
-
-    return matches;
-  }, [subjectTextbooks, selectedChapter]);
-
-  const selectedTextbookChapter = chapterTextbooks[0];
-
-  const chapterMastery = useMemo(() => {
-    if (!chapterCards.length) return 0;
-
-    const mastered = chapterCards.filter(
-      (card) => card.mastered
-    ).length;
-
-    return Math.round(
-      (mastered / chapterCards.length) * 100
-    );
-  }, [chapterCards]);
-
-  const openSubject = (subject) => {
-    setSelectedSubject(subject);
-    setSelectedChapter(null);
   };
 
-  const openChapter = (chapter) => {
-    setSelectedChapter(chapter);
-  };
+  const displayedSubjects = selectedSubject === "all"
+    ? fallbackDataset
+    : fallbackDataset.filter((s) => s.subject === selectedSubject);
 
-  const goBackToSubjects = () => {
-    setSelectedSubject(null);
-    setSelectedChapter(null);
-  };
-
-  const goBackToChapters = () => {
-    setSelectedChapter(null);
-  };
-
-  if (loading) {
-    return (
-      <div className="page learn-page">
-        <div className="learn-loading">
-          <div className="review-spinner" />
-          <p>Loading your subjects...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="page learn-page">
-        <section className="card learn-error">
-          <div className="learn-empty-icon">!</div>
-          <p className="eyebrow">LEARN</p>
-          <h2>Something went wrong</h2>
-          <p>{error}</p>
-        </section>
-      </div>
-    );
-  }
-
-  /*
-    LEVEL 1 — SUBJECTS
-  */
-  if (!selectedSubject) {
-    return (
-      <div className="page learn-page">
-        <section className="learn-hero">
-          <div>
-            <p className="eyebrow">
-              MEMORYMESH LEARN · CLASS {user?.class || "—"}
-            </p>
-
-            <h1>What do you want to learn?</h1>
-
-            <p>
-              Choose a subject to explore chapters, notes,
-              and flashcards.
-            </p>
-          </div>
-
-          <div className="learn-hero-stat">
-            <span>Subjects</span>
-            <strong>{subjects.length}</strong>
-          </div>
-        </section>
-
-        {subjects.length === 0 ? (
-          <section className="card learn-empty">
-            <div className="learn-empty-icon">??</div>
-
-            <h2>No subjects yet</h2>
-
-            <p>
-              Upload study material to start building your
-              learning library.
-            </p>
-          </section>
-        ) : (
-          <section className="learn-subject-grid">
-            {subjects.map((subject) => {
-              const cardCount = cards.filter(
-                (card) =>
-                  card.subject?.trim().toLowerCase() ===
-                  subject.toLowerCase()
-              ).length;
-
-              const noteCount = notes.filter(
-                (note) =>
-                  note.subject?.trim().toLowerCase() ===
-                  subject.toLowerCase()
-              ).length;
-
-              return (
-                <button
-                  key={subject}
-                  type="button"
-                  onClick={() => openSubject(subject)}
-                  className="learn-subject-card"
-                >
-                  <div className="learn-card-icon">
-                    {subject.charAt(0).toUpperCase()}
-                  </div>
-
-                  <div className="learn-card-body">
-                    <span className="learn-card-label">
-                      SUBJECT
-                    </span>
-
-                    <h2>{subject}</h2>
-
-                    <p>
-                      {cardCount} flashcard
-                      {cardCount === 1 ? "" : "s"}
-                      {" · "}
-                      {noteCount} note
-                      {noteCount === 1 ? "" : "s"}
-                    </p>
-                  </div>
-
-                  <span className="learn-card-arrow">
-                    →
-                  </span>
-                </button>
-              );
-            })}
-          </section>
-        )}
-      </div>
-    );
-  }
-
-  /*
-    LEVEL 2 — CHAPTERS
-  */
-  if (!selectedChapter) {
-    return (
-      <div className="page learn-page">
-        <button
-          type="button"
-          onClick={goBackToSubjects}
-          className="learn-back-button"
-        >
-          ← All Subjects
-        </button>
-
-        <section className="learn-hero">
-          <div>
-            <p className="eyebrow">
-              {selectedSubject.toUpperCase()}
-            </p>
-
-            <h1>Choose a chapter</h1>
-
-            <p>
-              Select a chapter to study notes and
-              practice flashcards.
-            </p>
-          </div>
-
-          <div className="learn-hero-stat">
-            <span>Chapters</span>
-            <strong>{chapters.length}</strong>
-          </div>
-        </section>
-
-        {chapters.length === 0 ? (
-          <section className="card learn-empty">
-            <div className="learn-empty-icon">??</div>
-
-            <h2>No chapters yet</h2>
-
-            <p>
-              Upload study material for {selectedSubject}
-              to create learning content.
-            </p>
-          </section>
-        ) : (
-          <section className="learn-chapter-grid">
-            {chapters.map((chapter) => {
-              const chapterName = chapter.name;
-
-              const cardCount = subjectCards.filter(
-                (card) =>
-                  (card.chapter?.trim() || "General") === chapterName
-              ).length;
-
-              const noteCount = subjectNotes.filter(
-                (note) =>
-                  (note.chapter?.trim() || "General") === chapterName
-              ).length;
-
-              return (
-                <button
-                  key={chapter.id || chapterName}
-                  type="button"
-                  onClick={() => openChapter(chapterName)}
-                  className="learn-chapter-card"
-                >
-                  <div className="chapter-number">
-                    {chapter.index || chapters.indexOf(chapter) + 1}
-                  </div>
-
-                  <div className="learn-card-body">
-                    <span className="learn-card-label">
-                      CHAPTER
-                    </span>
-
-                    <h2>{chapterName}</h2>
-
-                    <p>
-                      {cardCount} flashcard
-                      {cardCount === 1 ? "" : "s"} ·{" "}
-                      {noteCount} note
-                      {noteCount === 1 ? "" : "s"}
-                    </p>
-                  </div>
-
-                  <span className="learn-card-arrow">→</span>
-                </button>
-              );
-            })}
-          </section>
-        )}
-      </div>
-    );
-  }
-
-  /*
-    LEVEL 3 — CHAPTER CONTENT
-  */
   return (
-    <div className="page learn-page">
-      <div className="learn-breadcrumbs">
-        <button
-          type="button"
-          onClick={goBackToChapters}
-          className="learn-back-button"
-        >
-          ← Chapters
-        </button>
-
-        <button
-          type="button"
-          onClick={goBackToSubjects}
-          className="learn-back-button"
-        >
-          All Subjects
-        </button>
+    <div style={{ padding: "32px 48px 60px", maxWidth: "1280px", margin: "0 auto", boxSizing: "border-box" }}>
+      {/* Page Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+        <div>
+          <span style={{ fontSize: "11px", fontWeight: "800", color: "#10b981", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            CURRICULUM LIBRARY & STUDY HUB
+          </span>
+          <h1 style={{ fontSize: "28px", fontWeight: "900", color: "#0f172a", margin: "4px 0" }}>
+            Class {currentClass} Digital Curriculum Hub
+          </h1>
+          <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
+            Official NCERT chapter reader running offline inside the portal.
+          </p>
+        </div>
+        <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", padding: "8px 16px", textAlign: "right" }}>
+          <strong style={{ display: "block", color: "#0f172a", fontSize: "14px" }}>Class {currentClass}</strong>
+          <span style={{ color: "#f97316", fontSize: "12px", fontWeight: "700" }}>State NCERT</span>
+        </div>
       </div>
 
-      <section className="learn-hero">
-        <div>
-          <p className="eyebrow">
-            {selectedSubject.toUpperCase()}
-          </p>
-
-          <h1>{selectedChapter}</h1>
-
-          <p>
-            Study the notes, then practice the flashcards.
-          </p>
-        </div>
-
-        <div className="learn-hero-stat">
-          <span>Mastery</span>
-          <strong>{chapterMastery}%</strong>
-        </div>
-      </section>
-
-      <section className="card learn-mastery-card">
-        <div className="learn-mastery-top">
-          <span>Chapter mastery</span>
-          <strong>{chapterMastery}%</strong>
-        </div>
-
-        <div className="progress-track">
-          <div
-            className="progress-fill mastery-fill"
-            style={{
-              width: `${chapterMastery}%`,
+      {/* Grade Selector */}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "22px" }}>
+        <span style={{ fontSize: "12px", fontWeight: "800", color: "#0f172a", marginRight: "6px" }}>
+          SELECT GRADE:
+        </span>
+        {[5, 6].map((cls) => (
+          <button
+            key={cls}
+            type="button"
+            onClick={() => {
+              setCurrentClass(cls);
+              setSelectedSubject("all");
             }}
-          />
+            style={{
+              padding: "7px 18px",
+              borderRadius: "8px",
+              border: currentClass === cls ? "2px solid #059669" : "1px solid #cbd5e1",
+              background: currentClass === cls ? "#059669" : "#ffffff",
+              color: currentClass === cls ? "#ffffff" : "#475569",
+              fontSize: "13px",
+              fontWeight: "800",
+              cursor: "pointer"
+            }}
+          >
+            Class {cls}
+          </button>
+        ))}
+      </div>
+
+      {/* Filter Bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "12px" }}>
+        <span style={{ fontSize: "13px", fontWeight: "700", color: "#475569" }}>
+          Showing {displayedSubjects.length} Core Subjects
+        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "13px", color: "#64748b", fontWeight: "600" }}>Filter Subject:</span>
+          <select
+            value={selectedSubject}
+            onChange={(e) => setSelectedSubject(e.target.value)}
+            style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "13px", fontWeight: "600" }}
+          >
+            <option value="all">All Subjects</option>
+            {fallbackDataset.map((s) => (
+              <option key={s.subject} value={s.subject}>{s.subject}</option>
+            ))}
+          </select>
         </div>
+      </div>
 
-        <p>
-          {chapterCards.filter((card) => card.mastered).length} of{" "}
-          {chapterCards.length} flashcards mastered.
-        </p>
-      </section>
-
-      {chapterTextbooks.length > 0 && (
-        <section className="learn-content-section">
-          <div className="section-heading">
+      {/* Cards Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px" }}>
+        {displayedSubjects.map((item) => (
+          <div
+            key={item.subject}
+            style={{
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "14px",
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: "0 2px 8px rgba(15, 23, 42, 0.04)"
+            }}
+          >
             <div>
-              <p className="eyebrow">NCERT TEXTBOOK</p>
-              <h2>Official textbook</h2>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                <span style={{ fontSize: "11px", fontWeight: "800", color: "#059669", background: "#ecfdf5", padding: "3px 8px", borderRadius: "6px" }}>
+                  {item.subject}
+                </span>
+                <span style={{ fontSize: "11px", fontWeight: "600", color: "#64748b" }}>
+                  Class {currentClass} Official
+                </span>
+              </div>
+
+              <h3 style={{ fontSize: "16px", fontWeight: "800", color: "#0f172a", margin: "0 0 10px" }}>
+                {item.title}
+              </h3>
+
+              <p style={{ fontSize: "11px", fontWeight: "700", color: "#94a3b8", textTransform: "uppercase", margin: "12px 0 6px" }}>
+                Official Syllabus Chapters:
+              </p>
+
+              <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "13px" }}>
+                {item.chapters.map((ch) => (
+                  <li key={ch.num} style={{ marginBottom: "8px" }}>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenPdf(item.subject, ch.num, ch.title)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        padding: 0,
+                        color: "#0284c7",
+                        fontSize: "13px",
+                        fontWeight: "600",
+                        textAlign: "left",
+                        cursor: "pointer",
+                        textDecoration: "underline"
+                      }}
+                    >
+                      {ch.title} ↗
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div style={{ paddingTop: "14px", borderTop: "1px solid #f1f5f9", marginTop: "14px" }}>
+              <button
+                type="button"
+                onClick={() => handleOpenPdf(item.subject, 1, item.chapters[0].title)}
+                style={{
+                  width: "100%",
+                  background: "#0f172a",
+                  color: "#ffffff",
+                  fontWeight: "700",
+                  fontSize: "13px",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px"
+                }}
+              >
+                <span>📖</span> Open In-Portal Digital Reader
+              </button>
             </div>
           </div>
+        ))}
+      </div>
 
-          <div className="learn-content-grid">
-            {chapterTextbooks.map((book) => (
-              <article
-                key={book._id || book.chapterId}
-                className="card learn-note-card"
-              >
-                <span className="learn-card-label">
-                  NCERT TEXTBOOK
+      {/* Reader Modal */}
+      {activeModal && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(15, 23, 42, 0.8)",
+          backdropFilter: "blur(4px)",
+          zIndex: 9999,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "20px"
+        }}>
+          <div style={{
+            background: "#ffffff",
+            width: "100%",
+            maxWidth: "1050px",
+            height: "90vh",
+            borderRadius: "16px",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden"
+          }}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "14px 24px",
+              background: "#0f172a",
+              color: "#ffffff"
+            }}>
+              <div>
+                <span style={{ fontSize: "11px", fontWeight: "800", color: "#34d399", textTransform: "uppercase" }}>
+                  {activeModal.subject} — Grade {currentClass}
                 </span>
-
-                <h3>{book.chapter}</h3>
-
-                <p className="learn-note-content">
-                  {book.title}
-                </p>
-
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    flexWrap: "wrap",
-                  }}
+                <h2 style={{ fontSize: "16px", fontWeight: "700", margin: "2px 0 0" }}>
+                  {activeModal.title}
+                </h2>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={() => window.open(activeModal.url, "_blank")}
+                  style={{ background: "#334155", color: "#ffffff", border: "none", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}
                 >
-                  <a
-                    href={resolveTextbookUrl(book.sourceUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="primary-button"
-                  >
-                    📖 Open NCERT
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-<section className="learn-content-section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">FLASHCARDS</p>
-            <h2>Practice this chapter</h2>
-          </div>
+                  Full Tab ↗
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal(null)}
+                  style={{ background: "#ef4444", color: "#ffffff", border: "none", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: "800", cursor: "pointer" }}
+                >
+                  ✕ Close
+                </button>
+              </div>
+            </div>
 
-          {chapterCards.length > 0 && (
-            <button
-              type="button"
-              onClick={() =>
-                navigate("/review", {
-                  state: {
-                    subject: selectedSubject,
-                    chapter: selectedChapter,
-                  },
-                })
-              }
-              className="primary-button"
-            >
-              Start Review →
-            </button>
-          )}
+            <div style={{ flex: 1, background: "#f8fafc" }}>
+              <iframe
+                src={`${activeModal.url}#toolbar=1&navpanes=0`}
+                title="Reader Modal"
+                style={{ width: "100%", height: "100%", border: "none" }}
+              />
+            </div>
+          </div>
         </div>
-
-        {chapterCards.length === 0 ? (
-          <section className="card learn-empty">
-            <div className="learn-empty-icon">??</div>
-
-            <h3>No flashcards yet</h3>
-
-            <p>
-              Generate flashcards from the official NCERT
-              chapter above.
-            </p>
-
-            
-          </section>
-        ) : (
-          <div className="learn-content-grid">
-            {chapterCards.map((card) => (
-              <article
-                key={card._id}
-                className="card learn-flashcard"
-              >
-                <div className="learn-flashcard-top">
-                  <span className="learn-card-label">
-                    FLASHCARD
-                  </span>
-
-                  {card.mastered && (
-                    <span className="learn-mastered-badge">
-                      ✓ Mastered
-                    </span>
-                  )}
-                </div>
-
-                <h3>{card.question}</h3>
-
-                <div className="learn-answer">
-                  {card.answer}
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
+      )}
     </div>
   );
 }
-
-
-
-
-
-

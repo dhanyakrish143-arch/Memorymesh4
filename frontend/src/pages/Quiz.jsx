@@ -1,10 +1,12 @@
-﻿
-import { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
+import "./Quiz.css";
 
 export default function Quiz() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [quizzes, setQuizzes] = useState([]);
   const [quizMeta, setQuizMeta] = useState(null);
@@ -15,6 +17,9 @@ export default function Quiz() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  const studentClass = Number(user?.class) || 10;
+  const studentBoard = user?.board || "State";
 
   useEffect(() => {
     let active = true;
@@ -58,9 +63,7 @@ export default function Quiz() {
       setIndex(0);
       setResults(null);
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Could not open this quiz."
-      );
+      setError(err.response?.data?.error || "Could not open this quiz.");
     } finally {
       setLoading(false);
     }
@@ -91,9 +94,7 @@ export default function Quiz() {
 
       setResults(response.data);
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Could not submit the quiz."
-      );
+      setError(err.response?.data?.error || "Could not submit the quiz.");
     } finally {
       setSubmitting(false);
     }
@@ -110,142 +111,119 @@ export default function Quiz() {
 
   if (loading) {
     return (
-      <div className="page quiz-page">
-        <div className="card">
-          <p>Loading quizzes...</p>
+      <div className="quiz-studio-wrapper">
+        <div className="quiz-loading-state">
+          <div className="quiz-spinner" />
+          <p>Loading assessment workspace...</p>
         </div>
       </div>
     );
   }
 
-  if (!quiz) {
-    return (
-      <div className="page quiz-page">
-        <section className="quiz-header">
-          <div>
-            <span className="eyebrow">MEMORYMESH QUIZ</span>
-            <h1>Published quizzes</h1>
-            <p>Choose a quiz assigned by your administrator.</p>
-          </div>
-        </section>
-
-        {error && <div className="card" role="alert">{error}</div>}
-
-        {quizzes.length === 0 ? (
-          <div className="quiz-empty card">
-            <div className="quiz-empty-icon">📝</div>
-            <h2>No published quizzes yet</h2>
-            <p>Check back after your administrator publishes a quiz.</p>
-            <Link to="/activity" className="secondary-button">
-              View Activity
-            </Link>
-          </div>
-        ) : (
-          <div className="quiz-list">
-            {quizzes.map((item) => (
-              <section className="card" key={item._id}>
-                <h2>{item.title}</h2>
-                {item.description && <p>{item.description}</p>}
-                <p>
-                  {item.subject}
-                  {item.chapter ? ` · ${item.chapter}` : ""}
-                </p>
-                <p>
-                  Class {item.classNumber} · {item.board} ·{" "}
-                  {item.questionsCount ?? "Quiz"} 
-                </p>
-                <button
-                  type="button"
-                  className="primary-button"
-                  onClick={() => startQuiz(item)}
-                >
-                  Start Quiz
-                </button>
-              </section>
-            ))}
-          </div>
-        )}
-
-        <p>{/* Keep existing navigation available. */}</p>
-      </div>
-    );
-  }
-
+  /* ================= 1. RESULTS & ANSWER REVIEW VIEW ================= */
   if (results) {
-    const percentage = results.percentage;
-    const message =
-      percentage >= 80
-        ? "Excellent work!"
-        : percentage >= 60
-          ? "Good job! Keep improving."
-          : "Keep practicing!";
+    const percentage = Math.round(results.percentage ?? 0);
+    const isPassing = percentage >= 60;
 
     return (
-      <div className="page quiz-page">
-        <div className="quiz-result-card card">
-          <div className="quiz-result-icon">
-            {percentage >= 80 ? "🏆" : "🎯"}
-          </div>
-          <span className="eyebrow">QUIZ COMPLETE</span>
-          <h1>{message}</h1>
-          <p className="quiz-result-subtitle">{quiz.title}</p>
-
-          <div className="quiz-score-circle">
-            <strong>{percentage}%</strong>
-            <span>Score</span>
-          </div>
-
-          <div className="quiz-result-stats">
+      <div className="quiz-studio-wrapper">
+        <div className="quiz-results-card">
+          <div className="results-header-banner">
+            <div className="results-icon-bubble">{isPassing ? "🏆" : "🎯"}</div>
             <div>
-              <strong>{results.score}</strong>
-              <span>Correct</span>
-            </div>
-            <div>
-              <strong>{results.total - results.score}</strong>
-              <span>Incorrect</span>
-            </div>
-            <div>
-              <strong>{results.total}</strong>
-              <span>Total</span>
+              <span className="results-tag">Assessment Complete</span>
+              <h1 className="results-title">
+                {percentage >= 80
+                  ? "Mastery Demonstrated!"
+                  : percentage >= 60
+                  ? "Good Performance!"
+                  : "Needs Focused Revision"}
+              </h1>
+              <p className="results-sub">{quiz.title}</p>
             </div>
           </div>
 
-          <h2>Answer review</h2>
-          {quiz.questions.map((question, i) => {
-            const result = results.results[i];
-            return (
-              <section className="card" key={question._id || i}>
-                <h3>
-                  {i + 1}. {question.question}
-                </h3>
-                <p>
-                  Your answer:{" "}
-                  {question.options[answers[i]] ?? "Not answered"}
-                </p>
-                <p>
-                  Correct answer:{" "}
-                  {question.options[result.correct_index]}
-                </p>
-                <strong>{result.correct ? "Correct ✓" : "Incorrect ✕"}</strong>
-                {result.explanation && <p>{result.explanation}</p>}
-              </section>
-            );
-          })}
+          <div className="results-score-row">
+            <div className="score-radial-box">
+              <span className="score-number">{percentage}%</span>
+              <span className="score-label">Final Accuracy</span>
+            </div>
 
-          <div className="quiz-result-actions">
-            <button
-              type="button"
-              className="primary-button"
-              onClick={backToList}
-            >
-              Choose Another Quiz
+            <div className="score-stat-quad">
+              <div className="stat-quad-item stat-correct">
+                <span className="stat-num">{results.score}</span>
+                <span className="stat-desc">Correct Recalls</span>
+              </div>
+              <div className="stat-quad-item stat-incorrect">
+                <span className="stat-num">{results.total - results.score}</span>
+                <span className="stat-desc">Incorrect Recalls</span>
+              </div>
+              <div className="stat-quad-item">
+                <span className="stat-num">{results.total}</span>
+                <span className="stat-desc">Total Items</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="review-section">
+            <h3 className="review-heading">Item Breakdown & Rationales</h3>
+            <div className="review-list">
+              {quiz.questions.map((question, i) => {
+                const result = results.results?.[i] || {};
+                const isCorrect = result.correct;
+
+                return (
+                  <div
+                    key={question._id || i}
+                    className={`review-item-card ${isCorrect ? "card-pass" : "card-fail"}`}
+                  >
+                    <div className="review-item-top">
+                      <span className="review-item-idx">Question {i + 1}</span>
+                      <span className={`review-status-pill ${isCorrect ? "pill-pass" : "pill-fail"}`}>
+                        {isCorrect ? "Correct ✓" : "Incorrect ✕"}
+                      </span>
+                    </div>
+
+                    <h4 className="review-question-text">{question.question}</h4>
+
+                    <div className="review-answers-box">
+                      <div className="answer-line user-choice">
+                        <span className="choice-tag">Your Choice:</span>
+                        <span className={isCorrect ? "txt-correct" : "txt-wrong"}>
+                          {question.options[answers[i]] ?? "Not answered"}
+                        </span>
+                      </div>
+                      {!isCorrect && (
+                        <div className="answer-line key-choice">
+                          <span className="choice-tag">Correct Key:</span>
+                          <span className="txt-correct">
+                            {question.options[result.correct_index]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {result.explanation && (
+                      <div className="review-explanation">
+                        <strong>Explanation:</strong> {result.explanation}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="results-actions-footer">
+            <button type="button" className="quiz-btn-primary" onClick={backToList}>
+              ← Return to Published Quizzes
             </button>
             <button
               type="button"
-              className="secondary-button"
-              onClick={() => navigate("/activity")}
+              className="quiz-btn-secondary"
+              onClick={() => navigate("/progress")}
             >
-              View Activity
+              View Long-Term Analytics
             </button>
           </div>
         </div>
@@ -253,118 +231,181 @@ export default function Quiz() {
     );
   }
 
-  const currentQuestion = quiz.questions[index];
-  const selected = answers[index];
-  const progress = Math.round(((index + 1) / quiz.questions.length) * 100);
-  const allAnswered = answers.every((answer) => answer !== null);
+  /* ================= 2. ACTIVE QUIZ RUNNER ================= */
+  if (quiz) {
+    const currentQuestion = quiz.questions[index];
+    const selected = answers[index];
+    const progress = Math.round(((index + 1) / quiz.questions.length) * 100);
+    const allAnswered = answers.every((answer) => answer !== null);
 
-  return (
-    <div className="page quiz-page">
-      <section className="quiz-header">
-        <div>
-          <span className="eyebrow">MEMORYMESH QUIZ</span>
-          <h1>{quiz.title}</h1>
-          <p>
-            Question {index + 1} of {quiz.questions.length}
-          </p>
-        </div>
-      </section>
+    return (
+      <div className="quiz-studio-wrapper">
+        <div className="quiz-runner-card">
+          {/* Header */}
+          <div className="runner-nav-header">
+            <div>
+              <span className="runner-quiz-tag">Active Assessment</span>
+              <h2 className="runner-quiz-title">{quiz.title}</h2>
+            </div>
+            <button type="button" className="runner-exit-btn" onClick={backToList}>
+              ✕ Exit
+            </button>
+          </div>
 
-      <div className="quiz-progress-card">
-        <div className="quiz-progress-top">
-          <span>Quiz progress</span>
-          <strong>{progress}%</strong>
-        </div>
-        <div className="quiz-progress-track">
-          <div
-            className="quiz-progress-fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+          {/* Progress Bar */}
+          <div className="runner-progress-shell">
+            <div className="runner-progress-label">
+              <span>Question {index + 1} of {quiz.questions.length}</span>
+              <span>{progress}% Completed</span>
+            </div>
+            <div className="runner-track">
+              <div className="runner-fill" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
 
-      {error && <div className="card" role="alert">{error}</div>}
+          {error && (
+            <div className="quiz-alert-banner">
+              <span>⚠️ {error}</span>
+            </div>
+          )}
 
-      <section className="quiz-question-card card">
-        <span className="quiz-question-number">
-          QUESTION {index + 1}
-        </span>
-        <h2>{currentQuestion.question}</h2>
+          {/* Question Box */}
+          <div className="runner-question-block">
+            <span className="question-seq-pill">ITEM {index + 1}</span>
+            <h3 className="question-body-text">{currentQuestion.question}</h3>
 
-        <div className="quiz-options">
-          {currentQuestion.options.map((option, optionIndex) => {
-            const isSelected = selected === optionIndex;
-            let className = "quiz-option";
-            if (isSelected) className += " quiz-option-selected";
+            <div className="runner-options-stack">
+              {currentQuestion.options.map((option, optionIndex) => {
+                const isSelected = selected === optionIndex;
 
-            return (
+                return (
+                  <button
+                    type="button"
+                    key={optionIndex}
+                    className={`quiz-option-button ${isSelected ? "option-selected" : ""}`}
+                    onClick={() => chooseAnswer(optionIndex)}
+                    disabled={submitting}
+                  >
+                    <span className="option-letter-badge">
+                      {String.fromCharCode(65 + optionIndex)}
+                    </span>
+                    <span className="option-label-text">{option}</span>
+                    {isSelected && <span className="option-check-icon">✓</span>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Footer Controls */}
+          <div className="runner-bottom-controls">
+            <button
+              type="button"
+              className="quiz-btn-secondary"
+              onClick={() => setIndex((current) => Math.max(0, current - 1))}
+              disabled={index === 0 || submitting}
+            >
+              ← Previous
+            </button>
+
+            {index < quiz.questions.length - 1 ? (
               <button
                 type="button"
-                key={optionIndex}
-                className={className}
-                onClick={() => chooseAnswer(optionIndex)}
+                className="quiz-btn-primary"
+                onClick={() => {
+                  if (selected === null) {
+                    setError("Please select an answer to advance.");
+                    return;
+                  }
+                  setError("");
+                  setIndex((current) => current + 1);
+                }}
                 disabled={submitting}
               >
-                <span className="quiz-option-letter">
-                  {String.fromCharCode(65 + optionIndex)}
-                </span>
-                <span className="quiz-option-text">{option}</span>
-                {isSelected && <span>✓</span>}
+                Next Item →
               </button>
-            );
-          })}
+            ) : (
+              <button
+                type="button"
+                className="quiz-btn-primary submit-accent"
+                onClick={submitQuiz}
+                disabled={submitting || !allAnswered}
+              >
+                {submitting ? "Scoring Assessment..." : "Submit Assessment →"}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= 3. PUBLISHED QUIZZES CATALOG ================= */
+  return (
+    <div className="quiz-studio-wrapper">
+      <div className="quiz-catalog-header">
+        <div>
+          <span className="quiz-tagline">Curriculum-Locked Assessment</span>
+          <h1 className="quiz-main-title">Published Assessments</h1>
+          <p className="quiz-main-subtitle">
+            Diagnostic and chapter evaluations assigned by your academic administrator.
+          </p>
         </div>
 
-        <div className="quiz-result-actions">
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => setIndex((current) => Math.max(0, current - 1))}
-            disabled={index === 0 || submitting}
-          >
-            Previous
-          </button>
-
-          {index < quiz.questions.length - 1 ? (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => {
-                if (selected === null) {
-                  setError("Please select an answer to continue.");
-                  return;
-                }
-                setError("");
-                setIndex((current) => current + 1);
-              }}
-              disabled={submitting}
-            >
-              Next Question →
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={submitQuiz}
-              disabled={submitting || !allAnswered}
-            >
-              {submitting ? "Submitting..." : "Submit Quiz"}
-            </button>
-          )}
+        <div className="quiz-curriculum-badge">
+          <span className="badge-class">Class {studentClass}</span>
+          <span className="badge-board">{studentBoard} Board</span>
         </div>
+      </div>
 
-        {!allAnswered && (
-          <p>Please answer every question before submitting.</p>
-        )}
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={backToList}
-          disabled={submitting}
-        >
-          Exit Quiz
-        </button>
-      </section>
+      {error && (
+        <div className="quiz-alert-banner">
+          <span>⚠️ {error}</span>
+        </div>
+      )}
+
+      {quizzes.length === 0 ? (
+        <div className="quiz-empty-state">
+          <div className="empty-bubble">📝</div>
+          <h3>No Assessments Assigned</h3>
+          <p>Your curriculum administrator has not published any quizzes for this grade yet.</p>
+          <Link to="/learn" className="quiz-btn-secondary">
+            Open Curriculum Textbooks
+          </Link>
+        </div>
+      ) : (
+        <div className="quiz-catalog-grid">
+          {quizzes.map((item) => (
+            <div className="quiz-catalog-card" key={item._id}>
+              <div className="catalog-card-header">
+                <span className="card-subject-pill">{item.subject}</span>
+                <span className="card-questions-badge">
+                  {item.questionsCount ? `${item.questionsCount} Questions` : "Diagnostic Quiz"}
+                </span>
+              </div>
+
+              <h2 className="catalog-card-title">{item.title}</h2>
+              {item.description && (
+                <p className="catalog-card-desc">{item.description}</p>
+              )}
+
+              <div className="catalog-card-meta">
+                <span className="meta-chip">Class {item.classNumber || studentClass}</span>
+                <span className="meta-chip">{item.board || studentBoard} Board</span>
+                {item.chapter && <span className="meta-chip">{item.chapter}</span>}
+              </div>
+
+              <button
+                type="button"
+                className="quiz-btn-primary"
+                onClick={() => startQuiz(item)}
+              >
+                Start Assessment →
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

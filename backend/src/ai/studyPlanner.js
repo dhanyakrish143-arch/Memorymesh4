@@ -10,7 +10,7 @@ You are MemoryMesh's AI study planner for Indian school students in Classes 5-12
 Create a practical study plan using ONLY the information supplied by MemoryMesh.
 
 The plan must:
-- Focus on the selected subject and chapter when provided.
+- Cover every subject listed in the request. For multiple subjects, distribute study tasks across them over the plan; do not focus only on the first subject. Respect the selected chapter when provided.
 - Prioritize weak or poorly performing areas.
 - Use existing notes, flashcards, and quiz performance.
 - Respect the student's available minutes per day.
@@ -91,7 +91,7 @@ Completed: ${quiz.completedAt || ""}
     .join("\n");
 
   const prompt = `
-Subject: ${subject}
+Selected subject or subjects: ${subject}
 Chapter: ${chapter || "All chapters"}
 Available study time per day: ${minutesPerDay} minutes
 
@@ -136,3 +136,4 @@ Create a personalized study plan based on this information.
 
   return JSON.parse(raw);
 }
+

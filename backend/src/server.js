@@ -1,4 +1,5 @@
-﻿import "dotenv/config";
+﻿import notificationsRoutes from "./routes/notifications.js";
+import "dotenv/config";
 
 import express from "express";
 import path from "path";
@@ -19,6 +20,7 @@ import uploadRoutes from "./routes/upload.js";
 import progressRoutes from "./routes/progress.js";
 import notesRoutes from "./routes/notes.js";
 import assistantRoutes from "./routes/assistant.js";
+import evaluatorRoutes from "./routes/evaluator.js";
 import studyPlanRoutes from "./routes/studyPlan.js";
 import gamesRoutes from "./routes/games.js";
 import quizRoutes from "./routes/quiz.js";
@@ -54,21 +56,34 @@ app.use(
 
 app.use(express.json());
 
-/*
-  Serve local NCERT textbook PDFs.
-
-  Example:
-  http://localhost:5000/textbooks/Class-10/Science/English/Science.pdf
-*/
+// Static delivery for State NCERT Textbooks with explicit PDF headers
 app.use(
-  "/textbooks",
-  express.static(TEXTBOOK_ROOT, {
-    fallthrough: false,
-    index: false,
+  "/static/textbooks",
+  (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    if (req.path.toLowerCase().endsWith(".pdf")) {
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", "inline");
+    }
+    next();
+  },
+  express.static(path.resolve("public/textbooks"), {
+    setHeaders: (res, filePath) => {
+      if (filePath.toLowerCase().endsWith(".pdf")) {
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", "inline");
+      }
+    }
   })
 );
 
+
+// Static delivery for State NCERT Textbooks with permissive PDF frame headers
+
+
 app.use("/api/auth", authRoutes);
+app.use("/api/notifications", notificationsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", adminFlashcardsRoutes);
 app.use("/api/admin", adminQuizzesRoutes);
@@ -79,6 +94,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/notes", notesRoutes);
 app.use("/api/assistant", assistantRoutes);
+app.use("/api/evaluator", evaluatorRoutes);
 app.use("/api/study-plan", studyPlanRoutes);
 app.use("/api/games", gamesRoutes);
 app.use("/api/quiz", quizRoutes);
@@ -130,6 +146,7 @@ mongoose
 
     process.exit(1);
   });
+
 
 
 

@@ -63,3 +63,38 @@ backend/admin-notes-dry-run.mjs
 *.incomplete-backup
 *.repair-backup
 frontend/src/App.jsx.bak*
+
+# Dependencies and generated build output
+node_modules/
+frontend/dist/
+backend/dist/
+
+# Local uploads, backups, and database exports
+backend/uploads/
+backups/
+admin-backup-*/
+backend/backend/
+
+# Temporary and backup files
+*.bak
+*.bak*
+*.backup
+*.backup.*
+*.admin-backup
+*.incomplete-backup
+*.repair-backup
+*.tmp
+*.damaged
+*.corrupted
+
+# Local cleanup scripts
+backend/admin-notes-delete.mjs
+backend/admin-notes-dry-run.mjs
+backend/reset-admin-account.js
+backend/diagnose-cards.mjs
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+frontend/dist/
+.env
+*.log

@@ -1,46 +1,130 @@
-﻿.textbook-upload-card {
-  max-width: 860px;
-  margin-top: 24px;
-  padding: 24px;
-  border: 1px solid var(--border-color, #d9dee7);
-  border-radius: 16px;
-  background: var(--card-background, #fff);
+﻿/* Edge-to-Edge Professional Styling for Textbook Upload */
+.textbook-upload-card {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-top: 20px !important;
+  padding: 28px 32px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.03) !important;
 }
-.textbook-upload-card h2 { margin-top: 0; }
-.textbook-upload-hint { color: #687386; font-size: 0.92rem; }
-.textbook-upload-form { display: grid; gap: 18px; }
-.textbook-upload-form label { display: grid; gap: 7px; font-weight: 600; }
+
+.textbook-upload-card h2 {
+  margin: 0 0 4px !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  letter-spacing: -0.3px !important;
+}
+
+.textbook-upload-hint {
+  margin: 0 0 24px !important;
+  color: #64748b !important;
+  font-size: 13px !important;
+}
+
+.textbook-upload-form {
+  display: grid !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+.textbook-upload-form label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+  width: 100% !important;
+}
+
 .textbook-upload-form input,
 .textbook-upload-form select {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  padding: 11px 12px;
-  border: 1px solid #cbd2dc;
-  border-radius: 8px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 10px 14px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 13.5px !important;
+  font-family: inherit !important;
+  outline: none !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
 }
+
+.textbook-upload-form input:focus,
+.textbook-upload-form select:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+.textbook-upload-form input::placeholder {
+  color: #94a3b8 !important;
+}
+
 .textbook-upload-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  width: 100% !important;
 }
-.textbook-upload-form .textbook-file-label input { padding: 10px; }
+
+/* Styled File Picker */
+.textbook-file-label {
+  width: 100% !important;
+}
+
+.textbook-upload-form .textbook-file-label input[type="file"] {
+  padding: 12px 14px !important;
+  background: #f8fafc !important;
+  border: 2px dashed #cbd5e1 !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  color: #475569 !important;
+}
+
+.textbook-upload-form .textbook-file-label input[type="file"]:hover {
+  border-color: #10b981 !important;
+  background: #ecfdf5 !important;
+}
+
+/* Action Button */
 .textbook-upload-form button {
-  justify-self: start;
-  border: 0;
-  border-radius: 9px;
-  padding: 12px 22px;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
+  justify-self: start !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 11px 24px !important;
+  background: #10b981 !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25) !important;
+  transition: all 0.15s ease !important;
 }
-.textbook-upload-form button:disabled { cursor: wait; opacity: 0.65; }
-.textbook-upload-error { color: #b42318; margin: 0; }
-.textbook-upload-success { color: #167044; margin: 0; }
-@media (max-width: 600px) {
-  .textbook-upload-card { padding: 16px; }
-  .textbook-upload-grid { grid-template-columns: 1fr; }
+
+.textbook-upload-form button:hover:not(:disabled) {
+  background: #059669 !important;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35) !important;
+  transform: translateY(-1px) !important;
+}
+
+.textbook-upload-form button:disabled {
+  opacity: 0.65 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+@media (max-width: 768px) {
+  .textbook-upload-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .textbook-upload-card {
+    padding: 20px !important;
+  }
 }

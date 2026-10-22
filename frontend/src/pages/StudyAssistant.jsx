@@ -1,179 +1,180 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import client from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
+import "./StudyAssistant.css";
+
+const ALL_SUBJECTS = ["Science", "Social Science", "Mathematics", "English", "Kannada", "Hindi"];
+
+const CHAPTER_PRESETS = {
+  Science: ["Chemical Reactions", "Electricity", "Life Processes", "Light & Reflection", "Acids, Bases & Salts"],
+  "Social Science": ["Nationalism in India", "Federalism", "Resources & Development", "Power Sharing"],
+  Mathematics: ["Quadratic Equations", "Arithmetic Progressions", "Trigonometry", "Real Numbers", "Surface Areas & Volumes"],
+  English: ["Reported Speech", "Active & Passive Voice", "Tenses", "Formal Letter Writing"],
+  Kannada: ["ಕನ್ನಡ ಸಂಧಿಗಳು", "ಸಮಾಸಗಳು", "ವಿಭಕ್ತಿ ಪ್ರತ್ಯಯಗಳು", "ತತ್ಸಮ-ತದ್ಭವ"],
+  Hindi: ["समास", "पदबंध", "कारक", "उपसर्ग एवं प्रत्यय"]
+};
 
 const QUICK_PROMPTS = [
-  "Explain this topic in simple words.",
-  "What are the most important things to remember?",
-  "Give me a simple example.",
-  "Quiz me on this topic.",
+  "Explain this concept in simple terms.",
+  "What are the high-yield facts to remember?",
+  "Give me a real-world everyday example.",
+  "Generate a 3-question memory check.",
 ];
 
 export default function StudyAssistant() {
+  const { user } = useAuth();
   const [cards, setCards] = useState([]);
   const [notes, setNotes] = useState([]);
 
-  const [subject, setSubject] = useState("");
+  const [subject, setSubject] = useState("Science");
   const [chapter, setChapter] = useState("");
 
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const [showPlan, setShowPlan] = useState(false);
-  const [minutesPerDay, setMinutesPerDay] = useState(20);
-  const [plan, setPlan] = useState(null);
-
   const [loading, setLoading] = useState(true);
   const [asking, setAsking] = useState(false);
-  const [generatingPlan, setGeneratingPlan] =
-    useState(false);
-
   const [error, setError] = useState("");
 
+  // Speech Output (TTS)
+  const [speakingIndex, setSpeakingIndex] = useState(null);
+  const [voiceReplyEnabled, setVoiceReplyEnabled] = useState(false);
+
+  const messagesEndRef = useRef(null);
+
+  const studentClass = Number(user?.class) || 10;
+  const studentBoard = user?.board || "State";
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
+    scrollToBottom();
+  }, [messages, asking]);
+
+  useEffect(() => {
+    let active = true;
+
     const loadStudyMaterial = async () => {
       try {
-        const [cardsResponse, notesResponse] =
-          await Promise.all([
-            client.get("/cards"),
-            client.get("/notes"),
-          ]);
+        const [cardsResponse, notesResponse] = await Promise.allSettled([
+          client.get("/cards"),
+          client.get("/notes"),
+        ]);
+
+        if (!active) return;
 
         const cardData =
-          Array.isArray(cardsResponse.data)
-            ? cardsResponse.data
-            : cardsResponse.data?.cards || [];
+          cardsResponse.status === "fulfilled"
+            ? Array.isArray(cardsResponse.value.data)
+              ? cardsResponse.value.data
+              : cardsResponse.value.data?.cards || []
+            : [];
 
         const noteData =
-          Array.isArray(notesResponse.data)
-            ? notesResponse.data
-            : notesResponse.data?.notes || [];
+          notesResponse.status === "fulfilled"
+            ? Array.isArray(notesResponse.value.data)
+              ? notesResponse.value.data
+              : notesResponse.value.data?.notes || []
+            : [];
 
         setCards(cardData);
         setNotes(noteData);
       } catch (err) {
-        console.error(
-          "Failed to load TutorAgent material:",
-          err
-        );
-
-        setError(
-          "Unable to load your study material."
-        );
+        console.error("Failed to load material:", err);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     loadStudyMaterial();
+    return () => {
+      active = false;
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    };
   }, []);
 
-  const subjects = useMemo(() => {
-    const values = [
-      ...cards.map((card) => card.subject),
-      ...notes.map((note) => note.subject),
-    ]
-      .map((value) => value?.trim())
-      .filter(Boolean);
+  const availableChapters = useMemo(() => {
+    const preset = CHAPTER_PRESETS[subject] || [];
+    const uploaded = [
+      ...cards.filter((c) => c.subject?.toLowerCase() === subject.toLowerCase()).map((c) => c.chapter),
+      ...notes.filter((n) => n.subject?.toLowerCase() === subject.toLowerCase()).map((n) => n.chapter),
+    ].filter(Boolean);
 
-    return [...new Set(values)].sort();
-  }, [cards, notes]);
+    return [...new Set([...preset, ...uploaded])];
+  }, [subject, cards, notes]);
 
-  const chapters = useMemo(() => {
-    if (!subject) return [];
+  // Clean Text-to-Speech Output
+  const speakText = (text, index) => {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
 
-    const subjectKey =
-      subject.toLowerCase();
-
-    const values = [
-      ...cards
-        .filter(
-          (card) =>
-            card.subject
-              ?.trim()
-              .toLowerCase() ===
-            subjectKey
-        )
-        .map((card) => card.chapter),
-
-      ...notes
-        .filter(
-          (note) =>
-            note.subject
-              ?.trim()
-              .toLowerCase() ===
-            subjectKey
-        )
-        .map((note) => note.chapter),
-    ]
-      .map((value) => value?.trim())
-      .filter(Boolean);
-
-    return [...new Set(values)].sort();
-  }, [cards, notes, subject]);
-
-  const askQuestion = async (e) => {
-    e.preventDefault();
-
-    const trimmed = question.trim();
-
-    if (!trimmed || asking) {
+    if (speakingIndex === index) {
+      setSpeakingIndex(null);
       return;
     }
+
+    const clean = text.replace(/[*#_`>~-]/g, " ").replace(/\s+/g, " ").trim();
+    if (!clean) return;
+
+    const utterance = new SpeechSynthesisUtterance(clean);
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+
+    if (subject === "Kannada") utterance.lang = "kn-IN";
+    else if (subject === "Hindi") utterance.lang = "hi-IN";
+    else utterance.lang = "en-IN";
+
+    utterance.onstart = () => setSpeakingIndex(index);
+    utterance.onend = () => setSpeakingIndex(null);
+    utterance.onerror = () => setSpeakingIndex(null);
+
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const stopAudio = () => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+    setSpeakingIndex(null);
+  };
+
+  const executeAsk = async (queryText) => {
+    const trimmed = (queryText || question).trim();
+    if (!trimmed || asking) return;
 
     setAsking(true);
     setError("");
 
-    const previousHistory =
-      messages.slice(-10);
+    const previousHistory = messages.slice(-10);
 
-    setMessages((current) => [
-      ...current,
-      {
-        role: "user",
-        content: trimmed,
-      },
-    ]);
-
+    setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
     setQuestion("");
 
     try {
-      const { data } =
-        await client.post(
-          "/assistant/ask",
-          {
-            question: trimmed,
-            subject:
-              subject || undefined,
-            chapter:
-              chapter || undefined,
-            history:
-              previousHistory,
-          }
-        );
+      const { data } = await client.post("/assistant/ask", {
+        question: trimmed,
+        subject: subject || undefined,
+        chapter: chapter || undefined,
+        history: previousHistory,
+      });
 
-      setMessages((current) => [
-        ...current,
-        {
-          role: "assistant",
-          content:
-            data.answer ||
-            "I couldn't generate an answer.",
-        },
-      ]);
+      const reply = data.answer || "I could not generate an answer based on your curriculum.";
+
+      setMessages((prev) => {
+        const next = [...prev, { role: "assistant", content: reply }];
+        if (voiceReplyEnabled) {
+          speakText(reply, next.length - 1);
+        }
+        return next;
+      });
     } catch (err) {
-      console.error(
-        "TutorAgent request failed:",
-        err
-      );
-
-      setError(
-        err.response?.data?.error ||
-        "TutorAgent failed. Please try again."
-      );
-
-      setMessages((current) => {
-        const next = [...current];
+      console.error("TutorAgent query error:", err);
+      setError(err.response?.data?.error || "Unable to retrieve response. Please check your network or try again.");
+      setMessages((prev) => {
+        const next = [...prev];
         next.pop();
         return next;
       });
@@ -182,510 +183,406 @@ export default function StudyAssistant() {
     }
   };
 
-  const generatePlan = async () => {
-    if (!subject || generatingPlan) {
-      return;
-    }
-
-    try {
-      setGeneratingPlan(true);
-      setError("");
-      setPlan(null);
-
-      const { data } =
-        await client.post(
-          "/assistant/plan",
-          {
-            subject,
-            chapter:
-              chapter || undefined,
-            minutesPerDay:
-              Number(minutesPerDay),
-          }
-        );
-
-      if (!data?.plan) {
-        throw new Error(
-          "No study plan was returned."
-        );
-      }
-
-      setPlan(data.plan);
-    } catch (err) {
-      console.error(
-        "TutorAgent plan failed:",
-        err
-      );
-
-      setError(
-        err.response?.data?.error ||
-        err.message ||
-        "Failed to generate the study plan."
-      );
-    } finally {
-      setGeneratingPlan(false);
-    }
+  const handleFormSubmit = (e) => {
+    if (e) e.preventDefault();
+    executeAsk();
   };
 
   const startNewChat = () => {
+    stopAudio();
     setMessages([]);
     setQuestion("");
-    setPlan(null);
     setError("");
   };
 
   if (loading) {
     return (
-      <div className="page tutor-page">
-        <div className="progress-loading">
-          <div className="loader" />
-          <p>
-            Preparing your TutorAgent...
-          </p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "65vh" }}>
+        <div style={{ color: "#059669", fontWeight: "700", fontSize: "15px" }}>
+          Initializing Curriculum Assistant...
         </div>
       </div>
     );
   }
 
   return (
-    <div className="page tutor-page">
-
-      <section className="tutor-hero">
+    <div style={{ padding: "32px 40px 60px", maxWidth: "1200px", margin: "0 auto", boxSizing: "border-box" }}>
+      {/* Header Bar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px" }}>
         <div>
-          <span className="eyebrow">
-            MEMORYMESH AI
+          <span style={{ fontSize: "11px", fontWeight: "800", color: "#10b981", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+            COGNITIVE AI STUDY PARTNER
           </span>
-
-          <h1>
-            Meet your TutorAgent
+          <h1 style={{ fontSize: "28px", fontWeight: "900", color: "#0f172a", margin: "6px 0 4px" }}>
+            TutorAgent Studio
           </h1>
-
-          <p>
-            Ask doubts, simplify difficult ideas,
-            create study plans, and learn directly
-            from your MemoryMesh material.
+          <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
+            Curriculum-grounded assistant to clarify doubts, verify textbook formulas, and simplify exam chapters.
           </p>
         </div>
 
-        <div className="tutor-hero-icon">
-          🤖
-        </div>
-      </section>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <button
+            type="button"
+            onClick={() => {
+              if (voiceReplyEnabled) stopAudio();
+              setVoiceReplyEnabled(!voiceReplyEnabled);
+            }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "8px",
+              border: voiceReplyEnabled ? "1.5px solid #10b981" : "1px solid #cbd5e1",
+              background: voiceReplyEnabled ? "#ecfdf5" : "#ffffff",
+              color: voiceReplyEnabled ? "#047857" : "#64748b",
+              fontWeight: "700",
+              fontSize: "12.5px",
+              cursor: "pointer"
+            }}
+          >
+            {voiceReplyEnabled ? "🔊 Auto Read-Aloud ON" : "🔇 Read-Aloud OFF"}
+          </button>
 
-      <section className="card tutor-context">
-
-        <div className="tutor-context-title">
-
-          <div>
-            <span className="eyebrow">
-              STUDY CONTEXT
-            </span>
-
-            <h2>
-              What are you studying?
-            </h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "#ffffff",
+              border: "1px solid #e2e8f0",
+              borderRadius: "8px",
+              padding: "6px 12px",
+              fontSize: "12.5px",
+              fontWeight: "700",
+              color: "#0f172a"
+            }}
+          >
+            <span>Class {studentClass}</span>
+            <span style={{ color: "#cbd5e1" }}>•</span>
+            <span style={{ color: "#059669" }}>{studentBoard} Board</span>
           </div>
 
-          <div className="tutor-context-actions">
-
-            {messages.length > 0 && (
-              <button
-                type="button"
-                className="tutor-new-chat"
-                onClick={startNewChat}
-              >
-                + New chat
-              </button>
-            )}
-
+          {messages.length > 0 && (
             <button
               type="button"
-              className={
-                showPlan
-                  ? "tutor-plan-toggle active"
-                  : "tutor-plan-toggle"
-              }
-              onClick={() => {
-                setShowPlan(
-                  (current) => !current
-                );
-                setPlan(null);
+              onClick={startNewChat}
+              style={{
+                background: "#f8fafc",
+                border: "1px solid #cbd5e1",
+                borderRadius: "8px",
+                padding: "8px 14px",
+                fontSize: "12.5px",
+                fontWeight: "700",
+                color: "#475569",
+                cursor: "pointer"
               }}
             >
-              📅 Study Plan
+              + Clear Session
             </button>
+          )}
+        </div>
+      </div>
 
+      {/* Curriculum Context Filter */}
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #e2e8f0",
+          borderRadius: "14px",
+          padding: "16px 20px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "24px",
+          gap: "20px",
+          flexWrap: "wrap"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <span style={{ fontSize: "18px" }}>🎯</span>
+          <div>
+            <div style={{ fontSize: "13.5px", fontWeight: "800", color: "#0f172a" }}>Curriculum Focus Filter</div>
+            <div style={{ fontSize: "12px", color: "#64748b" }}>Constrain TutorAgent's knowledge base to a specific syllabus unit.</div>
           </div>
-
         </div>
 
-        <div className="tutor-select-grid">
-
-          <label>
-            <span>Subject</span>
-
+        <div style={{ display: "flex", gap: "14px", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <label style={{ fontSize: "10.5px", fontWeight: "800", color: "#64748b", textTransform: "uppercase" }}>Subject</label>
             <select
               value={subject}
               onChange={(e) => {
                 setSubject(e.target.value);
                 setChapter("");
-                setPlan(null);
+              }}
+              style={{
+                padding: "7px 12px",
+                borderRadius: "8px",
+                border: "1px solid #cbd5e1",
+                fontSize: "13px",
+                fontWeight: "700",
+                color: "#0f172a",
+                outline: "none"
               }}
             >
-              <option value="">
-                All subjects
-              </option>
-
-              {subjects.map((item) => (
-                <option
-                  key={item}
-                  value={item}
-                >
-                  {item}
-                </option>
+              {ALL_SUBJECTS.map((s) => (
+                <option key={s} value={s}>{s}</option>
               ))}
             </select>
-          </label>
+          </div>
 
-          <label>
-            <span>Chapter</span>
-
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <label style={{ fontSize: "10.5px", fontWeight: "800", color: "#64748b", textTransform: "uppercase" }}>Chapter / Unit</label>
             <select
               value={chapter}
-              onChange={(e) => {
-                setChapter(e.target.value);
-                setPlan(null);
+              onChange={(e) => setChapter(e.target.value)}
+              style={{
+                padding: "7px 12px",
+                borderRadius: "8px",
+                border: "1px solid #cbd5e1",
+                fontSize: "13px",
+                fontWeight: "700",
+                color: "#0f172a",
+                outline: "none",
+                minWidth: "180px"
               }}
-              disabled={!subject}
             >
-              <option value="">
-                All chapters
-              </option>
-
-              {chapters.map((item) => (
-                <option
-                  key={item}
-                  value={item}
-                >
-                  {item}
-                </option>
+              <option value="">All Chapters in {subject}</option>
+              {availableChapters.map((ch) => (
+                <option key={ch} value={ch}>{ch}</option>
               ))}
             </select>
-          </label>
-
+          </div>
         </div>
+      </div>
 
-      </section>
-
-      {showPlan && (
-        <section className="tutor-plan-card">
-
-          <div className="tutor-plan-header">
-            <div>
-              <span className="eyebrow">
-                AI STUDY PLANNER
-              </span>
-
-              <h2>
-                Build your study plan
-              </h2>
-
-              <p>
-                TutorAgent will prioritize your
-                notes, flashcards, mastery, and
-                quiz performance.
-              </p>
-            </div>
-
-            <div className="tutor-plan-icon">
-              📅
-            </div>
-          </div>
-
-          <div className="tutor-plan-controls">
-
-            <label>
-              <span>Study time per day</span>
-
-              <select
-                value={minutesPerDay}
-                onChange={(e) =>
-                  setMinutesPerDay(
-                    Number(e.target.value)
-                  )
-                }
+      {/* Main Conversation Feed */}
+      <div
+        style={{
+          background: "#ffffff",
+          border: "1px solid #e2e8f0",
+          borderRadius: "16px",
+          padding: "24px 28px",
+          minHeight: "420px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          boxShadow: "0 2px 8px rgba(15, 23, 42, 0.03)"
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px", flex: 1, overflowY: "auto", marginBottom: "20px" }}>
+          {messages.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "48px 20px" }}>
+              <div
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "50%",
+                  background: "#ecfdf5",
+                  color: "#10b981",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "22px",
+                  margin: "0 auto 16px"
+                }}
               >
-                <option value={10}>
-                  10 minutes
-                </option>
-
-                <option value={20}>
-                  20 minutes
-                </option>
-
-                <option value={30}>
-                  30 minutes
-                </option>
-
-                <option value={45}>
-                  45 minutes
-                </option>
-
-                <option value={60}>
-                  60 minutes
-                </option>
-              </select>
-            </label>
-
-            <button
-              type="button"
-              className="primary-button"
-              disabled={
-                !subject ||
-                generatingPlan
-              }
-              onClick={generatePlan}
-            >
-              {generatingPlan
-                ? "Building plan..."
-                : "Generate Study Plan →"}
-            </button>
-
-          </div>
-
-          {!subject && (
-            <div className="tutor-plan-notice">
-              Select a subject above to create
-              your personalized plan.
-            </div>
-          )}
-
-          {plan && (
-            <div className="tutor-plan-result">
-
-              <div className="tutor-plan-result-top">
-                <div>
-                  <span className="eyebrow">
-                    YOUR PLAN
-                  </span>
-
-                  <h3>
-                    {plan.title}
-                  </h3>
-
-                  <p>
-                    {plan.overview}
-                  </p>
-                </div>
-
-                <strong>
-                  {minutesPerDay}
-                  <small> min/day</small>
-                </strong>
+                ✦
               </div>
+              <h2 style={{ fontSize: "20px", fontWeight: "800", color: "#0f172a", margin: "0 0 6px" }}>
+                How can TutorAgent assist your study session?
+              </h2>
+              <p style={{ color: "#64748b", fontSize: "13.5px", maxWidth: "520px", margin: "0 auto 28px" }}>
+                Ask about key formulas, historical timelines, textbook proofs, or generate quick memory-check questions for Class {studentClass}.
+              </p>
 
-              <div className="tutor-plan-days">
-
-                {(plan.days || []).map(
-                  (day, index) => (
-                    <article
-                      key={`${day.day}-${index}`}
-                      className="tutor-plan-day"
-                    >
-                      <div className="tutor-plan-day-number">
-                        {day.day}
-                      </div>
-
-                      <div>
-                        <span>
-                          DAY {day.day}
-                        </span>
-
-                        <h4>
-                          {day.title}
-                        </h4>
-
-                        <div className="tutor-plan-task-list">
-                          {(day.tasks || []).map(
-                            (task, taskIndex) => (
-                              <div
-                                key={taskIndex}
-                              >
-                                <b>
-                                  {taskIndex + 1}
-                                </b>
-
-                                <p>
-                                  {task}
-                                </p>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      </div>
-
-                      <small>
-                        {day.minutes} min
-                      </small>
-                    </article>
-                  )
-                )}
-
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "10px", maxWidth: "700px", margin: "0 auto" }}>
+                {QUICK_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    onClick={() => executeAsk(prompt)}
+                    style={{
+                      padding: "12px 16px",
+                      borderRadius: "10px",
+                      border: "1px solid #e2e8f0",
+                      background: "#f8fafc",
+                      color: "#334155",
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease"
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.borderColor = "#10b981";
+                      e.currentTarget.style.background = "#ffffff";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.borderColor = "#e2e8f0";
+                      e.currentTarget.style.background = "#f8fafc";
+                    }}
+                  >
+                    ↳ {prompt}
+                  </button>
+                ))}
               </div>
-
             </div>
-          )}
+          ) : (
+            messages.map((msg, i) => {
+              const isUser = msg.role === "user";
+              const isPlaying = speakingIndex === i;
 
-        </section>
-      )}
-
-      <section className="tutor-chat">
-
-        {messages.length === 0 ? (
-          <div className="tutor-welcome">
-
-            <div className="tutor-welcome-icon">
-              ✦
-            </div>
-
-            <span className="eyebrow">
-              YOUR AI TUTOR
-            </span>
-
-            <h2>
-              What would you like to understand?
-            </h2>
-
-            <p>
-              Ask about your selected subject or
-              chapter. TutorAgent can explain,
-              give examples, quiz you, or help plan
-              your study.
-            </p>
-
-            <div className="tutor-quick-grid">
-
-              {QUICK_PROMPTS.map((prompt) => (
-                <button
-                  type="button"
-                  key={prompt}
-                  onClick={() =>
-                    setQuestion(prompt)
-                  }
-                >
-                  {prompt}
-                </button>
-              ))}
-
-            </div>
-
-          </div>
-        ) : (
-          <div className="tutor-messages">
-
-            {messages.map(
-              (message, index) => (
+              return (
                 <div
-                  key={index}
-                  className={
-                    message.role === "user"
-                      ? "tutor-message tutor-message-user"
-                      : "tutor-message tutor-message-ai"
-                  }
+                  key={i}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: isUser ? "flex-end" : "flex-start",
+                    width: "100%"
+                  }}
                 >
-                  <span className="tutor-message-label">
-                    {message.role === "user"
-                      ? "YOU"
-                      : "TUTORAGENT"}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "11px", fontWeight: "800", color: "#64748b" }}>
+                      {isUser ? "🧑‍🎓 YOU" : "🤖 TUTORAGENT"}
+                    </span>
+                    {!isUser && (
+                      <button
+                        type="button"
+                        onClick={() => speakText(msg.content, i)}
+                        style={{
+                          background: "transparent",
+                          border: "none",
+                          fontSize: "11.5px",
+                          fontWeight: "700",
+                          color: isPlaying ? "#ef4444" : "#10b981",
+                          cursor: "pointer",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          padding: 0
+                        }}
+                      >
+                        {isPlaying ? "⏹️ Stop" : "🔊 Listen"}
+                      </button>
+                    )}
+                  </div>
 
-                  <div className="tutor-message-body">
-                    {message.role === "assistant" ? (
-                      <ReactMarkdown>
-                        {message.content}
-                      </ReactMarkdown>
+                  <div
+                    style={{
+                      maxWidth: isUser ? "75%" : "90%",
+                      borderRadius: "14px",
+                      padding: isUser ? "12px 18px" : "18px 24px",
+                      background: isUser ? "#f1f5f9" : "#ffffff",
+                      border: isUser ? "1px solid #e2e8f0" : "1.5px solid #e2e8f0",
+                      borderLeft: isUser ? "1px solid #e2e8f0" : "4px solid #10b981",
+                      color: "#0f172a",
+                      fontSize: "14px",
+                      lineHeight: "1.6"
+                    }}
+                  >
+                    {isUser ? (
+                      <p style={{ margin: 0, fontWeight: "600" }}>{msg.content}</p>
                     ) : (
-                      message.content
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
                     )}
                   </div>
                 </div>
-              )
-            )}
+              );
+            })
+          )}
 
-            {asking && (
-              <div className="tutor-message tutor-message-ai">
-
-                <span className="tutor-message-label">
-                  TUTORAGENT
-                </span>
-
-                <div className="tutor-thinking">
-                  <span />
-                  <span />
-                  <span />
-                  <strong>
-                    TutorAgent is thinking...
-                  </strong>
-                </div>
-
+          {asking && (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+              <span style={{ fontSize: "11px", fontWeight: "800", color: "#64748b", marginBottom: "6px" }}>
+                🤖 TUTORAGENT
+              </span>
+              <div
+                style={{
+                  borderRadius: "14px",
+                  padding: "14px 20px",
+                  background: "#f8fafc",
+                  border: "1px dashed #cbd5e1",
+                  borderLeft: "4px solid #10b981",
+                  color: "#64748b",
+                  fontSize: "13px",
+                  fontWeight: "600"
+                }}
+              >
+                Formulating curriculum-grounded explanation...
               </div>
-            )}
+            </div>
+          )}
 
-          </div>
-        )}
+          <div ref={messagesEndRef} />
+        </div>
 
         {error && (
-          <div className="tutor-error">
-            {error}
+          <div style={{ padding: "10px 16px", background: "#fef2f2", border: "1px solid #fecdd3", borderRadius: "10px", color: "#b91c1c", fontSize: "13px", fontWeight: "600", marginBottom: "14px" }}>
+            ⚠️ {error}
           </div>
         )}
 
-        <form
-          className="tutor-input"
-          onSubmit={askQuestion}
-        >
+        {/* Clean Input Dock */}
+        <form onSubmit={handleFormSubmit} style={{ border: "1px solid #cbd5e1", borderRadius: "14px", padding: "12px 16px", background: "#f8fafc" }}>
           <textarea
             value={question}
-            onChange={(e) =>
-              setQuestion(e.target.value)
-            }
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleFormSubmit();
+              }
+            }}
             placeholder={
               chapter
-                ? `Ask about ${chapter}...`
-                : subject
-                  ? `Ask about ${subject}...`
-                  : "Ask TutorAgent a question..."
+                ? `Ask anything about ${chapter}... (Press Enter to send)`
+                : `Ask TutorAgent anything about ${subject}... (Press Enter to send)`
             }
-            rows={3}
-            disabled={asking}
+            rows={2}
+            style={{
+              width: "100%",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              resize: "none",
+              fontSize: "14px",
+              color: "#0f172a",
+              fontFamily: "inherit"
+            }}
           />
 
-          <div className="tutor-input-footer">
-
-            <span>
-              {subject
-                ? `${subject}${chapter ? ` · ${chapter}` : ""}`
-                : "All study material"}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #e2e8f0" }}>
+            <span style={{ fontSize: "12px", color: "#64748b", fontWeight: "600" }}>
+              Focus: <strong style={{ color: "#0f172a" }}>{subject}</strong> {chapter ? `• ${chapter}` : "(All Chapters)"}
             </span>
 
             <button
               type="submit"
-              className="primary-button"
-              disabled={
-                !question.trim() ||
-                asking
-              }
+              disabled={asking || !question.trim()}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 18px",
+                borderRadius: "10px",
+                border: "none",
+                background: !question.trim() || asking ? "#94a3b8" : "#10b981",
+                color: "#ffffff",
+                fontWeight: "800",
+                fontSize: "13px",
+                cursor: !question.trim() || asking ? "not-allowed" : "pointer",
+                boxShadow: !question.trim() || asking ? "none" : "0 2px 8px rgba(16, 185, 129, 0.3)"
+              }}
             >
-              {asking
-                ? "Thinking..."
-                : "Ask TutorAgent →"}
+              {asking ? "Processing..." : "Ask Assistant →"}
             </button>
-
           </div>
         </form>
-
-      </section>
-
+      </div>
     </div>
   );
 }

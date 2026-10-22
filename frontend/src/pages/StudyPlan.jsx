@@ -1,388 +1,302 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import client from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
+import "./StudyPlan.css";
+
+// Strictly curated for Karnataka / State Board Classes 5 - 10
+const STATE_BOARD_SUBJECTS = [
+  "Mathematics",
+  "Science",
+  "Social Science",
+  "English",
+  "Kannada",
+  "Hindi",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "History",
+  "Geography",
+  "Computer Science"
+];
+
+const TIME_PRESETS = [15, 30, 45, 60, 90, 120];
 
 export default function StudyPlan() {
-  const [cards, setCards] = useState([]);
-  const [notes, setNotes] = useState([]);
-
-  const [subject, setSubject] = useState("");
+  const { user } = useAuth();
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [allSubjects, setAllSubjects] = useState(false);
+  const [customSubject, setCustomSubject] = useState("");
   const [chapter, setChapter] = useState("");
-  const [minutesPerDay, setMinutesPerDay] = useState(20);
-
+  const [minutesPerDay, setMinutesPerDay] = useState(45);
+  const [availableSubjects, setAvailableSubjects] = useState([]);
   const [plan, setPlan] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const studentClass = Number(user?.class) || 10;
+  const studentBoard = user?.board || "State";
+
   useEffect(() => {
-    const loadMaterial = async () => {
-      try {
-        const [cardsResponse, notesResponse] =
-          await Promise.all([
-            client.get("/cards"),
-            client.get("/notes"),
-          ]);
-
-        const cardData = Array.isArray(cardsResponse.data)
-          ? cardsResponse.data
-          : cardsResponse.data?.cards || [];
-
-        const noteData = Array.isArray(notesResponse.data)
-          ? notesResponse.data
-          : notesResponse.data?.notes || [];
-
-        setCards(cardData);
-        setNotes(noteData);
-      } catch (err) {
-        console.error(
-          "Failed to load study material:",
-          err
-        );
-
-        setError(
-          "Unable to load your study material."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadMaterial();
+    let active = true;
+    client.get("/notes/subjects")
+      .then(({ data }) => {
+        if (active && Array.isArray(data?.subjects)) {
+          setAvailableSubjects(
+            data.subjects.filter(
+              (item) => typeof item === "string" && item.trim()
+            )
+          );
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
   }, []);
 
-  const subjects = useMemo(() => {
-    const values = [
-      ...cards.map((card) => card.subject),
-      ...notes.map((note) => note.subject),
-    ]
-      .map((value) => value?.trim())
-      .filter(Boolean);
+  const subjects = useMemo(
+    () => [...new Set([...STATE_BOARD_SUBJECTS, ...availableSubjects])]
+      .filter(Boolean)
+      .sort((a, b) => a.localeCompare(b)),
+    [availableSubjects]
+  );
 
-    return [...new Set(values)].sort();
-  }, [cards, notes]);
+  const finalSubjects = useMemo(() => {
+    const chosen = allSubjects ? subjects : selectedSubjects;
+    return [...new Set([
+      ...chosen,
+      ...(customSubject.trim() ? [customSubject.trim()] : [])
+    ])];
+  }, [allSubjects, subjects, selectedSubjects, customSubject]);
 
-  const chapters = useMemo(() => {
-    if (!subject) return [];
+  function toggleSubject(item) {
+    setSelectedSubjects((current) =>
+      current.includes(item)
+        ? current.filter((s) => s !== item)
+        : [...current, item]
+    );
+    setAllSubjects(false);
+    setError("");
+  }
 
-    const key = subject.toLowerCase();
+  function handleSelectAll() {
+    if (allSubjects) {
+      setAllSubjects(false);
+      setSelectedSubjects([]);
+    } else {
+      setAllSubjects(true);
+      setSelectedSubjects([...subjects]);
+    }
+    setError("");
+  }
 
-    const values = [
-      ...cards
-        .filter(
-          (card) =>
-            card.subject?.trim().toLowerCase() === key
-        )
-        .map((card) => card.chapter),
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (loading) return;
 
-      ...notes
-        .filter(
-          (note) =>
-            note.subject?.trim().toLowerCase() === key
-        )
-        .map((note) => note.chapter),
-    ]
-      .map((value) => value?.trim())
-      .filter(Boolean);
+    if (!finalSubjects.length) {
+      setError("Select at least one curriculum subject or enter a custom focus topic.");
+      return;
+    }
 
-    return [...new Set(values)].sort();
-  }, [cards, notes, subject]);
-
-  const generatePlan = async (e) => {
-    e.preventDefault();
-
-    if (!subject || generating) return;
+    setLoading(true);
+    setError("");
+    setPlan(null);
 
     try {
-      setGenerating(true);
-      setError("");
-      setPlan(null);
+      const { data } = await client.post("/study-plan/generate", {
+        subjects: finalSubjects,
+        chapter: chapter.trim() || undefined,
+        minutesPerDay: Number(minutesPerDay),
+      });
 
-      const { data } = await client.post(
-        "/study-plan/generate",
-        {
-          subject,
-          chapter: chapter || undefined,
-          minutesPerDay: Number(minutesPerDay),
-        }
-      );
-
-      if (!data?.plan) {
-        throw new Error(
-          "No study plan was returned."
-        );
+      if (!data?.plan || !Array.isArray(data.plan.days)) {
+        throw new Error("The cognitive engine did not return a structured plan.");
       }
-
       setPlan(data.plan);
     } catch (err) {
-      console.error(
-        "Failed to generate study plan:",
-        err
-      );
-
       setError(
         err.response?.data?.error ||
         err.message ||
-        "Failed to generate your study plan."
+        "Unable to generate study schedule at this time."
       );
     } finally {
-      setGenerating(false);
+      setLoading(false);
     }
-  };
-
-  if (loading) {
-    return (
-      <div className="page study-plan-page">
-        <div className="progress-loading">
-          <div className="loader" />
-          <p>Preparing your study planner...</p>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className="page study-plan-page">
-
-      <section className="study-plan-hero">
+    <div className="planner-studio-wrapper">
+      {/* Header */}
+      <div className="planner-header-pane">
         <div>
-          <span className="eyebrow">
-            MEMORYMESH AI
-          </span>
-
-          <h1 className="brand">
-            AI Study Plan
-          </h1>
-
-          <p className="subtitle">
-            Build a focused plan based on your notes,
-            flashcards, and quiz performance.
+          <span className="planner-tagline">Cognitive Spaced Schedule Generator</span>
+          <h1 className="planner-main-title">Curriculum Study Planner</h1>
+          <p className="planner-main-subtitle">
+            Generate an adaptive multi-day revision roadmap engineered around your active recall load and state board syllabus.
           </p>
         </div>
 
-        <div className="study-plan-hero-icon">
-          ✓
+        <div className="planner-curriculum-badge">
+          <span className="badge-class">Class {studentClass}</span>
+          <span className="badge-board">{studentBoard} Board</span>
         </div>
-      </section>
+      </div>
 
-      <section className="card study-plan-builder">
+      {/* Builder Console Card */}
+      <div className="planner-console-card">
+        <form onSubmit={handleSubmit}>
+          {/* Section 1: Subject Selection */}
+          <div className="planner-section-top">
+            <div>
+              <h3>1. Target Subjects</h3>
+              <p>Choose subjects to interleave across your study schedule.</p>
+            </div>
 
-        <div className="study-plan-heading">
-          <span className="eyebrow">
-            PLAN BUILDER
-          </span>
-
-          <h2>
-            Tell us how you want to study
-          </h2>
-
-          <p>
-            MemoryMesh will build a practical plan around
-            your existing study material.
-          </p>
-        </div>
-
-        <form
-          className="study-plan-form"
-          onSubmit={generatePlan}
-        >
-
-          <label>
-            <span>Subject</span>
-
-            <select
-              value={subject}
-              onChange={(e) => {
-                setSubject(e.target.value);
-                setChapter("");
-                setPlan(null);
-              }}
-              required
+            <button
+              type="button"
+              className={`select-all-toggle ${allSubjects ? "active" : ""}`}
+              onClick={handleSelectAll}
             >
-              <option value="">
-                Select a subject
-              </option>
+              {allSubjects ? "✓ All Subjects Selected" : "Select Entire Syllabus"}
+            </button>
+          </div>
 
-              {subjects.map((item) => (
-                <option
+          <div className="planner-chips-grid">
+            {subjects.map((item) => {
+              const isChecked = allSubjects || selectedSubjects.includes(item);
+              return (
+                <button
+                  type="button"
                   key={item}
-                  value={item}
+                  className={`subject-chip-btn ${isChecked ? "chip-checked" : ""}`}
+                  onClick={() => toggleSubject(item)}
                 >
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
+                  <span className="chip-indicator">{isChecked ? "✓" : "+"}</span>
+                  <span className="chip-label">{item}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <label>
-            <span>Chapter</span>
+          <div className="custom-subject-input-wrap">
+            <label className="field-sublabel">Additional Focus Topic or Unit (Optional)</label>
+            <input
+              type="text"
+              value={customSubject}
+              onChange={(e) => setCustomSubject(e.target.value)}
+              placeholder="e.g. Karnataka History & Heritage or Trigonometric Identities"
+              maxLength={120}
+              className="planner-input"
+            />
+          </div>
 
-            <select
-              value={chapter}
-              onChange={(e) => {
-                setChapter(e.target.value);
-                setPlan(null);
-              }}
-              disabled={!subject}
-            >
-              <option value="">
-                Entire subject
-              </option>
+          <div className="planner-divider" />
 
-              {chapters.map((item) => (
-                <option
-                  key={item}
-                  value={item}
-                >
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            <span>
-              Study time per day
+          {/* Section 2: Time and Topic Parameters */}
+          <div className="planner-section-top">
+            <div>
+              <h3>2. Session Parameters</h3>
+              <p>Configure daily pacing and specific chapter targets.</p>
+            </div>
+            <span className="selection-count-pill">
+              {finalSubjects.length} Subject{finalSubjects.length === 1 ? "" : "s"} In Plan
             </span>
+          </div>
 
-            <select
-              value={minutesPerDay}
-              onChange={(e) =>
-                setMinutesPerDay(
-                  Number(e.target.value)
-                )
-              }
-            >
-              <option value={10}>
-                10 minutes
-              </option>
+          <div className="planner-params-grid">
+            <div className="param-field">
+              <label className="field-sublabel">Chapter / Specific Module (Optional)</label>
+              <input
+                type="text"
+                value={chapter}
+                onChange={(e) => setChapter(e.target.value)}
+                placeholder="e.g. Life Processes, Quadratic Equations..."
+                maxLength={160}
+                className="planner-input"
+              />
+            </div>
 
-              <option value={20}>
-                20 minutes
-              </option>
-
-              <option value={30}>
-                30 minutes
-              </option>
-
-              <option value={45}>
-                45 minutes
-              </option>
-
-              <option value={60}>
-                60 minutes
-              </option>
-            </select>
-          </label>
+            <div className="param-field">
+              <label className="field-sublabel">Daily Study Commitment</label>
+              <div className="time-presets-row">
+                {TIME_PRESETS.map((m) => (
+                  <button
+                    type="button"
+                    key={m}
+                    className={`time-preset-btn ${minutesPerDay === m ? "active" : ""}`}
+                    onClick={() => setMinutesPerDay(m)}
+                  >
+                    {m}m
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {error && (
-            <div className="study-plan-error">
-              {error}
+            <div className="planner-alert-box" role="alert">
+              <span>⚠️ {error}</span>
             </div>
           )}
 
-          <button
-            type="submit"
-            className="primary-button study-plan-generate-button"
-            disabled={!subject || generating}
-          >
-            {generating
-              ? "Building your plan..."
-              : "Generate Study Plan →"}
-          </button>
-
+          <div className="planner-submit-row">
+            <button
+              type="submit"
+              className="planner-generate-btn"
+              disabled={loading || !finalSubjects.length}
+            >
+              {loading ? "Synthesizing Revision Plan..." : "Generate Spaced Study Plan →"}
+            </button>
+          </div>
         </form>
+      </div>
 
-      </section>
-
+      {/* Generated Multi-Day Schedule Section */}
       {plan && (
-        <section className="study-plan-result">
-
-          <div className="study-plan-result-header">
-
-            <div>
-              <span className="eyebrow">
-                YOUR PLAN
-              </span>
-
-              <h2>
-                {plan.title}
-              </h2>
-
-              <p>
-                {plan.overview}
+        <div className="planner-schedule-section" aria-live="polite">
+          <div className="schedule-header-card">
+            <div className="schedule-header-left">
+              <span className="schedule-tag">Generated Active Plan</span>
+              <h2>{plan.title || "Targeted Revision Schedule"}</h2>
+              <p className="schedule-subjects-summary">
+                Targeting: {finalSubjects.join(" • ")}
               </p>
+              {plan.overview && <p className="schedule-overview-text">{plan.overview}</p>}
             </div>
 
-            <div className="study-plan-time">
-              {minutesPerDay}
-              <span>
-                min/day
-              </span>
+            <div className="schedule-daily-stat">
+              <span className="daily-minutes">{minutesPerDay}</span>
+              <span className="daily-unit">MINUTES / DAY</span>
             </div>
-
           </div>
 
-          <div className="study-plan-days">
-
-            {(plan.days || []).map((day, index) => (
-              <article
-                className="card study-plan-day"
-                key={`${day.day}-${index}`}
-              >
-
-                <div className="study-plan-day-number">
-                  {day.day}
+          <div className="schedule-timeline-list">
+            {plan.days.map((day, index) => (
+              <div className="schedule-day-card" key={`${day.day ?? index}-${index}`}>
+                <div className="day-number-badge">
+                  <span className="badge-day-label">DAY</span>
+                  <span className="badge-day-val">{day.day ?? index + 1}</span>
                 </div>
 
-                <div className="study-plan-day-body">
-
-                  <div className="study-plan-day-top">
-                    <div>
-                      <span className="eyebrow">
-                        DAY {day.day}
-                      </span>
-
-                      <h3>
-                        {day.title}
-                      </h3>
-                    </div>
-
-                    <span className="study-plan-minutes">
-                      {day.minutes} min
-                    </span>
+                <div className="day-details-content">
+                  <div className="day-card-topbar">
+                    <h3 className="day-focus-title">{day.title || `Review Session ${index + 1}`}</h3>
+                    <span className="day-time-tag">⏱ {day.minutes ?? minutesPerDay} min allocated</span>
                   </div>
 
-                  <div className="study-plan-tasks">
-
-                    {(day.tasks || []).map(
-                      (task, taskIndex) => (
-                        <div
-                          className="study-plan-task"
-                          key={taskIndex}
-                        >
-                          <span>
-                            {taskIndex + 1}
-                          </span>
-
-                          <p>
-                            {task}
-                          </p>
-                        </div>
-                      )
-                    )}
-
+                  <div className="day-tasks-stack">
+                    {(day.tasks || []).map((task, i) => (
+                      <div className="day-task-item" key={`${i}-${task}`}>
+                        <span className="task-step-number">{i + 1}</span>
+                        <p className="task-text">{task}</p>
+                      </div>
+                    ))}
                   </div>
-
                 </div>
-
-              </article>
+              </div>
             ))}
-
           </div>
-
-        </section>
+        </div>
       )}
-
     </div>
   );
 }

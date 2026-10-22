@@ -1,405 +1,201 @@
-﻿import { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import client from "../api/client";
+import { useAuth } from "../contexts/AuthContext";
+import "./Progress.css";
 
 export default function Progress() {
+  const { user } = useAuth();
   const [stats, setStats] = useState(null);
+  const [rubricStats, setRubricStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
+
     const loadProgress = async () => {
       try {
-        const { data } = await client.get("/review/stats");
+        const [progressRes, rubricRes] = await Promise.allSettled([
+          client.get("/review/stats"),
+          client.get("/evaluator/analytics")
+        ]);
 
-        if (data?.success) {
-          setStats(data);
-        } else {
-          setStats(null);
+        if (!active) return;
+
+        if (progressRes.status === "fulfilled") {
+          const data = progressRes.value.data;
+          setStats(data?.success || data ? data : null);
+        }
+
+        if (rubricRes.status === "fulfilled") {
+          setRubricStats(rubricRes.value.data?.stats || null);
         }
       } catch (err) {
-        console.error("Failed to load progress:", err);
-        setStats(null);
+        console.error("Failed to load progress data:", err);
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     loadProgress();
+    return () => {
+      active = false;
+    };
   }, []);
+
+  const studentClass = Number(user?.class) || 10;
+  const studentBoard = user?.board || "State";
 
   if (loading) {
     return (
-      <div className="page progress-page">
-        <div className="progress-loading">
-          <div className="loader" />
-          <p>Loading your progress...</p>
+      <div className="progress-analytics-wrapper">
+        <div className="analytics-loading-box">
+          <div className="analytics-spinner" />
+          <p>Compiling cognitive retention metrics...</p>
         </div>
       </div>
     );
   }
 
-  const overview = stats?.overview ?? {};
-
-  const totalReviews = overview.totalReviews ?? 0;
-  const correct = overview.totalCorrect ?? 0;
-  const accuracy = overview.accuracy ?? 0;
-  const mastered = overview.masteredCards ?? 0;
-  const totalCards = overview.totalCards ?? 0;
+  const overview = stats?.overview ?? stats ?? {};
+  const totalReviews = overview.totalReviews ?? stats?.totalReviews ?? 0;
+  const accuracy = Math.round(overview.accuracy ?? stats?.accuracy ?? 0);
+  const mastered = overview.masteredCards ?? stats?.mastered ?? 0;
+  const totalCards = overview.totalCards ?? stats?.totalCards ?? 0;
+  const streak = overview.streak ?? stats?.streak ?? 0;
 
   const subjects = stats?.subjects ?? [];
-  const weeklyActivity = stats?.weeklyActivity ?? [];
-  const weakTopics = stats?.weakTopics ?? [];
-
-  const streak = stats?.streak ?? 0;
-  const xp = stats?.xp ?? 0;
-  const level = stats?.level ?? 1;
-  const gems = stats?.gems ?? 0;
-
-  const currentLevelXp = xp % 100;
-  const xpToNextLevel = 100 - currentLevelXp;
-
-  const mastery =
-    totalCards > 0
-      ? Math.round((mastered / totalCards) * 100)
-      : 0;
-
-  const remaining = Math.max(totalCards - mastered, 0);
 
   return (
-    <div className="page progress-page">
-      <div className="progress-hero">
+    <div className="progress-analytics-wrapper">
+      {/* Analytics Command Header */}
+      <div className="analytics-header">
         <div>
-          <span className="eyebrow">MEMORYMESH ANALYTICS</span>
-          <h1 className="brand">Your Progress</h1>
-          <p className="subtitle">
-            See how your memory is improving over time.
+          <span className="analytics-tagline">Cognitive Spaced Repetition Analytics</span>
+          <h1 className="analytics-title">Learning & Retention Progress</h1>
+          <p className="analytics-subtitle">
+            Real-time performance analytics based on your active recall intervals, confidence ratings, and subjective step rubrics.
           </p>
         </div>
 
-        <div className="progress-hero-actions">
-          <div className="progress-hero-badge">
-            <span>Mastery</span>
-            <strong>{mastery}%</strong>
-          </div>
+        <div className="analytics-curriculum-badge">
+          <span className="badge-class">Class {studentClass}</span>
+          <span className="badge-board">{studentBoard} Board</span>
         </div>
       </div>
 
-      <div className="progress-stats-grid">
-        <div className="progress-stat-card">
-          <div className="progress-stat-icon blue-icon">R</div>
-          <div>
-            <span>Total reviews</span>
-            <strong>{totalReviews}</strong>
+      {/* Top 4 KPI Metrics */}
+      <div className="analytics-kpi-grid">
+        <div className="kpi-card">
+          <div className="kpi-top">
+            <span className="kpi-label">Recall Accuracy</span>
+            <span className="kpi-icon">🎯</span>
           </div>
+          <div className="kpi-value">{accuracy}%</div>
+          <span className="kpi-subtext">Overall correct response rate</span>
         </div>
 
-        <div className="progress-stat-card">
-          <div className="progress-stat-icon green-icon">?</div>
-          <div>
-            <span>Correct answers</span>
-            <strong>{correct}</strong>
+        <div className="kpi-card">
+          <div className="kpi-top">
+            <span className="kpi-label">Total Reviews</span>
+            <span className="kpi-icon">⚡</span>
           </div>
+          <div className="kpi-value">{totalReviews}</div>
+          <span className="kpi-subtext">Active recall cards reviewed</span>
         </div>
 
-        <div className="progress-stat-card">
-          <div className="progress-stat-icon purple-icon">%</div>
-          <div>
-            <span>Accuracy</span>
-            <strong>{accuracy}%</strong>
+        <div className="kpi-card">
+          <div className="kpi-top">
+            <span className="kpi-label">Active Streak</span>
+            <span className="kpi-icon">🔥</span>
           </div>
+          <div className="kpi-value">{streak} Days</div>
+          <span className="kpi-subtext">Consecutive daily study sessions</span>
         </div>
 
-        <div className="progress-stat-card">
-          <div className="progress-stat-icon amber-icon">M</div>
-          <div>
-            <span>Cards mastered</span>
-            <strong>{mastered}</strong>
+        <div className="kpi-card">
+          <div className="kpi-top">
+            <span className="kpi-label">Concepts Mastered</span>
+            <span className="kpi-icon">🧠</span>
           </div>
+          <div className="kpi-value">{mastered} / {totalCards}</div>
+          <span className="kpi-subtext">Long-term interval retention</span>
         </div>
       </div>
 
-      <div className="progress-gamification-grid">
-        <div className="card gamification-card">
-          <div className="gamification-icon">🔥</div>
-
+      {/* NEW BE PROJECT DELIVERABLE: Step-Loss Detective Performance Card */}
+      <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "14px", padding: "24px", marginTop: "24px", boxShadow: "0 2px 6px rgba(15,23,42,0.04)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
           <div>
-            <span className="eyebrow">STREAK</span>
-            <h2>{streak} day{streak === 1 ? "" : "s"}</h2>
-
-            <p>
-              {streak > 0
-                ? "Keep your learning streak alive!"
-                : "Start reviewing to begin your streak."}
+            <span style={{ fontSize: "11px", fontWeight: "800", color: "#10b981", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              BE PROJECT DELIVERABLE • ALGORITHMIC RUBRIC EVALUATION
+            </span>
+            <h2 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", margin: "4px 0 2px" }}>
+              Subjective Step-Loss & Examiner Scoring
+            </h2>
+            <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>
+              Audit of subjective board answers evaluated for step accuracy, compulsory keywords, and mark deductions.
             </p>
           </div>
-        </div>
-
-        <div className="card gamification-card">
-          <div className="gamification-icon">⭐</div>
-
-          <div>
-            <span className="eyebrow">LEVEL</span>
-            <h2>Level {level}</h2>
-
-            <div className="xp-progress-track">
-              <div
-                className="xp-progress-fill"
-                style={{
-                  width: `${currentLevelXp}%`,
-                }}
-              />
+          <div style={{ display: "flex", gap: "12px" }}>
+            <div style={{ textAlign: "right", background: "#f8fafc", padding: "8px 14px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+              <div style={{ fontSize: "11px", fontWeight: "700", color: "#64748b" }}>EVALUATIONS</div>
+              <div style={{ fontSize: "18px", fontWeight: "900", color: "#0f172a" }}>{rubricStats?.totalEvaluations ?? 0}</div>
             </div>
-
-            <p>
-              {currentLevelXp} / 100 XP
-              {level < 100 && ` • ${xpToNextLevel} XP to next level`}
-            </p>
-          </div>
-        </div>
-
-        <div className="card gamification-card">
-          <div className="gamification-icon">💎</div>
-
-          <div>
-            <span className="eyebrow">GEMS</span>
-            <h2>{gems}</h2>
-
-            <p>Earn gems by completing achievements.</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="card progress-section">
-        <div className="progress-section-header">
-          <div>
-            <span className="eyebrow">PERFORMANCE</span>
-            <h2>Learning progress</h2>
-          </div>
-        </div>
-
-        <div className="metric">
-          <div className="metric-header">
-            <span>Answer accuracy</span>
-            <strong>{accuracy}%</strong>
-          </div>
-
-          <div className="progress-track">
-            <div
-              className="progress-fill accuracy-fill"
-              style={{
-                width: `${Math.min(accuracy, 100)}%`,
-              }}
-            />
-          </div>
-
-          <p>
-            {accuracy >= 80
-              ? "Excellent work. Keep it up!"
-              : accuracy >= 60
-                ? "Good progress. Keep practicing."
-                : "Keep reviewing to improve your accuracy."}
-          </p>
-        </div>
-
-        <div className="metric">
-          <div className="metric-header">
-            <span>Card mastery</span>
-            <strong>{mastery}%</strong>
-          </div>
-
-          <div className="progress-track">
-            <div
-              className="progress-fill mastery-fill"
-              style={{
-                width: `${Math.min(mastery, 100)}%`,
-              }}
-            />
-          </div>
-
-          <p>
-            {mastered} of {totalCards} cards mastered.
-          </p>
-        </div>
-      </div>
-
-
-      <div className="card progress-section">
-        <div className="progress-section-header">
-          <div>
-            <span className="eyebrow">SUBJECTS</span>
-            <h2>Subject mastery</h2>
-          </div>
-        </div>
-
-        {subjects.length === 0 ? (
-          <p>No subject progress yet. Start reviewing cards.</p>
-        ) : (
-          subjects.map((subject) => (
-            <div className="metric" key={subject.subject}>
-              <div className="metric-header">
-                <span>{subject.subject}</span>
-                <strong>{subject.mastery}%</strong>
-              </div>
-
-              <div className="progress-track">
-                <div
-                  className="progress-fill mastery-fill"
-                  style={{
-                    width: `${Math.min(subject.mastery, 100)}%`,
-                  }}
-                />
-              </div>
-
-              <p>
-                {subject.mastered} of {subject.total} cards mastered •{" "}
-                {subject.accuracy}% accuracy
-              </p>
+            <div style={{ textAlign: "right", background: "#ecfdf5", padding: "8px 14px", borderRadius: "8px", border: "1px solid #a7f3d0" }}>
+              <div style={{ fontSize: "11px", fontWeight: "700", color: "#065f46" }}>STEP ACCURACY</div>
+              <div style={{ fontSize: "18px", fontWeight: "900", color: "#059669" }}>{rubricStats?.averageAccuracy ?? 0}%</div>
             </div>
-          ))
-        )}
-      </div>
-
-      <div className="card progress-section">
-        <div className="progress-section-header">
-          <div>
-            <span className="eyebrow">FOCUS AREAS</span>
-            <h2>Topics to practise</h2>
           </div>
         </div>
 
-        {weakTopics.length === 0 ? (
-          <p>No focus areas identified yet. Keep reviewing to build your learning data.</p>
-        ) : (
-          <div className="weak-topics-list">
-            {weakTopics.map((topic) => (
-              <div
-                className="weak-topic-item"
-                key={`${topic.subject}-${topic.chapter}`}
-              >
-                <div className="weak-topic-heading">
-                  <div>
-                    <strong>{topic.chapter}</strong>
-                    <span>{topic.subject}</span>
+        {rubricStats?.recentAttempts && rubricStats.recentAttempts.length > 0 ? (
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            {rubricStats.recentAttempts.map((att, idx) => (
+              <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                <div>
+                  <div style={{ fontSize: "13px", fontWeight: "700", color: "#0f172a" }}>
+                    {att.subject} • {att.chapter}
                   </div>
-                  <span className="weak-topic-reason">{topic.reason}</span>
+                  <div style={{ fontSize: "11.5px", color: "#64748b" }}>
+                    {att.missedKeywords?.length > 0 
+                      ? `Penalized Keywords: [${att.missedKeywords.join(", ")}]` 
+                      : "Full step marks retained • No penalty clauses triggered"}
+                  </div>
                 </div>
-
-                <div className="weak-topic-metrics">
-                  <span>Mastery: {topic.mastery}%</span>
-                  <span>
-                    {topic.accuracy == null
-                      ? "No reviews yet"
-                      : `Accuracy: ${topic.accuracy}%`}
+                <div style={{ textAlign: "right" }}>
+                  <span style={{ fontSize: "14px", fontWeight: "800", color: att.scoreAwarded === att.maxMarks ? "#059669" : "#d97706" }}>
+                    {att.scoreAwarded} / {att.maxMarks} Marks
                   </span>
-                  <span>{topic.reviews} reviews · {topic.totalCards} cards</span>
-                </div>
-
-                <div className="progress-track">
-                  <div
-                    className="progress-fill mastery-fill"
-                    style={{
-                      width: `${Math.min(Math.max(topic.mastery ?? 0, 0), 100)}%`,
-                    }}
-                  />
+                  <div style={{ fontSize: "11px", fontWeight: "700", color: "#64748b" }}>
+                    {att.percentage}% step accuracy
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        )}
-      </div>
-
-
-      <div className="card progress-section">
-        <div className="progress-section-header">
-          <div>
-            <span className="eyebrow">LAST 7 DAYS</span>
-            <h2>Study activity</h2>
-          </div>
-        </div>
-
-        {weeklyActivity.length === 0 ? (
-          <p>No review activity yet.</p>
         ) : (
-          <div className="weekly-chart">
-            {weeklyActivity.map((day) => {
-              const maxDailyReviews = Math.max(
-                1,
-                ...weeklyActivity.map((item) => item.reviews ?? 0)
-              );
-              const reviews = day.reviews ?? 0;
-              const barHeight =
-                reviews > 0
-                  ? Math.max(8, (reviews / maxDailyReviews) * 100)
-                  : 0;
-
-              return (
-                <div className="weekly-chart-day" key={day.date}>
-                  <strong>{reviews}</strong>
-                  <div
-                    className="weekly-chart-track"
-                    title={`${reviews} reviews`}
-                  >
-                    <div
-                      className="weekly-chart-bar"
-                      style={{ height: `${barHeight}%` }}
-                    />
-                  </div>
-                  <span>
-                    {new Date(day.date).toLocaleDateString("en-IN", {
-                      weekday: "short",
-                    })}
-                  </span>
-                </div>
-              );
-            })}
+          <div style={{ padding: "20px", background: "#f8fafc", borderRadius: "8px", textAlign: "center", color: "#64748b", fontSize: "13px" }}>
+            No subjective answers evaluated yet. Complete a practice question in the <strong>Step-Loss Detective</strong> to generate your step deduction analytics.
           </div>
         )}
       </div>
 
-      <div className="progress-bottom-grid">
-        <div className="card progress-summary-card">
-          <span className="eyebrow">YOUR DECK</span>
-
-          <h2>{totalCards} cards</h2>
-
-          <p>
-            {remaining === 0
-              ? "Amazing! You've mastered every card."
-              : `${remaining} card${remaining === 1 ? "" : "s"} still to master.`}
-          </p>
+      {/* Subject Mastery Overview */}
+      {subjects.length > 0 && (
+        <div style={{ marginTop: "24px", background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "14px", padding: "24px" }}>
+          <h2 style={{ fontSize: "18px", fontWeight: "800", color: "#0f172a", marginBottom: "14px" }}>
+            Subject Mastery Distribution
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px" }}>
+            {subjects.map((s, idx) => (
+              <div key={idx} style={{ padding: "12px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
+                <strong style={{ fontSize: "13px", color: "#0f172a", display: "block" }}>{s.name || s.subject}</strong>
+                <span style={{ fontSize: "12px", color: "#64748b" }}>{s.accuracy || 0}% Retention</span>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <div className="card progress-summary-card">
-          <span className="eyebrow">REVIEWS</span>
-
-          <h2>{totalReviews} completed</h2>
-
-          <p>
-            You answered {correct} question
-            {correct === 1 ? "" : "s"} correctly.
-          </p>
-        </div>
-      </div>
-
-      <div className="card progress-message">
-        <div className="message-icon">?</div>
-
-        <div>
-          <h2>Keep going!</h2>
-
-          <p>
-            Consistent reviews are the key to remembering what you learn.
-            Come back regularly and keep building your memory.
-          </p>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
-
-
-
-
-
-
-
-

@@ -1,5 +1,4 @@
-
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import client from "../api/client";
 import "./Admin.css";
 
@@ -18,9 +17,7 @@ export default function AdminStudents() {
       try {
         setLoading(true);
         setError("");
-
         const response = await client.get("/admin/students");
-
         if (!cancelled) {
           setStudents(response.data.students || []);
         }
@@ -43,13 +40,8 @@ export default function AdminStudents() {
     };
   }, []);
 
-  const classes = useMemo(
-    () =>
-      [...new Set(students.map((student) => student.class).filter(
-        (value) => value !== undefined && value !== null && value !== ""
-      ))].sort((a, b) => Number(a) - Number(b)),
-    [students]
-  );
+  // Strict Class 5 - 10 Platform Curriculum Scope
+  const classes = [5, 6, 7, 8, 9, 10];
 
   const boards = useMemo(
     () =>
@@ -58,75 +50,62 @@ export default function AdminStudents() {
     [students]
   );
 
-  const filteredStudents = students.filter((student) => {
-    const query = search.trim().toLowerCase();
+  const filteredStudents = useMemo(() => {
+    const term = search.trim().toLowerCase();
 
-    const matchesSearch =
-      !query ||
-      student.name?.toLowerCase().includes(query) ||
-      student.email?.toLowerCase().includes(query);
+    return students.filter((student) => {
+      const name = String(student.name || "").toLowerCase();
+      const email = String(student.email || "").toLowerCase();
+      const studentClass = String(student.class ?? "");
+      const studentBoard = String(student.board || "");
 
-    const matchesClass =
-      classFilter === "all" || String(student.class) === classFilter;
+      const matchesSearch = !term || name.includes(term) || email.includes(term);
+      const matchesClass = classFilter === "all" || studentClass === classFilter;
+      const matchesBoard = boardFilter === "all" || studentBoard === boardFilter;
 
-    const matchesBoard =
-      boardFilter === "all" || student.board === boardFilter;
-
-    return matchesSearch && matchesClass && matchesBoard;
-  });
-
-  function formatDate(value) {
-    if (!value) return "Never recorded";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return "—";
-
-    return date.toLocaleDateString(undefined, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
+      return matchesSearch && matchesClass && matchesBoard;
     });
-  }
+  }, [students, search, classFilter, boardFilter]);
+
+  const resetFilters = () => {
+    setSearch("");
+    setClassFilter("all");
+    setBoardFilter("all");
+  };
 
   return (
-    <main className="admin-page">
+    <div className="admin-page">
       <header className="admin-header">
         <div>
-          <span className="admin-eyebrow">MEMORYMESH CONTROL CENTER</span>
+          <span className="admin-eyebrow">MemoryMesh Control Center</span>
           <h1>Students</h1>
           <p>Review registered accounts and their learning activity.</p>
         </div>
-
         <div className="admin-status">
           <span className="admin-status-dot" />
-          Administrator
+          <span>Administrator</span>
         </div>
       </header>
 
       {error && (
-        <div className="admin-error" role="alert">
-          {error}
+        <div className="admin-error-banner" role="alert">
+          <strong>Unable to load students:</strong> {error}
         </div>
       )}
 
-      <section className="admin-stats" aria-label="Student account statistics">
+      <section className="admin-stats" aria-label="Student directory metrics">
         <article className="admin-stat-card">
-          <span className="admin-stat-icon">👩‍🎓</span>
+          <span className="admin-stat-icon">👥</span>
           <p>Accounts loaded</p>
           <strong>{loading ? "—" : students.length}</strong>
-          <span className="admin-stat-note">
-            Up to 100 accounts returned by the API
-          </span>
+          <span className="admin-stat-note">Up to 100 accounts returned by the API</span>
         </article>
 
         <article className="admin-stat-card">
-          <span className="admin-stat-icon">🔎</span>
+          <span className="admin-stat-icon">🔍</span>
           <p>Matching students</p>
           <strong>{loading ? "—" : filteredStudents.length}</strong>
-          <span className="admin-stat-note">
-            Based on the current search and filters
-          </span>
+          <span className="admin-stat-note">Based on the current search and filters</span>
         </article>
 
         <article className="admin-stat-card">
@@ -139,9 +118,7 @@ export default function AdminStudents() {
                   .reduce((total, student) => total + (Number(student.xp) || 0), 0)
                   .toLocaleString()}
           </strong>
-          <span className="admin-stat-note">
-            Combined experience points for these accounts
-          </span>
+          <span className="admin-stat-note">Combined experience points for these accounts</span>
         </article>
       </section>
 
@@ -151,9 +128,7 @@ export default function AdminStudents() {
             <h2>Student accounts</h2>
             <p>Search and filter the registered student list.</p>
           </div>
-          <span className="admin-count">
-            {filteredStudents.length} shown
-          </span>
+          <span className="admin-count">{filteredStudents.length} shown</span>
         </div>
 
         <div className="admin-student-filters">
@@ -198,34 +173,27 @@ export default function AdminStudents() {
             </select>
           </label>
 
-          <button
-            className="admin-reset-filters"
-            type="button"
-            onClick={() => {
-              setSearch("");
-              setClassFilter("all");
-              setBoardFilter("all");
-            }}
-          >
-            Reset filters
-          </button>
+          {(search || classFilter !== "all" || boardFilter !== "all") && (
+            <button
+              type="button"
+              className="admin-reset-btn"
+              onClick={resetFilters}
+            >
+              Reset filters
+            </button>
+          )}
         </div>
 
         {loading ? (
-          <div className="admin-empty">Loading student accounts...</div>
-        ) : error ? (
-          <div className="admin-empty">
-            Student information is currently unavailable.
-          </div>
+          <div className="admin-table-loading">Loading student records...</div>
         ) : filteredStudents.length === 0 ? (
-          <div className="admin-empty">
-            {students.length
-              ? "No students match these filters."
-              : "No student accounts were returned by the API."}
+          <div className="admin-table-empty">
+            <p>No student accounts matched your query.</p>
+            <button type="button" onClick={resetFilters}>Clear filters</button>
           </div>
         ) : (
           <div className="admin-table-wrap">
-            <table className="admin-table admin-students-table">
+            <table className="admin-table">
               <thead>
                 <tr>
                   <th>Student</th>
@@ -234,34 +202,45 @@ export default function AdminStudents() {
                   <th>XP</th>
                   <th>Streak</th>
                   <th>Registered</th>
-                  <th>Last active</th>
+                  <th>Last Active</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredStudents.map((student) => (
-                  <tr key={student._id}>
+                  <tr key={student.id || student._id}>
                     <td>
                       <div className="admin-student">
                         <span className="admin-avatar">
-                          {(student.name || "?")
-                            .trim()
-                            .charAt(0)
-                            .toUpperCase()}
+                          {(student.name || "S").charAt(0).toUpperCase()}
                         </span>
                         <div>
                           <strong>{student.name || "Unnamed student"}</strong>
-                          <span>{student.email || "No email recorded"}</span>
+                          <span>{student.email}</span>
                         </div>
                       </div>
                     </td>
+                    <td>Class {student.class ?? "—"}</td>
+                    <td>{student.board || "State"}</td>
+                    <td>{student.xp ?? 0}</td>
+                    <td>{student.streak ?? 0} days</td>
                     <td>
-                      {student.class ? `Class ${student.class}` : "—"}
+                      {student.createdAt
+                        ? new Date(student.createdAt).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "—"}
                     </td>
-                    <td>{student.board || "—"}</td>
-                    <td>{(Number(student.xp) || 0).toLocaleString()}</td>
-                    <td>{Number(student.streak) || 0} days</td>
-                    <td>{formatDate(student.createdAt)}</td>
-                    <td>{formatDate(student.lastActiveDate)}</td>
+                    <td>
+                      {student.lastActive
+                        ? new Date(student.lastActive).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -270,10 +249,9 @@ export default function AdminStudents() {
         )}
 
         <p className="admin-footnote">
-          This page displays the student accounts returned by the existing
-          API, which is currently limited to 100 accounts.
+          This page displays the student accounts returned by the existing API, which is currently limited to 100 accounts.
         </p>
       </section>
-    </main>
+    </div>
   );
 }

@@ -27,6 +27,14 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(process.env.PORT, () => console.log(`Server on port ${process.env.PORT}`));
+    
+const textbookUploadRoute = require('./routes/textbookUpload');
+
+
+app.use('/api/textbooks', textbookUploadRoute);
+app.use('/textbooks', express.static(path.join(__dirname, 'public/textbooks')));
+
+app.listen(process.env.PORT, () => console.log(`Server on port ${process.env.PORT}`));
   })
   .catch((err) => console.error("Mongo connection error:", err));
+

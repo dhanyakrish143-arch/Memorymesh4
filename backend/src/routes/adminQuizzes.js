@@ -1,6 +1,7 @@
 ﻿import express from "express";
 import mongoose from "mongoose";
 import QuizSet from "../models/QuizSet.js";
+import { createResourceNotification } from "../utils/createResourceNotification.js";
 import requireAuth from "../middleware/auth.js";
 import requireAdmin from "../middleware/requireAdmin.js";
 
@@ -151,11 +152,27 @@ router.patch("/quizzes/:id/publish", async (req, res) => {
       return res.status(400).json({ error: "published must be true or false." });
     }
 
-    const quiz = await QuizSet.findByIdAndUpdate(
-      req.params.id,
-      { published: req.body.published },
-      { new: true }
-    );
+    const quiz = await QuizSet.findById(req.params.id);
+
+    if (!quiz) {
+      return res.status(404).json({ error: "Quiz not found." });
+    }
+
+    const wasPublished = quiz.published === true;
+    quiz.published = req.body.published;
+    await quiz.save();
+
+    if (!wasPublished && quiz.published) {
+      await createResourceNotification({
+        title: "New quiz available",
+        message: `${quiz.title || quiz.name || "A quiz"} is now available for Class ${quiz.classNumber}.`,
+        type: "quiz",
+        resourceId: quiz._id,
+        link: "/quiz",
+        classNumber: quiz.classNumber,
+        board: quiz.board,
+      });
+    }
 
     if (!quiz) {
       return res.status(404).json({ error: "Quiz not found." });
@@ -188,3 +205,4 @@ router.delete("/quizzes/:id", async (req, res) => {
 });
 
 export default router;
+

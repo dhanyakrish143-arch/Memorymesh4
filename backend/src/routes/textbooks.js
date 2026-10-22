@@ -1,117 +1,73 @@
-import express from "express";
+﻿import express from "express";
 import Textbook from "../models/Textbook.js";
 
 const router = express.Router();
 
-/*
-  Examples:
-
-  /api/textbooks?class=10
-  /api/textbooks?class=10&subject=Mathematics
-  /api/textbooks?class=10&subject=Mathematics&language=English
-  /api/textbooks?class=10&language=Hindi
-*/
-
 router.get("/", async (req, res) => {
   try {
-    const rawClass =
-      req.query.class ??
-      req.query.classNumber;
+    const rawClass = req.query.class ?? req.query.classNumber;
+    const subject = typeof req.query.subject === "string" ? req.query.subject.trim() : "";
+    const language = typeof req.query.language === "string" ? req.query.language.trim() : "";
+    let rawBoard = typeof req.query.board === "string" ? req.query.board.trim() : "State";
 
-    const subject =
-      typeof req.query.subject === "string"
-        ? req.query.subject.trim()
-        : "";
+    // Normalize board variations (e.g. "State Board" -> "State")
+    let board = "State";
+    if (rawBoard.toLowerCase().includes("cbse")) board = "CBSE";
+    else if (rawBoard.toLowerCase().includes("icse")) board = "ICSE";
+    else board = "State";
 
-    const language =
-      typeof req.query.language === "string"
-        ? req.query.language.trim()
-        : "";
-
-    const board =
-      typeof req.query.board === "string"
-        ? req.query.board.trim()
-        : "";
-
-    if (!["CBSE", "ICSE", "State"].includes(board)) {
-      return res.status(400).json({
-        error: "board must be CBSE, ICSE, or State.",
-      });
-    }
-
-    let classNumber = null;
+    let filter = { board, active: true };
 
     if (rawClass !== undefined) {
       const match = String(rawClass).match(/\d+/);
-
       if (match) {
-        classNumber = Number(match[0]);
+        filter.classNumber = Number(match[0]);
       }
     }
 
-    if (
-      !Number.isInteger(classNumber) ||
-      classNumber < 5 ||
-      classNumber > 12
-    ) {
-      return res.status(400).json({
-        error: "class must be an integer from 5 to 12.",
+    if (subject && subject.toLowerCase() !== "all" && subject.toLowerCase() !== "all subjects") {
+      filter.subject = new RegExp(`^${subject}$`, "i");
+    }
+
+    if (language && language.toLowerCase() !== "all") {
+      filter.language = new RegExp(`^${language}$`, "i");
+    }
+
+    const items = await Textbook.find(filter).sort({ subject: 1, chapterNumber: 1 }).lean();
+
+    // Group chapters under book titles for clean frontend rendering
+    const bookMap = new Map();
+    for (const item of items) {
+      const key = `${item.classNumber}-${item.subject}-${item.title}`;
+      if (!bookMap.has(key)) {
+        bookMap.set(key, {
+          _id: item._id,
+          title: item.title,
+          subject: item.subject,
+          classNumber: item.classNumber,
+          board: item.board,
+          language: item.language,
+          source: item.source,
+          chapters: []
+        });
+      }
+      bookMap.get(key).chapters.push({
+        chapterNumber: item.chapterNumber,
+        title: item.chapter,
+        sourceUrl: item.sourceUrl
       });
     }
 
-    const filter = {
-      classNumber,
-      board,
-      active: true,
-    };
+    const groupedTextbooks = Array.from(bookMap.values());
 
-    if (subject) {
-      filter.subject = new RegExp(
-        `^${escapeRegExp(subject)}$`,
-        "i"
-      );
-    }
-
-    if (language) {
-      filter.language = new RegExp(
-        `^${escapeRegExp(language)}$`,
-        "i"
-      );
-    }
-
-    const textbooks = await Textbook.find(filter)
-      .sort({
-        subject: 1,
-        language: 1,
-        bookCode: 1,
-        chapterNumber: 1,
-      })
-      .lean();
-
-    res.json({
+    return res.json({
       success: true,
-      classNumber,
-      board,
-      subject: subject || null,
-      language: language || null,
-      textbooks,
+      count: items.length,
+      textbooks: groupedTextbooks
     });
-  } catch (error) {
-    console.error("Textbook fetch error:", error);
-
-    res.status(500).json({
-      error: "Failed to load textbooks.",
-    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 });
 
-function escapeRegExp(value) {
-  return value.replace(
-    /[.*+?^${}()|[\]\\]/g,
-    "\\$&"
-  );
-}
-
 export default router;
-
-

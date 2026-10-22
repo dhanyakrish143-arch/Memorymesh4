@@ -6,112 +6,104 @@ import User from "../models/User.js";
 import { generateStudyPlan } from "../ai/studyPlanner.js";
 
 const router = express.Router();
-
 router.use(requireAuth);
 
 router.post("/generate", async (req, res) => {
   try {
-    const {
-      subject,
-      chapter,
-      minutesPerDay,
-    } = req.body;
+    const requestedSubjects = Array.isArray(req.body.subjects)
+      ? req.body.subjects
+      : [req.body.subject];
 
-    if (!subject || !subject.trim()) {
-      return res.status(400).json({
-        error: "Subject is required.",
-      });
+    const subjects = [...new Set(
+      requestedSubjects
+        .filter((item) => typeof item === "string")
+        .map((item) => item.trim())
+        .filter(Boolean)
+    )].slice(0, 30);
+
+    if (!subjects.length) {
+      return res.status(400).json({ error: "Choose at least one subject." });
     }
 
-    const minutes = Number(minutesPerDay);
-
-    if (
-      !Number.isFinite(minutes) ||
-      minutes < 10 ||
-      minutes > 180
-    ) {
+    const minutes = Number(req.body.minutesPerDay);
+    if (!Number.isFinite(minutes) || minutes < 10 || minutes > 180) {
       return res.status(400).json({
         error: "Study time must be between 10 and 180 minutes.",
       });
     }
 
+    const chapter =
+      typeof req.body.chapter === "string" ? req.body.chapter.trim() : "";
+
+    const subjectFilter = { $in: subjects };
     const cardQuery = {
       userId: req.userId,
-      subject: subject.trim(),
+      subject: subjectFilter,
     };
 
-    const noteQuery = {
-      userId: req.userId,
-      subject: subject.trim(),
-    };
+    if (chapter) cardQuery.chapter = chapter;
 
-    if (chapter && chapter.trim()) {
-      cardQuery.chapter = chapter.trim();
-      noteQuery.chapter = chapter.trim();
+    const user = await User.findById(req.userId)
+      .select("quizHistory class board")
+      .lean();
+
+    if (!user) {
+      return res.status(401).json({ error: "User not found." });
     }
 
-    const [cards, notes, user] = await Promise.all([
+    const noteQuery = {
+      subject: subjectFilter,
+      $or: [
+        {
+          userId: null,
+          class: user.class,
+          board: user.board,
+        },
+        { userId: req.userId },
+      ],
+    };
+
+    if (chapter) noteQuery.chapter = chapter;
+
+    const [cards, notes] = await Promise.all([
       Card.find(cardQuery)
-        .select(
-          "question answer p_l reviewCount correctCount chapter"
-        )
+        .select("question answer subject p_l reviewCount correctCount chapter")
         .lean(),
-
       Note.find(noteQuery)
-        .select("chapter content tags source")
-        .lean(),
-
-      User.findById(req.userId)
-        .select("quizHistory")
+        .select("subject chapter content tags source")
         .lean(),
     ]);
 
-    const quizHistory = (user?.quizHistory || []).filter(
-      (quiz) => {
-        if (
-          quiz.subject &&
-          quiz.subject.toLowerCase() !==
-            subject.trim().toLowerCase()
-        ) {
-          return false;
-        }
+    const subjectSet = new Set(subjects.map((s) => s.toLowerCase()));
+    const quizHistory = (user.quizHistory || []).filter((quiz) => {
+      if (
+        quiz.subject &&
+        !subjectSet.has(quiz.subject.toLowerCase())
+      ) return false;
 
-        if (
-          chapter &&
-          quiz.chapter &&
-          quiz.chapter.toLowerCase() !==
-            chapter.trim().toLowerCase()
-        ) {
-          return false;
-        }
+      if (
+        chapter &&
+        quiz.chapter &&
+        quiz.chapter.toLowerCase() !== chapter.toLowerCase()
+      ) return false;
 
-        return true;
-      }
-    );
+      return true;
+    });
 
     const plan = await generateStudyPlan({
-      subject: subject.trim(),
-      chapter: chapter?.trim() || "",
+      subject: subjects.join(", "),
+      chapter,
       minutesPerDay: minutes,
       cards,
       notes,
       quizHistory,
     });
 
-    res.json({
-      success: true,
-      plan,
-    });
+    res.json({ success: true, plan });
   } catch (err) {
-    console.error(
-      "Study Plan generation error:",
-      err
-    );
-
+    console.error("Study Plan generation error:", err);
     res.status(500).json({
-      error:
-        err.message ||
-        "Failed to generate study plan.",
+      error: err.message || "Failed to generate study plan.",
     });
   }
 });
